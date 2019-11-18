@@ -15,19 +15,25 @@ readme = open('README.rst').read()
 
 history = open('CHANGES.rst').read()
 
+docs_require = [
+    'Sphinx>=2.2',
+]
+
 tests_require = [
 ]
 
 extras_require = {
-    'docs': [
-        'Sphinx',
-    ],
+    'docs': docs_require,
+    'tests': tests_require,
 }
+
+extras_require['all'] = [ req for exts, reqs in extras_require.items() for req in reqs ]
 
 setup_requires = [
 ]
 
 install_requires = [
+    'requests>=2.20',
 ]
 
 packages = find_packages()
@@ -42,7 +48,7 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    keywords='Land Use FOSS',
+    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'WFS', 'WCS', 'WTSS'],
     license='MIT',
     author='INPE',
     author_email='fabi.zioti@gmail.com',
@@ -58,14 +64,14 @@ setup(
     setup_requires=setup_requires,
     tests_require=tests_require,
     classifiers=[
+        'Development Status :: 1 - Planning',
         'Environment :: Web Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT',
+        'Intended Audience :: Education',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Programming Language :: Python :: 3 :: Only',
+        'Topic :: Scientific/Engineering :: GIS',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Programming Language :: Python :: 3.6',
-        'Development Status :: 3 - Alpha',
     ],
 )
