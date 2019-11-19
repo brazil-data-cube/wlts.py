@@ -7,3 +7,6 @@
 #
 
 """Unit-test for WLTS' trajectory operation."""
+
+def test_trajectory():
+    assert 1 == 1

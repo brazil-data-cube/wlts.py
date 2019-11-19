@@ -13,7 +13,7 @@ Python Client Library for Web Land Trajectory Service
 .. image:: https://img.shields.io/badge/license-MIT-green
         :target: https://github.com//brazil-data-cube/wlts.py/blob/master/LICENSE
 
-.. image:: https://img.shields.io/badge/build-todo-success
+.. image:: https://travis-ci.org/brazil-data-cube/wlts.py.svg?branch=master
         :target: https://travis-ci.org/brazil-data-cube/wlts.py
 
 .. image:: https://img.shields.io/badge/tests-0%20passed,%200%20failed-critical
