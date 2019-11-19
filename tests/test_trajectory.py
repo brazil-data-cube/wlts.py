@@ -6,8 +6,4 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Python Client Library for the Web Land Trajectory Service."""
-
-from .version import __version__
-
-__all__ = ('__version__', )
+"""Unit-test for WLTS' trajectory operation."""

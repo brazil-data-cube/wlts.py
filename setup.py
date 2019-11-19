@@ -20,6 +20,11 @@ docs_require = [
 ]
 
 tests_require = [
+    'coverage>=4.5',
+    'pytest>=5.2',
+    'pytest-cov>=2.8',
+    'pytest-pep8>=1.0',
+
 ]
 
 extras_require = {
@@ -30,6 +35,7 @@ extras_require = {
 extras_require['all'] = [ req for exts, reqs in extras_require.items() for req in reqs ]
 
 setup_requires = [
+    'pytest-runner>=5.2',
 ]
 
 install_requires = [
