@@ -24,7 +24,9 @@ tests_require = [
     'pytest>=5.2',
     'pytest-cov>=2.8',
     'pytest-pep8>=1.0',
-
+    'pydocstyle>=4.0',
+    'isort>4.3',
+    'check-manifest>=0.40'
 ]
 
 extras_require = {
