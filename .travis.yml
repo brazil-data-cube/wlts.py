@@ -1,9 +1,16 @@
+sudo: false
+
 language: python
+
+cache:
+  directories:
+    - $HOME/.cache/pip
 
 dist: bionic
 
 python:
     - "3.6"
+    - "3.7"
 
 before_install:
     - pip install --upgrade pip
