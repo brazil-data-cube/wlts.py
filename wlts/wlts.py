@@ -12,18 +12,21 @@ from requests import Request, Session
 class wlts:
     """This class implements a Python API client wrapper for WLTS.
 
-       See https://github.com/brazil-data-cube/wlts for more
-       information on WLTS.
+    See https://github.com/brazil-data-cube/wlts for more
+    information on WLTS.
     """
 
     def __init__(self, url):
         """Create a WTSS client attached to the given host address (an URL).
-            Args:
-                url (str): the WLTS server URI.
+
+        Args:
+            url (str): the WLTS server URI.
+
         """
         self._url = url
 
     def list_collections(self):
+        """"""
         pass
 
     def trajectory(self):
