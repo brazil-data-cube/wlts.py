@@ -10,7 +10,6 @@
 
 from wlts import wlts
 
-
 url = 'http://localhost:5000'
 
 def test_uri():
@@ -19,13 +18,13 @@ def test_uri():
     assert service.url == url
 
 
-def test_print():
-    service = wlts(url)
-
-    print(service)
-
-
 def test_repr():
     service = wlts(url)
 
-    print(repr(service))
+    assert repr(service) == '{{ "url": "{}" }}'.format(url)
+
+
+def test_str():
+    service = wlts(url)
+
+    assert str(service) == '<WLTS [{}]>'.format(url)

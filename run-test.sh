@@ -8,7 +8,6 @@
 #
 
 #pydocstyle wlts && \
-#isort --check-only --diff --recursive **/*.py && \
-#check-manifest --ignore ".travis-*" && \
-#pytest tests
+isort --check-only --diff --recursive **/*.py && \
+check-manifest --ignore ".travis-*" && \
 pytest

@@ -5,16 +5,16 @@
 # Web Land Trajectory Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-
 """Python API client wrapper for WLTS."""
-
-#from requests import Request, Session
+from requests import Request, Session
 
 class wlts:
     """This class implements a Python API client wrapper for WLTS.
 
-     See https://github.com/brazil-data-cube/wlts for more information on WLTS.
+       See https://github.com/brazil-data-cube/wlts for more
+       information on WLTS.
     """
+
     def __init__(self, url):
         """Create a WTSS client attached to the given host address (an URL).
             Args:
@@ -39,7 +39,14 @@ class wlts:
 
     @property
     def url(self):
+        """Return the WLTS server instance URL."""
         return self._url
 
     def __repr__(self):
-        return '<WLTS [{}]>'.format(self.url or 'no server URL defined')
+        """Return the string representation of a WLTS object."""
+        text = '{{ "url": "{}" }}'.format(self.url)
+        return text
+
+    def __str__(self):
+        """Return the string representation of a WLTS object."""
+        return '<WLTS [{}]>'.format(self.url)
