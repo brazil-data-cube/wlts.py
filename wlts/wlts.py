@@ -8,6 +8,7 @@
 """Python API client wrapper for WLTS."""
 from requests import Request, Session
 
+
 class wlts:
     """This class implements a Python API client wrapper for WLTS.
 
