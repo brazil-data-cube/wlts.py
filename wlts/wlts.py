@@ -48,7 +48,7 @@ class wlts:
 
     def __repr__(self):
         """Return the string representation of a WLTS object."""
-        text = '{{ "url": "{}" }}'.format(self.url)
+        text = 'wlts("{}")'.format(self.url)
         return text
 
     def __str__(self):
