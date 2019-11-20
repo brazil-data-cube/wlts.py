@@ -8,5 +8,24 @@
 
 """Unit-test for WLTS' trajectory operation."""
 
-def test_trajectory():
-    assert 1 == 1
+from wlts import wlts
+
+
+url = 'http://localhost:5000'
+
+def test_uri():
+    service = wlts(url)
+
+    assert service.url == url
+
+
+def test_print():
+    service = wlts(url)
+
+    print(service)
+
+
+def test_repr():
+    service = wlts(url)
+
+    print(repr(service))

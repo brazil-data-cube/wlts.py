@@ -8,13 +8,19 @@
 
 """Python API client wrapper for WLTS."""
 
+#from requests import Request, Session
+
 class wlts:
     """This class implements a Python API client wrapper for WLTS.
 
      See https://github.com/brazil-data-cube/wlts for more information on WLTS.
     """
-    def __init__(self):
-        pass
+    def __init__(self, url):
+        """Create a WTSS client attached to the given host address (an URL).
+            Args:
+                url (str): the WLTS server URI.
+        """
+        self._url = url
 
     def list_collections(self):
         pass
@@ -30,3 +36,10 @@ class wlts:
 
     def describe_classification_sytem(self):
         pass
+
+    @property
+    def url(self):
+        return self._url
+
+    def __repr__(self):
+        return '<WLTS [{}]>'.format(self.url or 'no server URL defined')
