@@ -17,7 +17,6 @@ Documentation
    :caption: Contents:
 
    installation
-   usage
    api
 
 

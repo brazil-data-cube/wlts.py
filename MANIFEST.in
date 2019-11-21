@@ -6,10 +6,17 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
+exclude doc/sphinx/_build
 include *.rst
 include *.sh
 include *.txt
 include LICENSE
 include pytest.ini
+recursive-exclude doc/sphinx/_build *
+recursive-include doc *.bat
+recursive-include doc *.css
+recursive-include doc *.py
+recursive-include doc *.rst
+recursive-include doc Makefile
 recursive-include examples *.py
 recursive-include tests *.py
