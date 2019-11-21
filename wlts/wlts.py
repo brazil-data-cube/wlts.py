@@ -6,7 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for WLTS."""
-from requests import Request, Session
+import requests
 
 
 class wlts:
