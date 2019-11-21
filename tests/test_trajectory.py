@@ -21,7 +21,7 @@ def test_uri():
 def test_repr():
     service = wlts(url)
 
-    assert repr(service) == '{{ "url": "{}" }}'.format(url)
+    assert repr(service) == 'wlts("{}")'.format(url)
 
 
 def test_str():
