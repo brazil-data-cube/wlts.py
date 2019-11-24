@@ -20,6 +20,6 @@ python:
         - method: pip
           path: .
           extra_requirements:
-              - all
+              - docs
 
     system_packages: true
