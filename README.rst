@@ -41,13 +41,13 @@ Python Client Library for Web Land Trajectory Service
 Installation
 ============
 
-**Under Development!**
+See `INSTALL.rst <./INSTALL.rst>`_.
 
 
 Developer Documentation
 =======================
 
-**Under Development!**
+See https://wltspy.readthedocs.io/en/latest.
 
 
 License
