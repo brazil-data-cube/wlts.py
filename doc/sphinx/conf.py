@@ -64,3 +64,5 @@ def setup(app):
 todo_include_todos = True
 
 todo_emit_warnings = True
+
+master_doc = 'index'
