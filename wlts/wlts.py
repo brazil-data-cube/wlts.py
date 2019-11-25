@@ -21,19 +21,23 @@ class wlts:
 
     def __init__(self, url):
         """Create a WTSS client attached to the given host address (an URL)."""
-        self._url = url
+        self._url = url if url[-1] != '/' else url[0:-1]
+
 
     def list_collections(self):
         """Return the list of available collections."""
-        pass
+        return self._get('{}/list_collections'.format(self._url))
 
-    def trajectory(self, longitude, latitude,
-                   start_date=None, end_date=None, collections=None):
+
+    def trajectory(self, params):
         """Retrieve the trajectories of collections associated with a given location in space.
 
         Retrieve the land use and cover trajectory associated to the
         informed location considering the given date interval and the
         collections.
+
+        :param params: A dictionary with location and period.
+        :type params: dict
 
         :param longitude: Longitude.
         :type longitude: float
@@ -52,7 +56,8 @@ class wlts:
         :returns: Trajectory.
         :rtype: list
         """
-        pass
+        return self._get('{}/trajectory'.format(self._url), params=params)
+
 
     def describe_collection(self, name):
         """Describe a give collection.
@@ -65,24 +70,56 @@ class wlts:
         """
         pass
 
+
     def list_classification_sytem(self):
         """Return the list of available land use and land cover classification system."""
         pass
 
+
     def describe_classification_sytem(self):
         """List all classes of a land use and cover classification system."""
         pass
+
 
     @property
     def url(self):
         """Return the WLTS server instance URL."""
         return self._url
 
+
     def __repr__(self):
         """Return the string representation of a WLTS object."""
         text = 'wlts("{}")'.format(self.url)
         return text
 
+
     def __str__(self):
         """Return the string representation of a WLTS object."""
         return '<WLTS [{}]>'.format(self.url)
+
+
+    @staticmethod
+    def _get(url, params=None):
+        """Query the WLTS service using HTTP GET verb and return the result as a JSON document.
+
+        :param url: The URL to query must be a valid WLTS endpoint.
+        :type url: str
+
+        :param params: (optional) Dictionary, list of tuples or bytes to send
+        in the query string for the underlying `Requests`.
+        :type params: dict
+
+        :rtype: dict
+
+        :raises ValueError: If the response body does not contain a valid json.
+        """
+        response = requests.get(url, params=params)
+
+        response.raise_for_status()
+
+        content_type = response.headers.get('content-type')
+
+        if content_type.count('application/json') == 0:
+            raise ValueError('HTTP response is not JSON: Content-Type: {}'.format(content_type))
+
+        return response.json()

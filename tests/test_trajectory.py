@@ -8,14 +8,17 @@
 
 """Unit-test for WLTS' trajectory operation."""
 
+import os
+
 from wlts import wlts
 
-url = 'http://localhost:5000'
+url =  os.environ.get('WLTS_SERVER_URL', 'http://localhost')
 
-def test_uri():
+
+def test_creation():
     service = wlts(url)
 
-    assert service.url == url
+    assert url.count(service.url) == 1
 
 
 def test_repr():
@@ -28,3 +31,24 @@ def test_str():
     service = wlts(url)
 
     assert str(service) == '<WLTS [{}]>'.format(url)
+
+
+def test_collections():
+    service = wlts(url)
+
+    retval = service.list_collections()
+
+    assert 'feature_collection' in retval
+
+
+def test_trajectory():
+    service = wlts(url)
+
+    query = dict(
+        latitude=-64.285,
+        longitude=-8.706
+    )
+
+    retval = service.trajectory(query)
+
+    assert 'query' in retval

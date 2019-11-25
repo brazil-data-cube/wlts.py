@@ -23,7 +23,7 @@ Python Client Library for Web Land Trajectory Service
         :target: https://coveralls.io/github/brazil-data-cube/wlts.py?branch=master
 
 .. .. image:: https://img.shields.io/badge/pypi-v0.1.0-informational
-        :target: https://pypi.org/pypi/wlts-server
+        :target: https://pypi.org/pypi/wlts.py
 
 .. image:: https://img.shields.io/badge/lifecycle-experimental-orange.svg
         :target: https://www.tidyverse.org/lifecycle/#experimental
