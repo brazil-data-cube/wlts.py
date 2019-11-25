@@ -18,6 +18,7 @@ Documentation
 
    installation
    api
+   license
 
 
 
