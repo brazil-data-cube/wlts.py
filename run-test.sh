@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #
 # This file is part of Web Land Trajectory Service.
 # Copyright (C) 2019 INPE.
@@ -6,10 +7,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Python Client Library for the Web Land Trajectory Service."""
-
-from .version import __version__
-from .wlts import wlts
-
-__all__ = ('__version__',
-           'wlts', )
+pydocstyle wlts && \
+isort --check-only --diff --recursive **/*.py && \
+check-manifest --ignore ".travis-*" && \
+pytest && \
+sphinx-build -qnW --color -b doctest doc/sphinx/ doc/sphinx/_build/doctest

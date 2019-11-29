@@ -6,10 +6,18 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Python Client Library for the Web Land Trajectory Service."""
+version: 2
 
-from .version import __version__
-from .wlts import wlts
+sphinx:
+    configuration: doc/sphinx/conf.py
 
-__all__ = ('__version__',
-           'wlts', )
+formats: []
+
+python:
+    version: 3.7
+
+    install:
+        - method: pip
+          path: .
+          extra_requirements:
+              - docs
