@@ -68,7 +68,7 @@ class wlts:
         :returns: Collection description.
         :rtype: dict
         """
-        pass
+        return self._get('{}/describe_collection?name={}'.format(self._url, name))
 
 
     def list_classification_sytem(self):
