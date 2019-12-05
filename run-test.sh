@@ -9,6 +9,6 @@
 
 pydocstyle wlts && \
 isort --check-only --diff --recursive **/*.py && \
-check-manifest --ignore ".travis-*" && \
+check-manifest --ignore ".travis-*,.readthedocs.yml"  && \
 pytest && \
 sphinx-build -qnW --color -b doctest doc/sphinx/ doc/sphinx/_build/doctest

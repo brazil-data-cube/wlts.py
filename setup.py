@@ -43,6 +43,7 @@ setup_requires = [
 
 install_requires = [
     'requests>=2.20',
+    'Click>=7.0',
 ]
 
 packages = find_packages()
@@ -67,6 +68,9 @@ setup(
     include_package_data=True,
     platforms='any',
     entry_points={
+        'console_scripts': [
+            'wlts-cli = wlts.cli:cli',
+        ],
     },
     extras_require=extras_require,
     install_requires=install_requires,

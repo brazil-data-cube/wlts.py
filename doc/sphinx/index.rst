@@ -17,6 +17,7 @@ Documentation
    :caption: Contents:
 
    installation
+   cli
    api
    license
 

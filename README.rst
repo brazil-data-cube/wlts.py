@@ -44,6 +44,12 @@ Installation
 See `INSTALL.rst <./INSTALL.rst>`_.
 
 
+Using WLTS in the Command Line
+==============================
+
+See `RUNNING.rst <./CLI.rst>`_.
+
+
 Developer Documentation
 =======================
 
