@@ -9,8 +9,76 @@
 Running WLTS Client in the Command Line
 =======================================
 
+List the available collections:
+
 .. code-block:: shell
 
-        wlts-cli xxxx --url http://localhost/
+        wlts-cli --url 'http://localhost/wlts' collections
+
+
+Retrieve the trajactory given a longitude and latitude:
+
+.. code-block:: shell
+
+        wlts-cli --url 'http://localhost/wlts' trajectory -- 0 0
+
+The above command will return a JSON document as:
+
+.. code-block:: json
+
+        {
+            'query': {
+                'collections': None,
+                'end_date': None,
+                'latitude': -54.0,
+                'longitude': -12.0,
+                'start_date': None
+            },
+            'result': {
+                'trajectory': [{
+                        'class': 'Floresta',
+                        'collection': 'terraclass',
+                        'date': '2004'
+                    },
+                    {
+                        'class': 'Floresta',
+                        'collection': 'terraclass',
+                        'date': '2008'
+                    },
+                    {
+                        'class': 'Floresta',
+                        'collection': 'terraclass',
+                        'date': '2010'
+                    },
+                    {
+                        'class': 'Floresta',
+                        'collection': 'terraclass',
+                        'date': '2012'
+                    },
+                    {
+                        'class': 'Floresta',
+                        'collection': 'terraclass',
+                        'date': '2014'
+                    },
+                    {
+                        'class': 'Floresta',
+                        'collection': 'prodes',
+                        'date': '2017'
+                    }
+                ]
+            }
+        }
+
+
+
+.. code-block:: shell
+
+        wlts-cli --url 'http://localhost/wlts' trajectory --geoloc 0 0
+
+or:
+
+.. code-block:: shell
+
+        wlts-cli --url 'http://localhost/wlts' trajectory --ifile query.json
 
 
