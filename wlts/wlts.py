@@ -59,7 +59,7 @@ class wlts:
         return self._get('{}/trajectory'.format(self._url), params=params)
 
 
-    def describe_collection(self, name):
+    def describe_collection(self, collection_id):
         """Describe a give collection.
 
         :param name: The collection name.
@@ -68,7 +68,7 @@ class wlts:
         :returns: Collection description.
         :rtype: dict
         """
-        return self._get('{}/describe_collection?name={}'.format(self._url, name))
+        return self._get('{}/describe_collection?collection_id={}'.format(self._url, collection_id))
 
 
     def list_classification_sytem(self):
