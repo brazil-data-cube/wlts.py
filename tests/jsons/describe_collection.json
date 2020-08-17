@@ -1,0 +1,20 @@
+{
+  "collection_type": "Feature",
+  "description": "Desmatamento Cerrado",
+  "detail": "http://www.obt.inpe.br/OBT/assuntos/programas/amazonia/prodes",
+  "name": "prodes_cerrado",
+  "period": {
+    "end_date": "2019",
+    "start_date": "2000"
+  },
+  "resolution_unit": {
+    "unit": "YEAR",
+    "value": "1"
+  },
+  "spatial_extent": {
+    "xmax": -24.6851196289062,
+    "xmin": -60.0939559936523,
+    "ymax": -2.32670903205872,
+    "ymin": -41.5224685668945
+  }
+}

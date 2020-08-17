@@ -1,0 +1,163 @@
+{
+  "query": {
+    "collections": null,
+    "end_date": null,
+    "latitude": -12.31,
+    "longitude": -53.63,
+    "start_date": null
+  },
+  "result": {
+    "trajectory": [
+      {
+        "class": "Floresta",
+        "collection": "terraclass_amz",
+        "date": "2004"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2007"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2007"
+      },
+      {
+        "class": "Floresta",
+        "collection": "terraclass_amz",
+        "date": "2008"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2008"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2008"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2009"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2009"
+      },
+      {
+        "class": "Floresta",
+        "collection": "terraclass_amz",
+        "date": "2010"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2010"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2010"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2011"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2011"
+      },
+      {
+        "class": "Floresta",
+        "collection": "terraclass_amz",
+        "date": "2012"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2012"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2012"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2013"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2013"
+      },
+      {
+        "class": "Floresta",
+        "collection": "terraclass_amz",
+        "date": "2014"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2014"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2014"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2015"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2015"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2016"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2016"
+      },
+      {
+        "class": "Floresta",
+        "collection": "prodes_amz_legal",
+        "date": "2017"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2017"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2017"
+      },
+      {
+        "class": "Formação Florestal",
+        "collection": "mapbiomas_amz_4_1",
+        "date": "2018"
+      },
+      {
+        "class": "No-Data",
+        "collection": "mapbiomas_cerrado_4_1",
+        "date": "2018"
+      }
+    ]
+  }
+}
