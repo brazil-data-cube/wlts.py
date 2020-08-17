@@ -70,17 +70,6 @@ class wlts:
         """
         return self._get('{}/describe_collection?collection_id={}'.format(self._url, collection_id))
 
-
-    def list_classification_sytem(self):
-        """Return the list of available land use and land cover classification system."""
-        pass
-
-
-    def describe_classification_sytem(self):
-        """List all classes of a land use and cover classification system."""
-        pass
-
-
     @property
     def url(self):
         """Return the WLTS server instance URL."""
