@@ -24,14 +24,14 @@ Retrieve the trajactory given a longitude and latitude:
 
 The above command will return a JSON document as:
 
-.. code-block:: json
+.. code-block:: shell
 
         {
             'query': {
                 'collections': None,
                 'end_date': None,
-                'latitude': -54.0,
-                'longitude': -12.0,
+                'latitude': -12.0,
+                'longitude': -54.0,
                 'start_date': None
             },
             'result': {
