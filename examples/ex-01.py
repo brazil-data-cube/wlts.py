@@ -11,27 +11,18 @@ import os
 
 from wlts import wlts
 
+# Change to the WLTS URL you want to use.
 url =  os.environ.get('WLTS_SERVER_URL', 'http://0.0.0.0:5000/wlts/')
 
 service = wlts(url)
 
-# Retorna a lista de collections disponiveis no servico
+# Returns the list of collections available on the service
 print(service.list_collections())
 
-# Retorna os metadados do prodes collection
-print(service.describe_collection(name="prodes"))
+# Example of trajectory operation
 
-# Exemplos da operacao de trajetoria
-
-# Sao informados os parametros obrigatorios de latitude e longitude
-trj_um = service.trajectory(dict(latitude=-64.285, longitude=-8.706))
-
+# Inform the mandatory parameters (latitude and longitude)
+trj_um = service.trajectory(dict(latitude=-8.706, longitude=-64.285))
 
 for trj in trj_um['result']['trajectory']:
-  print("Collection: {}, Class: {}, Date: {}".format(trj['collection'], trj['class'], trj['date']))
-
-# Retorna a trajetoria apenas do terraclass collections
-trj_tc = service.trajectory(dict(latitude=-64.285, longitude=-8.706, collections='terraclass'))
-
-for trj in trj_tc['result']['trajectory']:
   print("Collection: {}, Class: {}, Date: {}".format(trj['collection'], trj['class'], trj['date']))

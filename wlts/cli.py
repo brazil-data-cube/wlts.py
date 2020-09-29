@@ -67,13 +67,13 @@ def trajectory(config, geoloc, ifile, x, y):
         query = json.load(ifile)
     elif geoloc:
         query.update(dict(
-            latitude=geoloc[1],
-            longitude=geoloc[0]
+            longitude=geoloc[1],
+            latitude=geoloc[0]
         ))
     else:
         query.update(dict(
-            latitude=y,
-            longitude=x
+            longitude=y,
+            latitude=x
         ))
 
 

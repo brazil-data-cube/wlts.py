@@ -8,47 +8,102 @@
 
 """Unit-test for WLTS' trajectory operation."""
 
+import json
 import os
+import re
+from pathlib import Path
 
-from wlts import wlts
+import pytest
+from pkg_resources import resource_filename, resource_string
 
-url =  os.environ.get('WLTS_SERVER_URL', 'http://localhost')
+import wlts
 
+url =  os.environ.get('WLTS_SERVER_URL', 'http://localhost:5000/wlts')
+match_url = re.compile(url)
 
-def test_creation():
-    service = wlts(url)
+@pytest.fixture
+def requests_mock(requests_mock):
+    requests_mock.get(re.compile('https://geojson.org/'), real_http=True)
+    yield requests_mock
 
-    assert url.count(service.url) == 1
+@pytest.fixture(scope='session')
+def wlts_objects():
+    directory = resource_filename(__name__, 'jsons/')
+    files = dict()
+    for path in Path(directory).rglob('*.json'):
+        path = str(path)
+        s = path.split('/')
 
+        file_path = '/'.join(s[-2:])
 
-def test_repr():
-    service = wlts(url)
+        print(file_path)
 
-    assert repr(service) == 'wlts("{}")'.format(url)
+        file = json.loads(resource_string(__name__, file_path).decode('utf-8'))
+        if s[-2] in files:
+            files[s[-2]][s[-1]] = file
+        else:
+            files[s[-2]] = {s[-1]: file}
 
+    return files
 
-def test_str():
-    service = wlts(url)
+class TestWLTS:
 
-    assert str(service) == '<WLTS [{}]>'.format(url)
+    def test_wlts(self):
+        service = wlts.wlts(url)
+        assert service.url == url
+        assert repr(service) == 'wlts("{}")'.format(url)
+        assert str(service) == '<WLTS [{}]>'.format(url)
 
+    def test_list_collection(self, wlts_objects, requests_mock):
+        for k in wlts_objects:
+            s = wlts.wlts(url)
+            requests_mock.get(match_url, json=wlts_objects[k]['list_collections.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
 
-def test_collections():
-    service = wlts(url)
+            response = s.list_collections()
 
-    retval = service.list_collections()
+            assert 'collections' in response
+            assert type(response['collections']) == list
+            assert response['collections'] == ["prodes_amz","prodes_cerrado", "deter_amz",
+                                               "deter_cerrado","mapbiomas_4_1_amz"]
 
-    #assert 'feature_collection' in retval
+    def test_describe_collection(self, wlts_objects, requests_mock):
+        for k in wlts_objects:
 
+            s = wlts.wlts(url)
 
-def test_trajectory():
-    service = wlts(url)
+            requests_mock.get(match_url, json=wlts_objects[k]['describe_collection.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
 
-    query = dict(
-        latitude=-64.285,
-        longitude=-8.706
-    )
+            collection = s.describe_collection(collection_id='prodes_cerrado')
 
-    retval = service.trajectory(query)
+            assert collection == wlts_objects[k]['describe_collection.json']
+            assert collection['collection_type']
+            assert collection['description']
+            assert collection['detail']
+            assert collection['name']
+            assert collection['period']
+            assert collection['resolution_unit']
+            assert collection['spatial_extent']
 
-    assert 'query' in retval
+    def test_trajectory(self, wlts_objects, requests_mock):
+        for k in wlts_objects:
+            s = wlts.wlts(url)
+
+            requests_mock.get(match_url, json=wlts_objects[k]['trajectory.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
+
+            trajectory = s.trajectory(dict(latitude=-12.31,longitude=-53.63))
+
+            assert 'query' in trajectory
+            assert 'result' in trajectory
+            assert trajectory['query']['latitude']
+            assert trajectory['query']['longitude']
+            assert 'trajectory' in trajectory['result']
+
+if __name__ == '__main__':
+    import pytest
+    pytest.main(['--color=auto', '--no-cov'])
