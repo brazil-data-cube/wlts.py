@@ -6,14 +6,14 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""A class that represents a coverage in WTSS."""
+"""A class that represents a collection in WTSS."""
 
 
 class Collections(dict):
     """A class that describes a collection in WTSS.
 
     .. note::
-        For more information about coverage definition, please, refer to
+        For more information about collection definition, please, refer to
         `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
@@ -21,7 +21,7 @@ class Collections(dict):
         """Create a collection object associated to a WLTS client.
 
         Args:
-            service (wlts.WTSS): The client to be used by the collection object.
+            service (wlts.WLTS): The client to be used by the collection object.
             metadata (dict): The collection metadata.
         """
         #: WLTS: The associated WLTS client to be used by the collection object.

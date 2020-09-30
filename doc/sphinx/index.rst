@@ -19,6 +19,7 @@ Documentation
    installation
    cli
    api
+   examples
    license
 
 
