@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for STAC.
-# Copyright (C) 2019 INPE.
+# Copyright (C) 2019-2020 INPE.
 #
 # Python Client Library for STAC is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -13,7 +13,7 @@ from pprint import pprint
 
 import click
 
-from .wlts import wlts
+from .wlts import WLTS
 
 
 class Config:
@@ -37,14 +37,42 @@ def cli(config, url):
 
 
 @cli.command()
+@click.option('-v', '--verbose', is_flag=True, default=False)
 @pass_config
-def collections(config):
+def collections(config, verbose):
     """Return the list of available collections in the service provider."""
-    service = wlts(config.url)
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tRetrieving the list of available coverages... ',
+                    bold=False, fg='black')
 
-    retval = service.list_collections()
+    service = WLTS(config.url)
+
+    retval = service.collections
 
     pprint(retval)
+
+
+@cli.command()
+@click.option('-v', '--verbose', is_flag=True, default=False)
+@click.option('-c', '--collection', required=True, type=str,
+              help='Collection name')
+@pass_config
+def describe(config, verbose, collection):
+    """Retrieve the coverage metadata."""
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tRetrieving the collection metadata... ',
+                    bold=False, fg='black')
+
+    service = WLTS(config.url)
+
+    cv = service[collection]
+
+    click.secho(f'\t- {cv}', bold=True, fg='green')
+
+    if verbose:
+        click.secho('\tFinished!', bold=False, fg='black')
 
 
 @cli.command()
@@ -56,11 +84,16 @@ def collections(config):
 @click.option('--ifile', type=click.File('r'),
               help='A JSON input file with all query parameters (required if --geoloc is omitted).',
               required=False)
+@click.option('-v', '--verbose', is_flag=True, default=False)
 @click.argument('x', type=click.FLOAT, required=False)
 @click.argument('y', type=click.FLOAT, required=False)
 @pass_config
-def trajectory(config, geoloc, ifile, x, y):
+def trajectory(config, verbose, geoloc, ifile, x, y):
     """Return the trajectory associated to the location."""
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tRetrieving trajectory... ',
+                    bold=False, fg='black')
     query = {}
 
     if ifile is not None:
@@ -76,11 +109,8 @@ def trajectory(config, geoloc, ifile, x, y):
             latitude=x
         ))
 
+    service = WLTS(config.url)
 
-    service = wlts(config.url)
+    retval = service.tj(**query)
 
-    retval = service.trajectory(query)
-
-    pprint(retval)
-
-
+    pprint(retval.trajectory)
