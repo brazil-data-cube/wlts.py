@@ -18,13 +18,15 @@ from pkg_resources import resource_filename, resource_string
 
 import wlts
 
-url =  os.environ.get('WLTS_SERVER_URL', 'http://localhost:5000/wlts')
+url = os.environ.get('WLTS_SERVER_URL', 'http://localhost:5000/wlts')
 match_url = re.compile(url)
+
 
 @pytest.fixture
 def requests_mock(requests_mock):
     requests_mock.get(re.compile('https://geojson.org/'), real_http=True)
     yield requests_mock
+
 
 @pytest.fixture(scope='session')
 def wlts_objects():
@@ -46,38 +48,37 @@ def wlts_objects():
 
     return files
 
+
 class TestWLTS:
 
     def test_wlts(self):
-        service = wlts.wlts(url)
+        service = wlts.WLTS(url)
         assert service.url == url
-        assert repr(service) == 'wlts("{}")'.format(url)
-        assert str(service) == '<WLTS [{}]>'.format(url)
+        assert str(service) == f'WLTS:\n\tURL: {url}'
+        assert repr(service) == f'wlts(url="{url}")'
 
     def test_list_collection(self, wlts_objects, requests_mock):
         for k in wlts_objects:
-            s = wlts.wlts(url)
+            s = wlts.WLTS(url)
             requests_mock.get(match_url, json=wlts_objects[k]['list_collections.json'],
                               status_code=200,
                               headers={'content-type': 'application/json'})
 
-            response = s.list_collections()
+            response = s.collections
 
-            assert 'collections' in response
-            assert type(response['collections']) == list
-            assert response['collections'] == ["prodes_amz","prodes_cerrado", "deter_amz",
-                                               "deter_cerrado","mapbiomas_4_1_amz"]
+            assert type(response) == list
+            assert response == ["prodes_amz", "prodes_cerrado", "deter_amz",
+                                "deter_cerrado", "mapbiomas_4_1_amz"]
 
     def test_describe_collection(self, wlts_objects, requests_mock):
         for k in wlts_objects:
-
-            s = wlts.wlts(url)
+            s = wlts.WLTS(url)
 
             requests_mock.get(match_url, json=wlts_objects[k]['describe_collection.json'],
                               status_code=200,
                               headers={'content-type': 'application/json'})
 
-            collection = s.describe_collection(collection_id='prodes_cerrado')
+            collection = s['prodes_cerrado']
 
             assert collection == wlts_objects[k]['describe_collection.json']
             assert collection['collection_type']
@@ -90,13 +91,13 @@ class TestWLTS:
 
     def test_trajectory(self, wlts_objects, requests_mock):
         for k in wlts_objects:
-            s = wlts.wlts(url)
+            s = wlts.WLTS(url)
 
             requests_mock.get(match_url, json=wlts_objects[k]['trajectory.json'],
                               status_code=200,
                               headers={'content-type': 'application/json'})
 
-            trajectory = s.trajectory(dict(latitude=-12.31,longitude=-53.63))
+            trajectory = s.tj(latitude=-12.31, longitude=-53.63)
 
             assert 'query' in trajectory
             assert 'result' in trajectory
@@ -104,6 +105,8 @@ class TestWLTS:
             assert trajectory['query']['longitude']
             assert 'trajectory' in trajectory['result']
 
+
 if __name__ == '__main__':
     import pytest
+
     pytest.main(['--color=auto', '--no-cov'])

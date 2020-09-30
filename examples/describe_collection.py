@@ -5,8 +5,12 @@
 # Web Land Trajectory Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
+"""WLTS Python Client Examples."""
 
-[pytest]
-#addopts = --pep8 --color=auto --cov=wlts --cov-report=term-missing
-addopts = --color=auto --cov=wlts --cov-report=term-missing
-testpaths = tests
+from wlts import WLTS
+
+# Change to the WLTS URL you want to use.
+service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
+
+# Get collection metadata
+print(service['prodes_amz_legal'])

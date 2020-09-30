@@ -1,6 +1,6 @@
 #
 # This file is part of Web Land Trajectory Service.
-# Copyright (C) 2019 INPE.
+# Copyright (C) 2019-2020 INPE.
 #
 # Web Land Trajectory Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -11,7 +11,7 @@ import os
 # -- Project information -----------------------------------------------------
 
 project = 'Web Land Trajectory Service'
-copyright = '2019, INPE'
+copyright = '2020, INPE'
 author = 'INPE'
 
 g = {}
@@ -64,5 +64,11 @@ def setup(app):
 todo_include_todos = True
 
 todo_emit_warnings = True
+
+doctest_global_setup = '''
+import os
+
+WLTS_EXAMPLE_URL = os.getenv('WLTS_EXAMPLE_URL', None)
+'''
 
 master_doc = 'index'

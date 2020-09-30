@@ -7,20 +7,10 @@
 #
 """WLTS Python Client Examples."""
 
-
 from wlts import WLTS
 
 # Change to the WLTS URL you want to use.
 service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
-
-print(repr(service))
-print(str(service))
-
-# Returns the list of collections available on the service
-print(service.collections)
-
-# Get Service metadata
-print(service['deter_amz_legal'])
 
 # Example of trajectory operation
 tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amz_4_1')

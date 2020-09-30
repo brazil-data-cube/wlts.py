@@ -5,8 +5,11 @@
 # Web Land Trajectory Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
+"""his example shows how the various text representation for services."""
+from wlts import *
 
-[pytest]
-#addopts = --pep8 --color=auto --cov=wlts --cov-report=term-missing
-addopts = --color=auto --cov=wlts --cov-report=term-missing
-testpaths = tests
+service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
+
+print(service)
+print(str(service))
+print(repr(service))
