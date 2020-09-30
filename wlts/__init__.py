@@ -9,7 +9,7 @@
 """Python Client Library for the Web Land Trajectory Service."""
 
 from .version import __version__
-from .wlts import WLTS
+from .wlts import wlts
 
 __all__ = ('__version__',
-           'WLTS',)
+           'wlts', )

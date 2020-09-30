@@ -1,28 +1,28 @@
 #
 # This file is part of Web Land Trajectory Service.
-# Copyright (C) 2019-2020 INPE.
+# Copyright (C) 2019 INPE.
 #
 # Web Land Trajectory Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""WLTS Python Client Examples."""
+"""WLTS Python Client Samples."""
 
+import os
 
-from wlts import WLTS
+from wlts import wlts
 
 # Change to the WLTS URL you want to use.
-service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
+url =  os.environ.get('WLTS_SERVER_URL', 'http://0.0.0.0:5000/wlts/')
 
-print(repr(service))
-print(str(service))
+service = wlts(url)
 
 # Returns the list of collections available on the service
-print(service.collections)
-
-# Get Service metadata
-print(service['deter_amz_legal'])
+print(service.list_collections())
 
 # Example of trajectory operation
-tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amz_4_1')
 
-print(tj.trajectory)
+# Inform the mandatory parameters (latitude and longitude)
+trj_um = service.trajectory(dict(latitude=-8.706, longitude=-64.285))
+
+for trj in trj_um['result']['trajectory']:
+  print("Collection: {}, Class: {}, Date: {}".format(trj['collection'], trj['class'], trj['date']))

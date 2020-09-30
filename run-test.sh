@@ -7,8 +7,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-pydocstyle wlts examples tests setup.py && \
-isort wlts examples tests setup.py --check-only --diff && \
-check-manifest --ignore ".travis-*" --ignore ".readthedocs.*" && \
+pydocstyle wlts && \
+isort --check-only --diff --recursive **/*.py && \
+check-manifest --ignore ".travis-*,.readthedocs.yml"  && \
 pytest && \
 sphinx-build -qnW --color -b doctest doc/sphinx/ doc/sphinx/_build/doctest

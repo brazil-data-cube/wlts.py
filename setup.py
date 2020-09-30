@@ -9,7 +9,6 @@
 """Python Client Library for the Web Land Trajectory Service."""
 
 import os
-
 from setuptools import find_packages, setup
 
 readme = open('README.rst').read()
@@ -35,7 +34,6 @@ tests_require = [
 extras_require = {
     'docs': docs_require,
     'tests': tests_require,
-    'pandas': ['pandas>=1.1']
 }
 
 extras_require['all'] = [ req for exts, reqs in extras_require.items() for req in reqs ]

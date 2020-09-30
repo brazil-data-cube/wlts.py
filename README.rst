@@ -1,6 +1,6 @@
 ..
     This file is part of Web Land Trajectory Service.
-    Copyright (C) 2019-2020 INPE.
+    Copyright (C) 2019 INPE.
 
     Web Land Trajectory Service is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
@@ -36,10 +36,6 @@ Python Client Library for Web Land Trajectory Service
 .. image:: https://img.shields.io/badge/lifecycle-experimental-orange.svg
         :target: https://www.tidyverse.org/lifecycle/#experimental
         :alt: Software Life Cycle
-
-.. image:: https://img.shields.io/discord/689541907621085198?logo=discord&logoColor=ffffff&color=7389D8
-        :target: https://discord.com/channels/689541907621085198#
-        :alt: Join us at Discord
 
 About
 =====
@@ -85,7 +81,7 @@ License
 =======
 
 .. admonition::
-    Copyright (C) 2019-2020 INPE.
+    Copyright (C) 2019 INPE.
 
     Web Land Trajectory Service is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
