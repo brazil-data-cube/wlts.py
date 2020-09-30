@@ -6,6 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for WLTS."""
+
 import requests
 
 from .collection import Collections
@@ -15,8 +16,9 @@ from .trajectory import Trajectory
 class WLTS:
     """This class implements a Python API client wrapper for WLTS.
 
-    See https://github.com/brazil-data-cube/wlts for more
-    information on WLTS.
+    .. note::
+        For more information about WLTS, please, refer to
+        `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
 
     :param url: The WLTS server URL.
     :type url: str
@@ -39,29 +41,28 @@ class WLTS:
         """Retrieve the trajectory for a given location and time interval.
 
         Keyword Args:
-            collections (optional): A string with attribute names separated by commas,
-                or any sequence of strings. If omitted, the values for all
-                coverage attributes are retrieved.
+            collections (optional): A string with collections names separated by commas,
+            or any sequence of strings. If omitted, the values for all collections are retrieved.
             longitude (int/float): A longitude value according to EPSG:4326.
             latitude (int/float): A latitude value according to EPSG:4326.
             start_date (:obj:`str`, optional): The begin of a time interval.
-            end_date (:obj:`str`, optional): The begin of a time interval.
+            end_date (:obj:`str`, optional): The end of a time interval.
 
         Returns:
             Trajectory: A trajectory object as a dictionary.
-        Raises:
-            HTTPError: If the server response indicates an error.
-            ValueError: If the response body is not a json document.
-            ImportError: If Maptplotlib or Numpy can no be imported.
+
         Example:
-            Retrieves a time series for MODIS13Q1 data product:
+
+            Retrieves a trajectory:
+
             .. doctest::
                 :skipif: WLTS_EXAMPLE_URL is None
+
                 >>> from wlts import *
                 >>> service = WLTS(WLTS_EXAMPLE_URL)
                 >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amz_4_1')
                 >>> ts.trajectory
-                [{'class': 'Formação Florestal', 'collection': 'mapbiomas_amz_4_1', 'date': '2007'}, ...]
+                [{'class': 'Formação Florestal', 'collection': 'mapbiomas_amz_4_1', 'date': '2007'}]
         """
         invalid_parameters = set(options) - {"longitude", "latitude", "start_date", "end_date", "collections"}
 
@@ -135,10 +136,13 @@ class WLTS:
 
         Returns:
             Collection: A collection metadata object.
+
         Example:
             Get a collection object named ``deter_amz_legal``:
+
             .. doctest::
                 :skipif: WLTS_EXAMPLE_URL is None
+
                 >>> from wlts import *
                 >>> service = WLTS(WLTS_EXAMPLE_URL)
                 >>> service['deter_amz_legal']

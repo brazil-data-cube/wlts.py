@@ -13,7 +13,7 @@ Examples
 
 
 List Available Collections
-------------------------
+--------------------------
 
 
 This example shows the list of collections in a service:

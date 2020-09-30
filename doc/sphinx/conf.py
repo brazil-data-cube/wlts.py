@@ -65,4 +65,10 @@ todo_include_todos = True
 
 todo_emit_warnings = True
 
+doctest_global_setup = '''
+import os
+
+WLTS_EXAMPLE_URL = os.getenv('WLTS_EXAMPLE_URL', None)
+'''
+
 master_doc = 'index'
