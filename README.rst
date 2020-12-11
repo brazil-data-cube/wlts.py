@@ -33,8 +33,8 @@ Python Client Library for Web Land Trajectory Service
 .. .. image:: https://img.shields.io/badge/pypi-v0.1.0-informational
         :target: https://pypi.org/pypi/wlts.py
 
-.. image:: https://img.shields.io/badge/lifecycle-experimental-orange.svg
-        :target: https://www.tidyverse.org/lifecycle/#experimental
+.. image:: https://img.shields.io/badge/lifecycle-maturing-blue.svg
+        :target: https://www.tidyverse.org/lifecycle/#maturing
         :alt: Software Life Cycle
 
 .. image:: https://img.shields.io/discord/689541907621085198?logo=discord&logoColor=ffffff&color=7389D8

@@ -54,16 +54,19 @@ Run the tests:
 
         $ ./run-test.sh
 
+Build the Documentation
++++++++++++++++++++++++
 
-Generate the documentation:
+You can generate the documentation based on Sphinx with the following command::
 
-.. code-block:: shell
-
-        $ python setup.py build_sphinx
+    python setup.py build_sphinx
 
 
-The above command will generate the documentation in HTML and it will place it under:
+The above command will generate the documentation in HTML and it will place it under::
 
-.. code-block:: shell
+    docs/sphinx/_build/html/
 
-    doc/sphinx/_build/html/
+
+You can open the above documentation in your favorite browser, as::
+
+    firefox docs/sphinx/_build/html/index.html
