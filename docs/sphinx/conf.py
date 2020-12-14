@@ -76,7 +76,7 @@ html_title = 'WLTS'
 html_context = {
     'display_github': False,
     'github_user': 'brazil-data-cube',
-    'github_repo': 'wtss.py',
+    'github_repo': 'wlts.py',
     'last_updated': False,
     #'commit': False,
 }
