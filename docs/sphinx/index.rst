@@ -20,6 +20,8 @@ Documentation
    api
    cli
    examples
+   repository
+   history
    license
 
 
