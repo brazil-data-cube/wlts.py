@@ -71,7 +71,7 @@ html_theme_options = {
 
 #html_style = ''
 
-html_title = 'WTSS'
+html_title = 'WLTS'
 
 html_context = {
     'display_github': False,
