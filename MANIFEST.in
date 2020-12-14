@@ -12,12 +12,12 @@ include *.sh
 include *.txt
 include LICENSE
 include pytest.ini
-recursive-exclude doc/sphinx/_build *
-recursive-include doc *.bat
-recursive-include doc *.css
-recursive-include doc *.py
-recursive-include doc *.rst
-recursive-include doc Makefile
+recursive-exclude docs/sphinx/_build *
+recursive-include docs *.bat
+recursive-include docs *.css
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs Makefile
 recursive-include examples *.py
 recursive-include examples *.ipynb
 recursive-include examples *.json
