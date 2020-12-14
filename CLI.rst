@@ -13,14 +13,14 @@ List the available collections:
 
 .. code-block:: shell
 
-        wlts-cli --url 'http://localhost/wlts' collections
+        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' collections
 
 
 Retrieve the trajactory given a longitude and latitude:
 
 .. code-block:: shell
 
-        wlts-cli --url 'http://localhost/wlts' trajectory -- 0 0
+        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' trajectory -- 0 0
 
 The above command will return a JSON document as:
 
@@ -67,12 +67,12 @@ The above command will return a JSON document as:
 
 .. code-block:: shell
 
-        wlts-cli --url 'http://localhost/wlts' trajectory --geoloc 0 0
+        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' trajectory --geoloc 0 0
 
 or:
 
 .. code-block:: shell
 
-        wlts-cli --url 'http://localhost/wlts' trajectory --ifile query.json
+        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' trajectory --ifile query.json
 
 

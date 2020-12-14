@@ -17,6 +17,8 @@ recursive-include docs *.bat
 recursive-include docs *.css
 recursive-include docs *.py
 recursive-include docs *.rst
+recursive-include docs *.ico
+recursive-include docs *.png
 recursive-include docs Makefile
 recursive-include examples *.py
 recursive-include examples *.ipynb

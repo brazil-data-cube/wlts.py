@@ -10,4 +10,27 @@
 Changes
 =======
 
-**Under Development!**
+Version 0.4.0-0 (2020-12-14)
+----------------------------
+
+- Basic integration with Jupyter Environment and Pandas.
+
+- Command Line Interface (CLI).
+
+- Support for the `WLTS specification version 0.4.0-0 <https://github.com/brazil-data-cube/wlts-spec>`_.
+
+- Documentation system based on Sphinx.
+
+- Documentation integrated to ``Read the Docs``.
+
+- Installation and build instructions.
+
+- Package support through Setuptools.
+
+- Installation and usage instructions.
+
+- Travis CI support.
+
+- Source code versioning based on `Semantic Versioning 2.0.0 <https://semver.org/>`_.
+
+- License: `MIT <https://github.com/gqueiroz/wtss.py/blob/master/LICENSE>`_.
