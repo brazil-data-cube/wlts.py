@@ -9,7 +9,8 @@
 
 from wlts import WLTS
 
-# Change to the WLTS URL you want to use.
+# You should create a wlts object attached to a given service
+# Specify the URL of the WLTS instance to be used
 service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
 
 # Returns the list of collections available on the service
