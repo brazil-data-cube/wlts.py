@@ -24,10 +24,10 @@ Production installation
 ..     $ pip3 install wlts.py
 
 
-Development installation
-------------------------
+Development Installation - GitHub
+---------------------------------
 
-Clone the software repository:
+Clone the Software Repository:
 
 .. code-block:: shell
 
@@ -48,7 +48,9 @@ Install in development mode:
         $ pip3 install -e .[all]
 
 
-Run the tests:
+Run the Tests
++++++++++++++
+
 
 .. code-block:: shell
 
