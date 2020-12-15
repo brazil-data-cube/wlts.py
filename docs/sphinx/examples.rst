@@ -18,10 +18,9 @@ List Available Collections
 
 This example shows the list of collections in a service:
 
-
 .. literalinclude:: ../../examples/list_collection.py
    :language: python
-   :lines: 11-
+   :lines: 12-
 
 Describe Collections
 ------------------------
@@ -29,10 +28,9 @@ Describe Collections
 
 This example shows the metadata of a collection:
 
-
 .. literalinclude:: ../../examples/describe_collection.py
    :language: python
-   :lines: 11-
+   :lines: 12-
 
 Trajectory
 -----------
@@ -40,10 +38,9 @@ Trajectory
 
 This example shows how to retrieve a trajectory:
 
-
 .. literalinclude:: ../../examples/trajectory.py
    :language: python
-   :lines: 11-
+   :lines: 12-
 
 
 Text Representations
@@ -52,7 +49,6 @@ Text Representations
 
 This example shows how the various text representation for services and coverages:
 
-
 .. literalinclude:: ../../examples/text-repr.py
    :language: python
-   :lines: 11-
+   :lines: 14-

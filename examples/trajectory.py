@@ -9,10 +9,16 @@
 
 from wlts import WLTS
 
-# Change to the WLTS URL you want to use.
+# Specify the URL of the WLTS instance to be used
 service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
 
 # Example of trajectory operation
-tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amz_4_1')
+tj = service.tj(latitude=-12.0, longitude=-54.0)
 
 print(tj.trajectory)
+
+# The collection name may not be same.
+# Make sure the collection is available in service
+tj_two = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
+
+print(tj_two.trajectory)

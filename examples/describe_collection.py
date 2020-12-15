@@ -9,8 +9,8 @@
 
 from wlts import WLTS
 
-# Change to the WLTS URL you want to use.
+# Specify the URL of the WLTS instance to be used
 service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
 
 # Get collection metadata
-print(service['prodes_amz_legal'])
+print(service['prodes_amazonia_legal'])
