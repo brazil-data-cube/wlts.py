@@ -21,3 +21,4 @@ print(tj.trajectory)
 # Make sure the collection is available in service
 tj_two = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
 
+print(tj_two.trajectory)
