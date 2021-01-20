@@ -14,16 +14,12 @@ Python Client Library for Web Land Trajectory Service
         :target: https://github.com//brazil-data-cube/wlts.py/blob/master/LICENSE
         :alt: Software License
 
-.. image:: https://travis-ci.org/brazil-data-cube/wlts.py.svg?branch=master
-        :target: https://travis-ci.org/brazil-data-cube/wlts.py
+.. image:: https://drone.dpi.inpe.br/api/badges/brazil-data-cube/wlts.py/status.svg
+        :target: https://drone.dpi.inpe.br/brazil-data-cube/wlts.py
         :alt: Build Status
 
-.. .. image:: https://img.shields.io/badge/tests-0%20passed,%200%20failed-critical
-..         :target: https://travis-ci.org/brazil-data-cube/wlts.py
-..         :alt: Tests
-
-.. image:: https://coveralls.io/repos/github/brazil-data-cube/wlts.py/badge.svg?branch=master
-        :target: https://coveralls.io/github/brazil-data-cube/wlts.py?branch=master
+.. image:: https://codecov.io/gh/brazil-data-cube/wlts.py/branch/master/graph/badge.svg?token=1R1NNI56JO
+        :target: https://codecov.io/gh/brazil-data-cube/wlts.py
         :alt: Code Coverage Test
 
 .. image:: https://readthedocs.org/projects/wltspy/badge/?version=latest

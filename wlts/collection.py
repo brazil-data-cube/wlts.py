@@ -6,11 +6,11 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""A class that represents a collection in WTSS."""
+"""A class that represents a collection in WLTS."""
 
 
 class Collections(dict):
-    """A class that describes a collection in WTSS.
+    """A class that describes a collection in WLTS.
 
     .. note::
         For more information about collection definition, please, refer to
