@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020 INPE.
+# Copyright (C) 2020-2021 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -43,6 +43,7 @@ class Collections(dict):
         def detail(self):
             """Return the coverage dimensions metadata."""
             return self['detail']
+
         @property
         def name(self):
             """Return the coverage dimensions metadata."""

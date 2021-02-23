@@ -19,13 +19,14 @@ class WLTS:
     .. note::
         For more information about WLTS, please, refer to
         `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
-
-    :param url: The WLTS server URL.
-    :type url: str
     """
 
     def __init__(self, url):
-        """Create a WLTS client attached to the given host address (an URL)."""
+        """Create a WLTS client attached to the given host address (an URL).
+
+        Args:
+            url (str): URL for the WLTS server.
+        """
         self._url = url if url[-1] != '/' else url[0:-1]
 
     @property
@@ -37,7 +38,7 @@ class WLTS:
         """
         return self._list_collections()
 
-    def tj(self, **options):
+    def tj(self, latitude, longitude, **options):
         """Retrieve the trajectory for a given location and time interval.
 
         Keyword Args:
@@ -47,6 +48,7 @@ class WLTS:
             latitude (int/float): A latitude value according to EPSG:4326.
             start_date (:obj:`str`, optional): The begin of a time interval.
             end_date (:obj:`str`, optional): The end of a time interval.
+            geometry (:obj:`str`, optional): A string that accepted True of False.
 
         Returns:
             Trajectory: A trajectory object as a dictionary.
@@ -60,30 +62,35 @@ class WLTS:
 
                 >>> from wlts import *
                 >>> service = WLTS(WLTS_EXAMPLE_URL)
-                >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amz_4_1')
+                >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
                 >>> ts.trajectory
-                [{'class': 'Formação Florestal', 'collection': 'mapbiomas_amz_4_1', 'date': '2007'}]
+                [{'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2007'}]
         """
-        invalid_parameters = set(options) - {"longitude", "latitude", "start_date", "end_date", "collections"}
+        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry"}
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
 
-        if ('latitude' not in options) or ('longitude' not in options):
-            raise ValueError("Arguments latitude and longitude are mandatory.")
+        if type(latitude) != list and type(longitude) != list:
+            latitude = [latitude]
+            longitude = [longitude]
 
-        if (type(options['latitude']) not in (float, int)) or (type(options['longitude']) not in (float, int)):
-            raise ValueError("Arguments latitude and longitude must be numeric.")
+        result = list()
 
-        if (options['latitude'] < -90.0) or (options['latitude'] > 90.0):
-            raise ValueError('latitude is out-of range [-90,90]!')
+        for lat, long in zip(latitude, longitude):
+            if (type(lat) not in (float, int)) or (type(long) not in (float, int)):
+                raise ValueError("Arguments latitude and longitude must be numeric.")
+    
+            if (lat < -90.0) or (lat > 90.0):
+                raise ValueError('latitude is out-of range [-90,90]!')
+    
+            if (long < -180.0) or (long > 180.0):
+                raise ValueError('longitude is out-of range [-180,180]!')
 
-        if (options['longitude'] < -180.0) or (options['longitude'] > 180.0):
-            raise ValueError('longitude is out-of range [-180,180]!')
+            data = self._trajectory(**{'latitude': lat, 'longitude': long, **options})
+            result.append(Trajectory(data))
 
-        data = self._trajectory(options)
-
-        return Trajectory(data)
+        return result
 
     def _list_collections(self):
         """Return the list of available collections."""
@@ -91,40 +98,32 @@ class WLTS:
 
         return result['collections']
 
-    def _trajectory(self, params):
+    def _trajectory(self, **params):
         """Retrieve the trajectories of collections associated with a given location in space.
 
         Retrieve the land use and cover trajectory associated to the
         informed location considering the given date interval and the
         collections.
 
-        :param params: A dictionary with location and period.
-        :type params: dict
+        Keyword Args:
+            collections (optional): A string with collections names separated by commas,
+            or any sequence of strings. If omitted, the values for all collections are retrieved.
+            longitude (int/float): A longitude value according to EPSG:4326.
+            latitude (int/float): A latitude value according to EPSG:4326.
+            start_date (:obj:`str`, optional): The begin of a time interval.
+            end_date (:obj:`str`, optional): The end of a time interval.
+            geometry (:obj:`str`, optional): A string that accepted True of False.
 
-        :param longitude: Longitude.
-        :type longitude: float
-
-        :param latitude: Latitude.
-        :type latitude: float
-
-        :param start_date: A string with the start date in the following format: yyyy-mm-dd.
-        :type start_date: string, optional
-
-        :param end_date: A string with the end date in the following format: yyyy-mm-dd.
-        :type end_date: string, optional
-
-        :param collections: The list of
-
-        :returns: Trajectory.
-        :rtype: list
+         Returns:
+            Trajectory: A trajectory object as a dictionary.
         """
-        return WLTS._get('{}/trajectory'.format(self._url), params=params)
+        return WLTS._get('{}/trajectory'.format(self._url), **params)
 
     def _describe_collection(self, collection_id):
         """Describe a give collection.
 
-        :param name: The collection name.
-        :type name: str.
+        :param collection_id: The collection name.
+        :type collection_id: str.
 
         :returns: Collection description.
         :rtype: dict
@@ -179,7 +178,7 @@ class WLTS:
             yield self[cl_name]
 
     @staticmethod
-    def _get(url, params=None):
+    def _get(url, **params):
         """Query the WLTS service using HTTP GET verb and return the result as a JSON document.
 
         :param url: The URL to query must be a valid WLTS endpoint.
