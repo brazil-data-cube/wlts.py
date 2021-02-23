@@ -1,8 +1,8 @@
 ..
-    This file is part of Web Land Trajectory Service.
-    Copyright (C) 2019-2020 INPE.
+    This file is part of Python Client Library for WLTS.
+    Copyright (C) 2020-2021 INPE.
 
-    Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+    Python Client Library for WLTS is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 
@@ -27,34 +27,27 @@ Production installation
 Development Installation - GitHub
 ---------------------------------
 
-Clone the Software Repository:
+Clone the Software Repository::
 
-.. code-block:: shell
-
-        $ git clone https://github.com/brazil-data-cube/wlts.py.git
+    git clone https://github.com/brazil-data-cube/wlts.py.git
 
 
-Go to the source code folder:
+Go to the source code folder::
 
-.. code-block:: shell
-
-        $ cd wlts.py
+    cd wlts.py
 
 
-Install in development mode:
+Install in development mode::
 
-.. code-block:: shell
-
-        $ pip3 install -e .[all]
+    pip3 install -e .[all]
 
 
 Run the Tests
 +++++++++++++
 
+Run the tests::
 
-.. code-block:: shell
-
-        $ ./run-test.sh
+    ./run-test.sh
 
 Build the Documentation
 +++++++++++++++++++++++

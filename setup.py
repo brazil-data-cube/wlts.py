@@ -1,8 +1,8 @@
 #
-# This file is part of Web Land Trajectory Service.
-# Copyright (C) 2019 INPE.
+# This file is part of Python Client Library for WLTS.
+# Copyright (C) 2020-2021 INPE.
 #
-# Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+# Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
@@ -49,6 +49,7 @@ setup_requires = [
 install_requires = [
     'requests>=2.20',
     'Click>=7.0',
+    'Jinja2>=2.11.1',
 ]
 
 packages = find_packages()
@@ -63,7 +64,7 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'WFS', 'WCS', 'Web Time Series Service'],
+    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'OGC WFS', 'OGC WCS', 'Web Time Series Service'],
     license='MIT',
     author='Brazil Data Cube Team',
     author_email='brazildatacube@inpe.br',

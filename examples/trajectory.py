@@ -1,13 +1,11 @@
 #
-# This file is part of Web Land Trajectory Service.
+# This file is part of Python Client Library for WLTS.
 # Copyright (C) 2020-2021 INPE.
 #
-# Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+# Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """WLTS Python Client Examples."""
-import matplotlib.pyplot as plt
-
 from wlts import WLTS
 
 # Specify the URL of the WLTS instance to be used
@@ -17,13 +15,13 @@ tj = service.tj(latitude=[-12.0, -10.3378], longitude=[-47.3200, -54.0], start_d
 print(tj)
 
 
-#Example of trajectory operation
+# Example of trajectory operation
 tj = service.tj(latitude=-12.0, longitude=-54.0)
 
 print(tj.trajectory)
 
-#The collection name may not be same.
-#Make sure the collection is available in service
+# The collection name may not be same.
+# Make sure the collection is available in service
 tj_two = service.tj(latitude=-10.3378, longitude=-47.3200, collections='prodes_cerrado', geometry=True)
 
 print(tj_two.trajectory)

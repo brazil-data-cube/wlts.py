@@ -1,14 +1,25 @@
 ..
-    This file is part of Web Land Trajectory Service.
-    Copyright (C) 2019-2020 INPE.
+    This file is part of Python Client Library for WLTS.
+    Copyright (C) 2020-2021 INPE.
 
-    Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+    Python Client Library for WLTS is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 
 =======
 Changes
 =======
+
+Version 0.6.0 (2021-X-X)
+------------------------
+
+- Add Drone integration (`#38 <https://github.com/brazil-data-cube/wlts/issues/38>`_).
+
+- Integration with Geopandas package (`#33 <https://github.com/brazil-data-cube/wlts/issues/33>`_).
+
+- Add support for user pass multiple points in trajectory (`#42 <https://github.com/brazil-data-cube/wlts/issues/42>`_).
+
+- Improve Jupyter integration (`#33 <https://github.com/brazil-data-cube/wlts/issues/33>`_).
 
 Version 0.4.0-0 (2020-12-15)
 ----------------------------
