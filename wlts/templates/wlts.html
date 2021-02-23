@@ -1,0 +1,10 @@
+<p>WLTS</p>
+<ul>
+    <li><b>URL:</b> {{ url }}</li>
+    <li><b>Collections:</b></li>
+    <ul>
+    {% for cl in collections -%}
+        <li>{{ cl }}</li>
+    {%- endfor %}
+    </ul>
+</ul>

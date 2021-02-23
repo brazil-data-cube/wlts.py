@@ -13,3 +13,5 @@ service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/')
 print(service)
 print(str(service))
 print(repr(service))
+print(service._repr_html_())
+

@@ -1,0 +1,45 @@
+<div>
+    <b>Collection Name:</b> {{collection.name}}
+</div>
+<div>
+    <b>Collection Type:</b> {{collection.collection_type}}
+</div>
+<div>
+    <b>Description:</b> {{collection.description}}
+</div>
+<div>
+    <b>Start date:</b> {{collection.period['start_date']}}
+    <b>End date:</b> {{collection.period['end_date']}}
+</div>
+<b>Resolution Unit:</b>
+<div>
+    <b>Unit:</b> {{collection.resolution_unit['unit']}}
+    <b>Value:</b> {{collection.resolution_unit['value']}}
+</div>
+</br>
+<b>Classification System:</b>
+<div>
+    <b>Id:</b> {{collection.classification_system['classification_system_id']}}
+    <b>Name:</b> {{collection.classification_system['classification_system_name']}}
+    <b>Version:</b> {{collection.classification_system['classification_system_version']}}
+</div>
+</br>
+<div>
+    <b>Extent</b>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>max_x</th>
+            <th>min_x</th>
+            <th>max_y</th>
+            <th>min_y</th>
+        </tr>
+        <tr>
+            <td>{{collection.spatial_extent['xmax']}}</td>
+            <td>{{collection.spatial_extent['xmin']}}</td>
+            <td>{{collection.spatial_extent['ymax']}}</td>
+            <td>{{collection.spatial_extent['ymin']}}</td>
+        </tr>
+    </table>
+</div>

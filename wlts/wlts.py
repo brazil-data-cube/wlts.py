@@ -11,6 +11,7 @@ import requests
 
 from .collection import Collections
 from .trajectory import Trajectory
+from .utils import Utils
 
 
 class WLTS:
@@ -176,6 +177,17 @@ class WLTS:
         """
         for cl_name in self.collections:
             yield self[cl_name]
+
+    def _repr_html_(self):
+        """Display the WLTS object as HTML.
+        
+        This integrates a rich display in IPython.
+        """
+        cl_list = self._list_collections()
+
+        html = Utils.render_html('wlts.html', url=self._url, collections=cl_list)
+
+        return html
 
     @staticmethod
     def _get(url, **params):

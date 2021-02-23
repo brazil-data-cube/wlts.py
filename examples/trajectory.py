@@ -18,10 +18,10 @@ print(tj)
 # Example of trajectory operation
 tj = service.tj(latitude=-12.0, longitude=-54.0)
 
-print(tj.trajectory)
+print(tj[0].trajectory)
 
 # The collection name may not be same.
 # Make sure the collection is available in service
 tj_two = service.tj(latitude=-10.3378, longitude=-47.3200, collections='prodes_cerrado', geometry=True)
 
-print(tj_two.trajectory)
+print(tj_two[0].trajectory)
