@@ -36,7 +36,8 @@ tests_require = [
 extras_require = {
     'docs': docs_require,
     'tests': tests_require,
-    'pandas': ['pandas>=1.1']
+    'pandas': ['pandas>=1.1'],
+    'geopandas': ['geopandas>=0.8.2', 'descartes>=1.1.0', 'shapely>=1.7.1'],
 }
 
 extras_require['all'] = [ req for exts, reqs in extras_require.items() for req in reqs ]
@@ -62,10 +63,10 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'WFS', 'WCS', 'WTSS'],
+    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'WFS', 'WCS', 'Web Time Series Service'],
     license='MIT',
-    author='INPE',
-    author_email='fabi.zioti@gmail.com',
+    author='Brazil Data Cube Team',
+    author_email='brazildatacube@inpe.br',
     url='https://github.com/brazil-data-cube/wlts.py',
     packages=packages,
     zip_safe=False,
