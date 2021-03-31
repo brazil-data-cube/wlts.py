@@ -99,11 +99,11 @@ class TestWLTS:
 
             trajectory = s.tj(latitude=-12.31, longitude=-53.63)
 
-            assert 'query' in trajectory[0]
-            assert 'result' in trajectory[0]
-            assert trajectory[0]['query']['latitude']
-            assert trajectory[0]['query']['longitude']
-            assert 'trajectory' in trajectory[0]['result']
+            assert 'query' in trajectory
+            assert 'result' in trajectory
+            assert trajectory['query']['latitude']
+            assert trajectory['query']['longitude']
+            assert 'trajectory' in trajectory['result']
 
 
 if __name__ == '__main__':
