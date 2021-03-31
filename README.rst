@@ -22,8 +22,8 @@ Python Client Library for Web Land Trajectory Service
         :target: https://codecov.io/gh/brazil-data-cube/wlts.py
         :alt: Code Coverage Test
 
-.. image:: https://readthedocs.org/projects/wltspy/badge/?version=latest
-        :target: https://wltspy.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/wlts/badge/?version=latest
+        :target: https://wlts.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 .. .. image:: https://img.shields.io/badge/pypi-v0.1.0-informational
