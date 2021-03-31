@@ -42,11 +42,11 @@ class Trajectory(dict):
         except:
             raise ImportError('You should install Pandas')
 
-        return pd.DataFrame(self.trajectory['trajectory'])
+        return pd.DataFrame(self.trajectory)
 
     def geodf(self, **options):
         """Plot trajectory as geodataframe."""
-        if not all(['geom' in i for i in self.trajectory['trajectory']]):
+        if not all(['geom' in i for i in self.trajectory]):
             raise RuntimeError("Geometry field not exist! Verify if you pass geometry=True in service.trj!")
         try:
             import geopandas as gpd
@@ -54,7 +54,7 @@ class Trajectory(dict):
         except:
             raise ImportError('You should install GeoPandas, Shapely and Descartes!')
 
-        gdf = gpd.GeoDataFrame(self.trajectory['trajectory'])
+        gdf = gpd.GeoDataFrame(self.trajectory)
         
         gdf["geom"] = gdf.apply(lambda x: shape(x["geom"]), axis=1)
 
