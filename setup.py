@@ -1,8 +1,8 @@
 #
-# This file is part of Web Land Trajectory Service.
-# Copyright (C) 2019 INPE.
+# This file is part of Python Client Library for WLTS.
+# Copyright (C) 2020-2021 INPE.
 #
-# Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+# Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
@@ -36,7 +36,8 @@ tests_require = [
 extras_require = {
     'docs': docs_require,
     'tests': tests_require,
-    'pandas': ['pandas>=1.1']
+    'pandas': ['pandas>=1.1'],
+    'geopandas': ['geopandas>=0.8.2', 'descartes>=1.1.0', 'shapely>=1.7.1'],
 }
 
 extras_require['all'] = [ req for exts, reqs in extras_require.items() for req in reqs ]
@@ -48,6 +49,7 @@ setup_requires = [
 install_requires = [
     'requests>=2.20',
     'Click>=7.0',
+    'Jinja2>=2.11.1',
 ]
 
 packages = find_packages()
@@ -62,10 +64,10 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'WFS', 'WCS', 'WTSS'],
+    keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'OGC WFS', 'OGC WCS', 'Web Time Series Service'],
     license='MIT',
-    author='INPE',
-    author_email='fabi.zioti@gmail.com',
+    author='Brazil Data Cube Team',
+    author_email='brazildatacube@inpe.br',
     url='https://github.com/brazil-data-cube/wlts.py',
     packages=packages,
     zip_safe=False,

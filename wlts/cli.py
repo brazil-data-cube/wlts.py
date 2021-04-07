@@ -1,12 +1,12 @@
 #
-# This file is part of Python Client Library for STAC.
-# Copyright (C) 2019-2020 INPE.
+# This file is part of Python Client Library for WLTS.
+# Copyright (C) 2020-2021 INPE.
 #
-# Python Client Library for STAC is free software; you can redistribute it and/or modify it
+# Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Command line interface for the STAC client."""
+"""Command line interface for the WLTS client."""
 
 import json
 from pprint import pprint
@@ -28,7 +28,7 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 
 
 @click.group()
-@click.option('--url', type=click.STRING, default='http://localhost',
+@click.option('--url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/wlts/',
               help='The WLTS server address (an URL).')
 @pass_config
 def cli(config, url):

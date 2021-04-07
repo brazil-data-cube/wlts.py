@@ -1,26 +1,22 @@
 ..
-    This file is part of Web Land Trajectory Service.
-    Copyright (C) 2019-20 INPE.
+    This file is part of Python Client Library for WLTS.
+    Copyright (C) 2020-2021 INPE.
 
-    Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+    Python Client Library for WLTS is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 
 Running WLTS Client in the Command Line
 =======================================
 
-List the available collections:
+List the available collections::
 
-.. code-block:: shell
-
-        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' collections
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' collections
 
 
-Retrieve the trajactory given a longitude and latitude:
+Retrieve the trajectory given a longitude and latitude::
 
-.. code-block:: shell
-
-        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' trajectory -- 0 0
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' trajectory -- 0 0
 
 The above command will return a JSON document as:
 
@@ -63,16 +59,12 @@ The above command will return a JSON document as:
       'collection': 'mapbiomas_amz_4_1',
       'date': '2018'}]
 
+You can also use::
 
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' trajectory --geoloc 0 0
 
-.. code-block:: shell
+or pass a json file with the location in space::
 
-        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' trajectory --geoloc 0 0
-
-or:
-
-.. code-block:: shell
-
-        wlts-cli --url 'http://brazildatacube.dpi.inpe.br/wlts/' trajectory --ifile query.json
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' trajectory --ifile query.json
 
 

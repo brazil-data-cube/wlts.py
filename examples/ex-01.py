@@ -1,8 +1,8 @@
 #
-# This file is part of Web Land Trajectory Service.
-# Copyright (C) 2019-2020 INPE.
+# This file is part of Python Client Library for WLTS.
+# Copyright (C) 2020-2021 INPE.
 #
-# Web Land Trajectory Service is free software; you can redistribute it and/or modify it
+# Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """WLTS Python Client Examples."""
@@ -12,7 +12,7 @@ from wlts import WLTS
 
 # You should create a WLTS object attached to a given service
 # (Specify the URL of the WLTS instance to be used ):
-service = WLTS('http://brazildatacube.dpi.inpe.br/wlts/')
+service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/')
 
 print(repr(service))
 print(str(service))
@@ -30,4 +30,3 @@ print(service['deter_amz_legal'])
 # Make sure the collection is available in service, using the previous operation (service.collection)
 tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
 
-print(tj.trajectory)
