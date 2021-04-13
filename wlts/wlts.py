@@ -10,6 +10,7 @@
 import requests
 
 from .collection import Collections
+from .trajectories import Trajectories
 from .trajectory import Trajectory
 from .utils import Utils
 
@@ -45,8 +46,8 @@ class WLTS:
         Keyword Args:
             collections (optional): A string with collections names separated by commas,
             or any sequence of strings. If omitted, the values for all collections are retrieved.
-            longitude (int/float): A longitude value according to EPSG:4326.
-            latitude (int/float): A latitude value according to EPSG:4326.
+            longitude (int/float/list): A longitude value according to EPSG:4326.
+            latitude (int/float/list): A latitude value according to EPSG:4326.
             start_date (:obj:`str`, optional): The begin of a time interval.
             end_date (:obj:`str`, optional): The end of a time interval.
             geometry (:obj:`str`, optional): A string that accepted True of False.
@@ -67,31 +68,38 @@ class WLTS:
                 >>> ts.trajectory
                 [{'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2007'}]
         """
+        def validate_lat_long(lat, long):
+            if (type(lat) not in (float, int)) or (type(long) not in (float, int)):
+                raise ValueError("Arguments latitude and longitude must be numeric.")
+
+            if (lat < -90.0) or (lat > 90.0):
+                raise ValueError('latitude is out-of range [-90,90]!')
+
+            if (long < -180.0) or (long > 180.0):
+                raise ValueError('longitude is out-of range [-180,180]!')
+
         invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry"}
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
 
         if type(latitude) != list and type(longitude) != list:
-            latitude = [latitude]
-            longitude = [longitude]
+            validate_lat_long(latitude, longitude)
+
+            data = self._trajectory(**{'latitude': latitude, 'longitude': longitude, **options})
+
+            return Trajectory(data)
 
         result = list()
 
         for lat, long in zip(latitude, longitude):
-            if (type(lat) not in (float, int)) or (type(long) not in (float, int)):
-                raise ValueError("Arguments latitude and longitude must be numeric.")
-    
-            if (lat < -90.0) or (lat > 90.0):
-                raise ValueError('latitude is out-of range [-90,90]!')
-    
-            if (long < -180.0) or (long > 180.0):
-                raise ValueError('longitude is out-of range [-180,180]!')
+            validate_lat_long(lat, long)
 
             data = self._trajectory(**{'latitude': lat, 'longitude': long, **options})
+
             result.append(Trajectory(data))
 
-        return result
+        return Trajectories({"trajectories": result})
 
     def _list_collections(self):
         """Return the list of available collections."""

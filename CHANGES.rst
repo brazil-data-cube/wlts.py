@@ -10,8 +10,8 @@
 Changes
 =======
 
-Version 0.6.0 (2021-X-X)
-------------------------
+Version 0.6.0 (2021-04-13)
+--------------------------
 
 - Add Drone integration (`#38 <https://github.com/brazil-data-cube/wlts/issues/38>`_).
 
@@ -20,6 +20,8 @@ Version 0.6.0 (2021-X-X)
 - Add support for user pass multiple points in trajectory (`#42 <https://github.com/brazil-data-cube/wlts/issues/42>`_).
 
 - Improve Jupyter integration (`#33 <https://github.com/brazil-data-cube/wlts/issues/33>`_).
+
+- Add Jupyter support to WLTS objects (`#44 <https://github.com/brazil-data-cube/wlts/issues/44>`_).
 
 Version 0.4.0-0 (2020-12-15)
 ----------------------------

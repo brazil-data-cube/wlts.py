@@ -6,10 +6,11 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for WLTS."""
+from .utils import Utils
 
 
 class Trajectory(dict):
-    """A class that represents a collection in WLTS.
+    """A class that represents a trajectory in WLTS.
 
     .. note::
         For more information about trajectory definition, please, refer to
@@ -27,7 +28,7 @@ class Trajectory(dict):
     @property
     def trajectory(self, as_date=False, fmt=''):
         """Return the trajectory associated with a location in space."""
-        return {'latitude': self['query']['latitude'], 'longitude': self['query']['longitude'], 'trajectory': self['result']['trajectory']}
+        return self['result']['trajectory']
 
     @property
     def query(self, as_date=False, fmt=''):
@@ -41,11 +42,11 @@ class Trajectory(dict):
         except:
             raise ImportError('You should install Pandas')
 
-        return pd.DataFrame(self.trajectory['trajectory'])
+        return pd.DataFrame(self.trajectory)
 
     def geodf(self, **options):
         """Plot trajectory as geodataframe."""
-        if not all(['geom' in i for i in self.trajectory['trajectory']]):
+        if not all(['geom' in i for i in self.trajectory]):
             raise RuntimeError("Geometry field not exist! Verify if you pass geometry=True in service.trj!")
         try:
             import geopandas as gpd
@@ -53,7 +54,7 @@ class Trajectory(dict):
         except:
             raise ImportError('You should install GeoPandas, Shapely and Descartes!')
 
-        gdf = gpd.GeoDataFrame(self.trajectory['trajectory'])
+        gdf = gpd.GeoDataFrame(self.trajectory)
         
         gdf["geom"] = gdf.apply(lambda x: shape(x["geom"]), axis=1)
 
@@ -61,3 +62,7 @@ class Trajectory(dict):
         gdf.set_crs("EPSG:4326", inplace=True)
 
         return gdf
+
+    def _repr_html_(self):
+        """HTML repr."""
+        return Utils.render_html('trajectory-item.html', tj=self)

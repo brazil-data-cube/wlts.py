@@ -40,7 +40,7 @@ This example shows how to retrieve a trajectory:
 
 .. literalinclude:: ../../examples/trajectory.py
    :language: python
-   :lines: 10-
+   :lines: 09-
 
 
 Text Representations

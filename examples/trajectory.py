@@ -11,17 +11,18 @@ from wlts import WLTS
 # Specify the URL of the WLTS instance to be used
 service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/')
 
-tj = service.tj(latitude=[-12.0, -10.3378], longitude=[-47.3200, -54.0], start_date='2010')
-print(tj)
-
-
 # Example of trajectory operation
 tj = service.tj(latitude=-12.0, longitude=-54.0)
 
-print(tj[0].trajectory)
+print(tj.trajectory)
 
+# Example of trajectory operation passing a list of latitude and longitude
+tj_m = service.tj(latitude=[-12.0, -10.3378], longitude=[-47.3200, -54.0], start_date='2010')
+for tj in tj_m['trajectories']:
+    print(tj.trajectory)
+
+# Example of trajectory operation with geometry
 # The collection name may not be same.
 # Make sure the collection is available in service
 tj_two = service.tj(latitude=-10.3378, longitude=-47.3200, collections='prodes_cerrado', geometry=True)
-
-print(tj_two[0].trajectory)
+print(tj_two.trajectory)
