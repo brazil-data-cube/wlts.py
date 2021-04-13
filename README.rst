@@ -78,7 +78,7 @@ See `CLI.rst <./CLI.rst>`_.
 Developer Documentation
 =======================
 
-See https://wltspy.readthedocs.io/en/latest.
+See https://wlts.readthedocs.io/en/latest.
 
 
 License
