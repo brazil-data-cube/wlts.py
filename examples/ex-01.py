@@ -12,7 +12,7 @@ from wlts import WLTS
 
 # You should create a WLTS object attached to a given service
 # (Specify the URL of the WLTS instance to be used ):
-service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/')
+service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/', access_token='change-me')
 
 print(repr(service))
 print(str(service))
