@@ -14,9 +14,11 @@ import re
 from pathlib import Path
 
 import pytest
+from click.testing import CliRunner
 from pkg_resources import resource_filename, resource_string
 
 import wlts
+from wlts.cli import Config
 
 url = os.environ.get('WLTS_SERVER_URL', 'http://localhost:5000/wlts')
 match_url = re.compile(url)
@@ -47,6 +49,20 @@ def wlts_objects():
             files[s[-2]] = {s[-1]: file}
 
     return files
+
+
+@pytest.fixture(scope='module')
+def runner():
+    return CliRunner()
+
+
+@pytest.fixture
+def config_obj():
+    config = Config()
+    config.url = url
+    config.service = wlts.WLTS(url)
+
+    return config
 
 
 class TestWLTS:
@@ -97,13 +113,57 @@ class TestWLTS:
                               status_code=200,
                               headers={'content-type': 'application/json'})
 
-            trajectory = s.tj(latitude=-12.31, longitude=-53.63)
+            trajectory = s.tj(latitude=-12.0, longitude=-54.0, start_date='2001', end_date='2011',
+                              collections='mapbiomas5_amazonia')
 
             assert 'query' in trajectory
             assert 'result' in trajectory
             assert trajectory['query']['latitude']
             assert trajectory['query']['longitude']
             assert 'trajectory' in trajectory['result']
+
+
+class TestCli:
+    def test_collection(self, wlts_objects, requests_mock, runner, config_obj):
+        for k in wlts_objects:
+            requests_mock.get(match_url, json=wlts_objects[k]['list_collections.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
+
+            result = runner.invoke(wlts.cli.list_collections, obj=config_obj)
+
+            assert result.exit_code == 0
+            assert 'prodes_amz' in result.output
+
+    def test_describe(self, wlts_objects, requests_mock, runner, config_obj):
+        for k in wlts_objects:
+            requests_mock.get(match_url, json=wlts_objects[k]['describe_collection.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
+
+            result = runner.invoke(wlts.cli.describe, ['--collection', 'prodes_cerrado'], obj=config_obj)
+
+            assert result.exit_code == 0
+            assert 'collection_type' in result.output
+            assert 'description' in result.output
+            assert 'detail' in result.output
+            assert 'name' in result.output
+
+    def test_trajectory(self, wlts_objects, requests_mock, runner, config_obj):
+        for k in wlts_objects:
+            requests_mock.get(match_url, json=wlts_objects[k]['trajectory.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
+
+            result = runner.invoke(wlts.cli.trajectory, ['--collections', 'mapbiomas5_amazonia',
+                                                         '--latitude', '-12.0',
+                                                         '--longitude', '-54.0',
+                                                         '--start-date', '2001',
+                                                         '--end-date', '2011'
+                                                         ], obj=config_obj)
+
+            assert result.exit_code == 0
+            assert 'trajectory:' in result.output
 
 
 if __name__ == '__main__':

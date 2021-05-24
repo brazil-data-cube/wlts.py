@@ -19,7 +19,7 @@ class Config:
     def __init__(self):
         """Initialization of Config decorator."""
         self.url = None
-        self.access_token = None
+        self.service = None
 
 
 pass_config = click.make_pass_decorator(Config, ensure=True)
