@@ -8,9 +8,6 @@
 
 """Command line interface for the WLTS client."""
 
-import json
-from pprint import pprint
-
 import click
 
 from .wlts import WLTS
@@ -22,6 +19,7 @@ class Config:
     def __init__(self):
         """Initialization of Config decorator."""
         self.url = None
+        self.access_token = None
 
 
 pass_config = click.make_pass_decorator(Config, ensure=True)
@@ -30,44 +28,47 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 @click.group()
 @click.option('--url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/wlts/',
               help='The WLTS server address (an URL).')
+@click.option('--access-token', default=None, help='Personal Access Token of the BDC Auth')
+@click.version_option()
 @pass_config
-def cli(config, url):
+def cli(config, url, access_token):
     """WLTS on command line."""
     config.url = url
+    config.service = WLTS(url, access_token=access_token)
 
 
 @cli.command()
 @click.option('-v', '--verbose', is_flag=True, default=False)
 @pass_config
-def collections(config, verbose):
+def list_collections(config: Config, verbose):
     """Return the list of available collections in the service provider."""
     if verbose:
         click.secho(f'Server: {config.url}', bold=True, fg='black')
         click.secho('\tRetrieving the list of available coverages... ',
                     bold=False, fg='black')
+        for collection in config.service.collections:
+            click.secho(f'\t\t- {collection}', bold=True, fg='green')
 
-    service = WLTS(config.url)
+        click.secho('\tFinished!', bold=False, fg='black')
 
-    retval = service.collections
-
-    pprint(retval)
+    else:
+        for cv in config.service.collections:
+            click.secho(f'{cv}', bold=True, fg='green')
 
 
 @cli.command()
 @click.option('-v', '--verbose', is_flag=True, default=False)
 @click.option('-c', '--collection', required=True, type=str,
-              help='Collection name')
+              help='The collection name')
 @pass_config
-def describe(config, verbose, collection):
+def describe(config: Config, verbose, collection):
     """Retrieve the coverage metadata."""
     if verbose:
         click.secho(f'Server: {config.url}', bold=True, fg='black')
         click.secho('\tRetrieving the collection metadata... ',
                     bold=False, fg='black')
 
-    service = WLTS(config.url)
-
-    cv = service[collection]
+    cv = config.service[collection]
 
     click.secho(f'\t- {cv}', bold=True, fg='green')
 
@@ -76,41 +77,33 @@ def describe(config, verbose, collection):
 
 
 @cli.command()
-@click.option('--geoloc', nargs=2, type=click.FLOAT,
-              help='''The x and y coordinates of the query location
-                      (required if --ifile is omitted or if x and y
-                       arguments are omitted).''',
-              required=False)
-@click.option('--ifile', type=click.File('r'),
-              help='A JSON input file with all query parameters (required if --geoloc is omitted).',
-              required=False)
 @click.option('-v', '--verbose', is_flag=True, default=False)
-@click.argument('x', type=click.FLOAT, required=False)
-@click.argument('y', type=click.FLOAT, required=False)
+@click.option('-a', '--collections', required=False, type=str,
+              help='Collections list (items separated by comma)')
+@click.option('--latitude', required=True, type=float,
+              help='Latitude in EPSG:4326')
+@click.option('--longitude', required=True, type=float,
+              help='Longitude in EPSG:4326')
+@click.option('--start-date', required=False, type=str,
+              help='Start date')
+@click.option('--end-date', required=False, type=str,
+              help='End date')
+@click.option('--start-date', required=False, type=str,
+              help='Start date')
+@click.option('--end-date', required=False, type=str,
+              help='End date')
 @pass_config
-def trajectory(config, verbose, geoloc, ifile, x, y):
+def trajectory(config: Config, verbose, collections, start_date, end_date, latitude, longitude):
     """Return the trajectory associated to the location."""
     if verbose:
         click.secho(f'Server: {config.url}', bold=True, fg='black')
         click.secho('\tRetrieving trajectory... ',
                     bold=False, fg='black')
-    query = {}
 
-    if ifile is not None:
-        query = json.load(ifile)
-    elif geoloc:
-        query.update(dict(
-            longitude=geoloc[1],
-            latitude=geoloc[0]
-        ))
-    else:
-        query.update(dict(
-            longitude=y,
-            latitude=x
-        ))
+    retval = config.service.tj(latitude=latitude, longitude=longitude,
+                               collections=collections, start_date=start_date, end_date=end_date)
 
-    service = WLTS(config.url)
+    click.secho(f'\ttrajectory: {retval.trajectory}')
 
-    retval = service.tj(**query)
-
-    pprint(retval.trajectory)
+    if verbose:
+        click.secho('\tFinished!', bold=False, fg='black')

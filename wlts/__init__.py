@@ -8,6 +8,7 @@
 
 """Python Client Library for the Web Land Trajectory Service."""
 
+from . import cli
 from .version import __version__
 from .wlts import WLTS
 
