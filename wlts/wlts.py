@@ -23,13 +23,15 @@ class WLTS:
         `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
-    def __init__(self, url):
+    def __init__(self, url, access_token=None):
         """Create a WLTS client attached to the given host address (an URL).
 
         Args:
             url (str): URL for the WLTS server.
+            access_token (str, optional): Authentication token to be used with the WLTS server.
         """
         self._url = url if url[-1] != '/' else url[0:-1]
+        self._access_token = access_token
 
     @property
     def collections(self):
@@ -103,7 +105,7 @@ class WLTS:
 
     def _list_collections(self):
         """Return the list of available collections."""
-        result = WLTS._get('{}/list_collections'.format(self._url))
+        result = self._get(self._url, op='list_collections')
 
         return result['collections']
 
@@ -126,7 +128,7 @@ class WLTS:
          Returns:
             Trajectory: A trajectory object as a dictionary.
         """
-        return WLTS._get('{}/trajectory'.format(self._url), **params)
+        return self._get(self._url, op='trajectory', **params)
 
     def _describe_collection(self, collection_id):
         """Describe a give collection.
@@ -137,7 +139,7 @@ class WLTS:
         :returns: Collection description.
         :rtype: dict
         """
-        return WLTS._get('{}/describe_collection?collection_id={}'.format(self._url, collection_id))
+        return self._get(self._url, op='describe_collection', collection_id=collection_id)
 
     def __getitem__(self, key):
         """Get collection whose name is identified by the key.
@@ -197,11 +199,13 @@ class WLTS:
 
         return html
 
-    @staticmethod
-    def _get(url, **params):
+    def _get(self, url, op, **params):
         """Query the WLTS service using HTTP GET verb and return the result as a JSON document.
 
         :param url: The URL to query must be a valid WLTS endpoint.
+        :type url: str
+
+        :param op: WLTS operation.
         :type url: str
 
         :param params: (optional) Dictionary, list of tuples or bytes to send
@@ -212,6 +216,12 @@ class WLTS:
 
         :raises ValueError: If the response body does not contain a valid json.
         """
+        url_components = [url, op]
+
+        params.setdefault('access_token', self._access_token)
+
+        url = '/'.join(s.strip('/') for s in url_components)
+
         response = requests.get(url, params=params)
 
         response.raise_for_status()
@@ -219,6 +229,6 @@ class WLTS:
         content_type = response.headers.get('content-type')
 
         if content_type.count('application/json') == 0:
-            raise ValueError('HTTP response is not JSON: Content-Type: {}'.format(content_type))
+            raise ValueError(f'HTTP response is not JSON: Content-Type: {content_type}')
 
         return response.json()

@@ -9,62 +9,52 @@
 Running WLTS Client in the Command Line
 =======================================
 
+The ``WLTS`` client installs a command line tool named ``wlts-cli`` that allows to retrieve trajectory data.
+
+
+If you want to know the WLTS version, use the option ``--version`` as in::
+
+    wlts-cli --version
+
+
 List the available collections::
 
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' collections
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' list-collections
+
+
+To get more information about a specific collection, use the ``describe`` command::
+
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' describe --collection prodes_amazonia_legal
 
 
 Retrieve the trajectory given a longitude and latitude::
 
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' trajectory -- 0 0
+    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' \
+             --access-token='change-me' \
+             trajectory --latitude -12.0 --longitude -54.0  \
+             --start-date 2001 --end-date 2011 \
+             --collections mapbiomas5_amazonia
 
-The above command will return a JSON document as:
+
+The above command will return a document as:
 
 .. code-block:: shell
 
-      [{'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2007'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2008'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2009'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2010'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2011'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2012'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2013'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2014'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2015'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2016'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2017'},
-     {'class': 'Formação Florestal',
-      'collection': 'mapbiomas_amz_4_1',
-      'date': '2018'}]
+       trajectory: [
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2001'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2002'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2003'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2004'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2005'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2006'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2007'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2008'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2009'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2010'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2011'}
+       ]
 
-You can also use::
+.. note::
 
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' trajectory --geoloc 0 0
-
-or pass a json file with the location in space::
-
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' trajectory --ifile query.json
-
+    You may need to pass the parameter ``--access-token=CHANGE_ME`` to retrieve trajectory.
 
