@@ -6,7 +6,9 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for WLTS."""
+import json
 
+import lccs
 import requests
 
 from .collection import Collections
@@ -23,7 +25,7 @@ class WLTS:
         `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
-    def __init__(self, url, access_token=None):
+    def __init__(self, url, lccs_url=None, access_token=None):
         """Create a WLTS client attached to the given host address (an URL).
 
         Args:
@@ -32,6 +34,7 @@ class WLTS:
         """
         self._url = url if url[-1] != '/' else url[0:-1]
         self._access_token = access_token
+        self._lccs_url = lccs_url if lccs_url else 'https://brazildatacube.dpi.inpe.br/dev/lccs'
 
     @property
     def collections(self):
@@ -66,7 +69,7 @@ class WLTS:
 
                 >>> from wlts import *
                 >>> service = WLTS(WLTS_EXAMPLE_URL)
-                >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
+                >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amazonia-v5,terraclass_amazonia', target_system='terraclass_amazonia')
                 >>> ts.trajectory
                 [{'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2007'}]
         """
@@ -80,7 +83,7 @@ class WLTS:
             if (long < -180.0) or (long > 180.0):
                 raise ValueError('longitude is out-of range [-180,180]!')
 
-        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry"}
+        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry", "target_system"}
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
@@ -89,6 +92,12 @@ class WLTS:
             validate_lat_long(latitude, longitude)
 
             data = self._trajectory(**{'latitude': latitude, 'longitude': longitude, **options})
+
+            if "target_system" in options:
+                j = self._harmonize(data['result']['trajectory'], target_system=options["target_system"])
+                data['result']['trajectory'] = json.loads(j)
+
+                return Trajectory(data)
 
             return Trajectory(data)
 
@@ -102,6 +111,23 @@ class WLTS:
             result.append(Trajectory(data))
 
         return Trajectories({"trajectories": result})
+
+    def _harmonize(self, data, target_system):
+        import pandas as pd
+
+        lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
+        df = pd.DataFrame(data)
+
+        for i in df['collection'].unique():
+            ds = self._describe_collection(i)
+            mappings = lccs_service.mappings(
+                system_name_source=f"{ds['classification_system']['classification_system_name']}-{ds['classification_system']['classification_system_version']}",
+                system_name_target=target_system)
+
+            for map in mappings.mapping:
+                df.loc[(df['collection'] == i) & (df["class"] == map.source_class.name), ['class']] = map.target_class.name
+
+        return df.to_json()
 
     def _list_collections(self):
         """Return the list of available collections."""
