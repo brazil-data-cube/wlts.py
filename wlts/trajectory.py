@@ -37,10 +37,7 @@ class Trajectory(dict):
 
     def df(self, **options):
         """Plot trajectory as dataframe."""
-        try:
-            import pandas as pd
-        except:
-            raise ImportError('You should install Pandas')
+        import pandas as pd
 
         return pd.DataFrame(self.trajectory)
 

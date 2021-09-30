@@ -36,8 +36,6 @@ tests_require = [
 extras_require = {
     'docs': docs_require,
     'tests': tests_require,
-    'pandas': ['pandas>=1.1'],
-    'geopandas': ['geopandas>=0.8.2', 'descartes>=1.1.0', 'shapely>=1.7.1'],
 }
 
 extras_require['all'] = [ req for exts, reqs in extras_require.items() for req in reqs ]
@@ -50,6 +48,11 @@ install_requires = [
     'requests>=2.20',
     'Click>=7.0',
     'Jinja2>=2.11.1',
+    'descartes>=1.1.0',
+    'shapely>=1.7.1',
+    'pandas>=1.1',
+    'geopandas>=0.8.2',
+    'lccs @ git+https://github.com/brazil-data-cube/lccs.py@v0.8.0',
 ]
 
 packages = find_packages()
