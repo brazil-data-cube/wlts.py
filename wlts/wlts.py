@@ -34,7 +34,7 @@ class WLTS:
         """
         self._url = url if url[-1] != '/' else url[0:-1]
         self._access_token = access_token
-        self._lccs_url = lccs_url if lccs_url else 'https://brazildatacube.dpi.inpe.br/lccs'
+        self._lccs_url = lccs_url if lccs_url else 'https://brazildatacube.dpi.inpe.br/lccs/'
 
     @property
     def collections(self):
