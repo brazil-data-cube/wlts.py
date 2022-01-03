@@ -20,7 +20,7 @@ print(tj.trajectory)
 # # Example of trajectory operation passing a list of latitude and longitude
 # Make sure the collection is available in service
 tj_m = service.tj(latitude=[-12.0, -10.3378], longitude=[-47.3200, -54.0],
-                  collections='prodes_amazonia_legal,mapbiomas5_amazonia', start_date='2010')
+                  collections='prodes_amazonia_legal,mapbiomas_amazonia-v5', start_date='2010')
 for tj in tj_m['trajectories']:
     print(tj.trajectory)
 #

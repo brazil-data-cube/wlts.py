@@ -28,5 +28,5 @@ print(service['deter_amz_legal'])
 # Example of trajectory operation
 # The collection name may not be same.
 # Make sure the collection is available in service, using the previous operation (service.collection)
-tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
+tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amazonia-v5')
 

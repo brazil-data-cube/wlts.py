@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2020-2021 INPE.
+    Copyright (C) 2020-2022 INPE.
 
     Python Client Library for WLTS is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
@@ -33,7 +33,7 @@ Retrieve the trajectory given a longitude and latitude::
              --access-token='change-me' \
              trajectory --latitude -12.0 --longitude -54.0  \
              --start-date 2001 --end-date 2011 \
-             --collections mapbiomas5_amazonia
+             --collections mapbiomas_amazonia-v5
 
 
 The above command will return a document as:
@@ -41,17 +41,17 @@ The above command will return a document as:
 .. code-block:: shell
 
        trajectory: [
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2001'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2002'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2003'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2004'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2005'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2006'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2007'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2008'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2009'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2010'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2011'}
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2001'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2002'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2003'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2004'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2005'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2006'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2007'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2008'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2009'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2010'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas_amazonia-v5', 'date': '2011'}
        ]
 
 .. note::
