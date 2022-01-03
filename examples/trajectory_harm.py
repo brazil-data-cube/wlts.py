@@ -11,8 +11,8 @@ from lccs import LCCS
 from wlts import WLTS
 
 # Define Services
-service_wlts = WLTS(url='https://brazildatacube.dpi.inpe.br/dev/wlts/', access_token='change-me')
-service_lccs = LCCS(url='https://brazildatacube.dpi.inpe.br/dev/lccs/')
+service_wlts = WLTS(url='https://brazildatacube.dpi.inpe.br/wlts/', access_token='change-me')
+service_lccs = LCCS(url='https://brazildatacube.dpi.inpe.br/lccs/')
 
 # Find the classification system of collections
 collection_1 = service_wlts['terraclass_amazonia-v2'].classification_system
