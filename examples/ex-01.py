@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -28,5 +28,5 @@ print(service['deter_amz_legal'])
 # Example of trajectory operation
 # The collection name may not be same.
 # Make sure the collection is available in service, using the previous operation (service.collection)
-tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas5_amazonia')
+tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amazonia-v5')
 
