@@ -52,7 +52,8 @@ install_requires = [
     'shapely>=1.7.1',
     'pandas>=1.1',
     'geopandas>=0.8.2',
-    'lccs @ git+https://github.com/brazil-data-cube/lccs.py@v0.8.0',
+    'plotly==5.5.0',
+    'lccs @ git+https://github.com/brazil-data-cube/lccs.py@master',
 ]
 
 packages = find_packages()

@@ -93,6 +93,9 @@ class WLTS:
 
             data = self._trajectory(**{'latitude': latitude, 'longitude': longitude, **options})
 
+            for trj in data['result']['trajectory']:
+                trj['point_id'] = 1
+
             if "target_system" in options:
                 j = self._harmonize(data['result']['trajectory'], target_system=options["target_system"])
                 data['result']['trajectory'] = json.loads(j)
@@ -102,12 +105,17 @@ class WLTS:
             return Trajectory(data)
 
         result = list()
+        index = 1
 
         for lat, long in zip(latitude, longitude):
             validate_lat_long(lat, long)
 
             data = self._trajectory(**{'latitude': lat, 'longitude': long, **options})
 
+            for trj in data['result']['trajectory']:
+                trj['point_id'] = index
+
+            index = index + 1
             result.append(Trajectory(data))
 
         return Trajectories({"trajectories": result})
@@ -115,13 +123,15 @@ class WLTS:
     def _harmonize(self, data, target_system):
         import pandas as pd
 
-        lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
+        # lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
+        lccs_service = lccs.LCCS(url=self._lccs_url, access_token='24gd5YIo2UyeDBNFSRG4DGV5VVVjuGIuPUVoU08Kuh')
+
         df = pd.DataFrame(data)
 
         for i in df['collection'].unique():
             ds = self._describe_collection(i)
             mappings = lccs_service.mappings(
-                system_name_source=f"{ds['classification_system']['classification_system_name']}-{ds['classification_system']['classification_system_version']}",
+                system_name_source=f"{ds['classification_system']['classification_system_id']}",
                 system_name_target=target_system)
 
             for map in mappings.mapping:
@@ -192,6 +202,29 @@ class WLTS:
     def url(self):
         """Return the WLTS server instance URL."""
         return self._url
+
+    @classmethod
+    def plot(cls, dataframe, **parameters):
+        """Plot land use and cover trajectory."""
+        import plotly.express as px
+
+        parameters.setdefault('marker_size', 10)
+        parameters.setdefault('title', 'Land Use and Cover Trajectory')
+        df = dataframe.copy()
+        df['class'] = df['class'].astype('category')
+        df['date'] = df['date'].astype('category')
+        df['collection'] = df['collection'].astype('category')
+
+        if len(dataframe.point_id.unique()) == 1 and len(dataframe.collection.unique()) == 1:
+            fig = px.scatter(df, y="class", x="date", color="class", symbol="class",
+                             title=parameters['title'])
+            fig.update_traces(marker_size=parameters['marker_size'])
+            fig.show()
+
+        elif len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
+            df_group = dataframe.groupby(['date','class']).count()['point_id'].unstack()
+            fig = px.bar(df_group, title=parameters['title'])
+            fig.show()
 
     def __str__(self):
         """Return the string representation of the WLTS object."""
