@@ -123,8 +123,7 @@ class WLTS:
     def _harmonize(self, data, target_system):
         import pandas as pd
 
-        # lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
-        lccs_service = lccs.LCCS(url=self._lccs_url, access_token='24gd5YIo2UyeDBNFSRG4DGV5VVVjuGIuPUVoU08Kuh')
+        lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
 
         df = pd.DataFrame(data)
 
@@ -210,21 +209,75 @@ class WLTS:
 
         parameters.setdefault('marker_size', 10)
         parameters.setdefault('title', 'Land Use and Cover Trajectory')
+        parameters.setdefault('title_y', 'Number of Points')
+        parameters.setdefault('legend_title_text', 'Class')
+        parameters.setdefault('date', 'Year')
+        parameters.setdefault('value', 'Collection')
+        parameters.setdefault('width', 950)
+        parameters.setdefault('height', 320)
+        parameters.setdefault('font_size', 12)
+        parameters.setdefault('figsize_x', 30)
+        parameters.setdefault('figsize_y', 15)
+
         df = dataframe.copy()
         df['class'] = df['class'].astype('category')
         df['date'] = df['date'].astype('category')
         df['collection'] = df['collection'].astype('category')
 
         if len(dataframe.point_id.unique()) == 1 and len(dataframe.collection.unique()) == 1:
-            fig = px.scatter(df, y="class", x="date", color="class", symbol="class",
-                             title=parameters['title'])
+            fig = px.scatter(df,
+                             y=['class', 'collection'],
+                             x="date", color="class",
+                             symbol="class",
+                             labels={
+                                 "date": parameters['date'],
+                                 "value": parameters['value'],
+                             },
+                             title=parameters['title'],
+                             width=parameters['width'], height=parameters['height'])
             fig.update_traces(marker_size=parameters['marker_size'])
+            fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
+                size=parameters['font_size'],
+            ))
             fig.show()
 
         elif len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
-            df_group = dataframe.groupby(['date','class']).count()['point_id'].unstack()
-            fig = px.bar(df_group, title=parameters['title'])
+            df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
+            fig = px.bar(df_group, title=parameters['title'],
+                         width=parameters['width'], height=parameters['height'],
+                         labels={
+                             "date": parameters['date'],
+                             "value": parameters['value'],
+                         },
+                         )
+            fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
+                size=parameters['font_size'],
+            ))
             fig.show()
+
+        elif len(dataframe.collection.unique()) >= 1 and len(dataframe.point_id.unique()) >= 1:
+            mydf = (
+                dataframe.groupby(['date', 'collection'])
+                .apply(lambda x: x.groupby('class').count())
+                .rename(columns={'collection': 'size', 'date': 'date_old'}).reset_index()
+            )
+            fig = px.bar(mydf, x="date", y="size", facet_col="collection", color="class",
+                         text="size",
+                         barmode="overlay",
+                         width=parameters['width'], height=parameters['height'],
+                         labels={
+                             "size": parameters['title_y'],
+                             "date": parameters['date'],
+                             "collection": "Collection"
+                         },
+                         )
+
+            fig.update_traces(width=0.7, textfont_size=15)
+            fig.update_layout(legend_title_text='Class', font=dict(size=12, ))
+            fig.show(figsize=(parameters['figsize_x'], parameters['figsize_y']))
+
+        else:
+            raise "No plot support for this trajectory!"
 
     def __str__(self):
         """Return the string representation of the WLTS object."""
