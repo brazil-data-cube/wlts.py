@@ -83,7 +83,8 @@ class WLTS:
             if (long < -180.0) or (long > 180.0):
                 raise ValueError('longitude is out-of range [-180,180]!')
 
-        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry", "target_system"}
+        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry", "target_system",
+                                             "language"}
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
@@ -130,11 +131,11 @@ class WLTS:
         for i in df['collection'].unique():
             ds = self._describe_collection(i)
             mappings = lccs_service.mappings(
-                system_name_source=f"{ds['classification_system']['classification_system_id']}",
-                system_name_target=target_system)
-
-            for map in mappings.mapping:
-                df.loc[(df['collection'] == i) & (df["class"] == map.source_class.name), ['class']] = map.target_class.name
+                system_source=f"{ds['classification_system']['classification_system_id']}",
+                system_target=target_system)
+            for map in mappings.mappings:
+                df.loc[(df['collection'] == i) & (df["class"] == map.source_class.title), [
+                    'class']] = map.target_class.title
 
         return df.to_json()
 
@@ -216,8 +217,6 @@ class WLTS:
         parameters.setdefault('width', 950)
         parameters.setdefault('height', 320)
         parameters.setdefault('font_size', 12)
-        parameters.setdefault('figsize_x', 30)
-        parameters.setdefault('figsize_y', 15)
 
         df = dataframe.copy()
         df['class'] = df['class'].astype('category')
@@ -239,7 +238,8 @@ class WLTS:
             fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
                 size=parameters['font_size'],
             ))
-            fig.show()
+
+            return fig
 
         elif len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
             df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
@@ -253,7 +253,8 @@ class WLTS:
             fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
                 size=parameters['font_size'],
             ))
-            fig.show()
+
+            return fig
 
         elif len(dataframe.collection.unique()) >= 1 and len(dataframe.point_id.unique()) >= 1:
             mydf = (
@@ -274,7 +275,8 @@ class WLTS:
 
             fig.update_traces(width=0.7, textfont_size=15)
             fig.update_layout(legend_title_text='Class', font=dict(size=12, ))
-            fig.show(figsize=(parameters['figsize_x'], parameters['figsize_y']))
+
+            return fig
 
         else:
             raise "No plot support for this trajectory!"
