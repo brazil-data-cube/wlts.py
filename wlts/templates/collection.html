@@ -8,13 +8,16 @@
     <b>Description:</b> {{collection.description}}
 </div>
 <div>
+    <b>Description:</b> {{collection.detail}}
+</div>
+<div>
     <b>Start date:</b> {{collection.period['start_date']}}
     <b>End date:</b> {{collection.period['end_date']}}
 </div>
 <b>Resolution Unit:</b>
 <div>
-    <b>Unit:</b> {{collection.resolution_unit['unit']}}
-    <b>Value:</b> {{collection.resolution_unit['value']}}
+    <b>Unit:</b> {{collection.temporal_resolution['unit']}}
+    <b>Value:</b> {{collection.temporal_resolution['value']}}
 </div>
 </br>
 <b>Classification System:</b>
@@ -23,6 +26,77 @@
     <b>Name:</b> {{collection.classification_system['classification_system_name']}}
     <b>Version:</b> {{collection.classification_system['classification_system_version']}}
 </div>
+</br>
+<b>Datasource:</b>
+<div>
+    <b>Host:</b>{{collection.datasource_host}}
+</div>
+{% if 'data_field' in collection.datasource_layer[0] %}
+<div>
+    <b>Layers:</b>
+    <table>
+        <tr>
+        </tr>
+        <tr>
+            <th>Layer name</th>
+            <th>Title</th>
+            <th>Data field</th>
+            <th>Workspace</th>
+        </tr>
+        {% for layers in collection.datasource_layer -%}
+        <tr>
+            <td>{{layers['layer_name']}}</td>
+            <td>{{layers['title']}}</td>
+            <td>{{layers['data_field']}}</td>
+            <td>{{layers['workspace']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% elif 'temporal_property' in collection.datasource_layer[0] %}
+    <div>
+        <b>Layers:</b>
+        <table>
+            <tr>
+            </tr>
+            <tr>
+                <th>Layer name</th>
+                <th>Title</th>
+                <th>Temporal property</th>
+                <th>Workspace</th>
+            </tr>
+            {% for layers in collection.datasource_layer -%}
+            <tr>
+                <td>{{layers['layer_name']}}</td>
+                <td>{{layers['title']}}</td>
+                <td>{{layers['temporal_property']}}</td>
+                <td>{{layers['workspace']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% else %}
+<div>
+    <b>Layers:</b>
+    <div>
+        <b>Layer Name:</b> {{collection.datasource_layer[0]['layer_name']}}
+    </div>
+    <table>
+        <tr>
+        </tr>
+        <tr>
+            <th>Class property</th>
+            <th>Temporal property</th>
+        </tr>
+        {% for layers in collection.datasource_layer[0]['properties'] -%}
+        <tr>
+            <td>{{layers['class_property']}}</td>
+            <td>{{layers['temporal_property']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
 </br>
 <div>
     <b>Extent</b>
