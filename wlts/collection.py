@@ -71,10 +71,12 @@ class Collections(dict):
 
     @property
     def datasource_host(self):
+        """Return the host of the collection datasource."""
         return self['datasource']['host']
 
     @property
     def datasource_layer(self):
+        """Return the layer of the collection datasource."""
         return self['datasource']['layers']
 
     def __str__(self):
