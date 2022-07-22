@@ -56,6 +56,7 @@ class WLTS:
             start_date (:obj:`str`, optional): The begin of a time interval.
             end_date (:obj:`str`, optional): The end of a time interval.
             geometry (:obj:`str`, optional): A string that accepted True of False.
+            language (:obj:`str`, optional): The language of classes.
 
         Returns:
             Trajectory: A trajectory object as a dictionary.
@@ -304,7 +305,7 @@ class WLTS:
 
     def _repr_html_(self):
         """Display the WLTS object as HTML.
-        
+
         This integrates a rich display in IPython.
         """
         cl_list = self._list_collections()
