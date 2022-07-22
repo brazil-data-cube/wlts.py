@@ -218,67 +218,74 @@ class WLTS:
         parameters.setdefault('width', 950)
         parameters.setdefault('height', 320)
         parameters.setdefault('font_size', 12)
+        parameters.setdefault('type', 'scatter')
 
         df = dataframe.copy()
         df['class'] = df['class'].astype('category')
         df['date'] = df['date'].astype('category')
         df['collection'] = df['collection'].astype('category')
 
-        if len(dataframe.point_id.unique()) == 1 and len(dataframe.collection.unique()) == 1:
-            fig = px.scatter(df,
-                             y=['class', 'collection'],
-                             x="date", color="class",
-                             symbol="class",
-                             labels={
-                                 "date": parameters['date'],
-                                 "value": parameters['value'],
-                             },
-                             title=parameters['title'],
-                             width=parameters['width'], height=parameters['height'])
-            fig.update_traces(marker_size=parameters['marker_size'])
-            fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
-                size=parameters['font_size'],
-            ))
+        if parameters['type'] == 'scatter':
+            # Validates the data for this plot type
+            if len(dataframe.point_id.unique()) == 1:
+                fig = px.scatter(df,
+                                y=['class', 'collection'],
+                                x="date", color="class",
+                                symbol="class",
+                                labels={
+                                    "date": parameters['date'],
+                                    "value": parameters['value'],
+                                },
+                                title=parameters['title'],
+                                width=parameters['width'], height=parameters['height'])
+                fig.update_traces(marker_size=parameters['marker_size'])
+                fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
+                    size=parameters['font_size'],
+                ))
 
-            return fig
+                return fig
+            else:
+                raise ValueError("The scatter plot is for one point only! Please try another type: bar plot.")
 
-        elif len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
-            df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
-            fig = px.bar(df_group, title=parameters['title'],
-                         width=parameters['width'], height=parameters['height'],
-                         labels={
-                             "date": parameters['date'],
-                             "value": parameters['value'],
-                         },
-                         )
-            fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
-                size=parameters['font_size'],
-            ))
+        if parameters['type'] == 'bar':
+            # Validates the data for this plot type - Unique collection or multiples collections
+            if len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
+                df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
+                fig = px.bar(df_group, title=parameters['title'],
+                            width=parameters['width'], height=parameters['height'],
+                            labels={
+                                "date": parameters['date'],
+                                "value": parameters['value'],
+                            },
+                            )
+                fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
+                    size=parameters['font_size'],
+                ))
 
-            return fig
+                return fig
 
-        elif len(dataframe.collection.unique()) >= 1 and len(dataframe.point_id.unique()) >= 1:
-            mydf = (
-                dataframe.groupby(['date', 'collection'])
-                .apply(lambda x: x.groupby('class').count())
-                .rename(columns={'collection': 'size', 'date': 'date_old'}).reset_index()
-            )
-            fig = px.bar(mydf, x="date", y="size", facet_col="collection", color="class",
-                         text="size",
-                         barmode="overlay",
-                         width=parameters['width'], height=parameters['height'],
-                         labels={
-                             "size": parameters['title_y'],
-                             "date": parameters['date'],
-                             "collection": "Collection"
-                         },
-                         )
+            elif len(dataframe.collection.unique()) >= 1 and len(dataframe.point_id.unique()) >= 1:
+                mydf = (
+                    dataframe.groupby(['date', 'collection'])
+                    .apply(lambda x: x.groupby('class').count())
+                    .rename(columns={'collection': 'size', 'date': 'date_old'}).reset_index()
+                )
 
-            fig.update_traces(width=0.7, textfont_size=15)
-            fig.update_layout(legend_title_text='Class', font=dict(size=12, ))
+                fig = px.bar(mydf, x="date", y="size", facet_col="collection", color="class",
+                            text="size",
+                            barmode="overlay",
+                            width=parameters['width'], height=parameters['height'],
+                            labels={
+                                "size": parameters['title_y'],
+                                "date": parameters['date'],
+                                "collection": "Collection"
+                            },
+                )
 
-            return fig
+                fig.update_traces(width=0.7, textfont_size=15)
+                fig.update_layout(legend_title_text='Class', font=dict(size=12, ))
 
+                return fig
         else:
             raise "No plot support for this trajectory!"
 
