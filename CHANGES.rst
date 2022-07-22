@@ -10,6 +10,17 @@
 Changes
 =======
 
+Version 0.8.1 (2022-07-22)
+--------------------------
+
+- Add support for new version of WLTS.
+
+- Review the collection class.
+
+- Add datasource information in jinja template.
+
+- Describe collection: Add datasource information (`#52 <https://github.com/brazil-data-cube/wlts.py/issues/52>`_).
+
 
 Version 0.8.0 (2021-09-30)
 --------------------------
