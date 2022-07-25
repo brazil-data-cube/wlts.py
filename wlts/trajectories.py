@@ -29,3 +29,11 @@ class Trajectories(dict):
         """HTML repr."""
         return Utils.render_html('trajectory.html', trajectories=self)
 
+    def df(self, **options):
+        """Plot trajectory as dataframe."""
+        import pandas as pd
+
+        trjs_df = [trj.df() for trj in self['trajectories']]
+
+        return pd.concat(trjs_df, axis=0).reset_index(drop=True)
+

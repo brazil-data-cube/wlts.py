@@ -26,7 +26,7 @@ class Trajectory(dict):
         super(Trajectory, self).__init__(data or {})
 
     @property
-    def trajectory(self, as_date=False, fmt=''):
+    def trajectory(self, as_date=False, index: int = 1, fmt=''):
         """Return the trajectory associated with a location in space."""
         return self['result']['trajectory']
 

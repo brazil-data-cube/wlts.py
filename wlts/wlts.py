@@ -45,6 +45,12 @@ class WLTS:
         """
         return self._list_collections()
 
+    def _support_language(self):
+        """Get the support language from service."""
+        import enum
+        data = Utils._get(f'{self._url}/')
+        return enum.Enum('Language', {i['language']: i['language'] for i in data['supported_language']}, type=str)
+
     def tj(self, latitude, longitude, **options):
         """Retrieve the trajectory for a given location and time interval.
 
@@ -56,6 +62,7 @@ class WLTS:
             start_date (:obj:`str`, optional): The begin of a time interval.
             end_date (:obj:`str`, optional): The end of a time interval.
             geometry (:obj:`str`, optional): A string that accepted True of False.
+            language (:obj:`str`, optional): The language of classes.
 
         Returns:
             Trajectory: A trajectory object as a dictionary.
@@ -83,15 +90,27 @@ class WLTS:
             if (long < -180.0) or (long > 180.0):
                 raise ValueError('longitude is out-of range [-180,180]!')
 
-        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry", "target_system"}
+        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry", "target_system",
+                                             "language"}
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
+
+        if 'language' in options:
+            self._support_l = self._support_language()
+            if options['language'] in [e.value for e in self._support_l]:
+                pass
+            else:
+                s = ', '.join([e for e in self.allowed_language])
+                raise KeyError(f'Language not supported! Use: {s}')
 
         if type(latitude) != list and type(longitude) != list:
             validate_lat_long(latitude, longitude)
 
             data = self._trajectory(**{'latitude': latitude, 'longitude': longitude, **options})
+
+            for trj in data['result']['trajectory']:
+                trj['point_id'] = 1
 
             if "target_system" in options:
                 j = self._harmonize(data['result']['trajectory'], target_system=options["target_system"])
@@ -102,12 +121,17 @@ class WLTS:
             return Trajectory(data)
 
         result = list()
+        index = 1
 
         for lat, long in zip(latitude, longitude):
             validate_lat_long(lat, long)
 
             data = self._trajectory(**{'latitude': lat, 'longitude': long, **options})
 
+            for trj in data['result']['trajectory']:
+                trj['point_id'] = index
+
+            index = index + 1
             result.append(Trajectory(data))
 
         return Trajectories({"trajectories": result})
@@ -116,16 +140,17 @@ class WLTS:
         import pandas as pd
 
         lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
+
         df = pd.DataFrame(data)
 
         for i in df['collection'].unique():
             ds = self._describe_collection(i)
             mappings = lccs_service.mappings(
-                system_name_source=f"{ds['classification_system']['classification_system_name']}-{ds['classification_system']['classification_system_version']}",
-                system_name_target=target_system)
-
-            for map in mappings.mapping:
-                df.loc[(df['collection'] == i) & (df["class"] == map.source_class.name), ['class']] = map.target_class.name
+                system_source=f"{ds['classification_system']['classification_system_id']}",
+                system_target=target_system)
+            for map in mappings.mappings:
+                df.loc[(df['collection'] == i) & (df["class"] == map.source_class.title), [
+                    'class']] = map.target_class.title
 
         return df.to_json()
 
@@ -193,6 +218,91 @@ class WLTS:
         """Return the WLTS server instance URL."""
         return self._url
 
+    @classmethod
+    def plot(cls, dataframe, **parameters):
+        """Plot land use and cover trajectory."""
+        import plotly.express as px
+
+        parameters.setdefault('marker_size', 10)
+        parameters.setdefault('title', 'Land Use and Cover Trajectory')
+        parameters.setdefault('title_y', 'Number of Points')
+        parameters.setdefault('legend_title_text', 'Class')
+        parameters.setdefault('date', 'Year')
+        parameters.setdefault('value', 'Collection')
+        parameters.setdefault('width', 950)
+        parameters.setdefault('height', 320)
+        parameters.setdefault('font_size', 12)
+        parameters.setdefault('type', 'scatter')
+
+        df = dataframe.copy()
+        df['class'] = df['class'].astype('category')
+        df['date'] = df['date'].astype('category')
+        df['collection'] = df['collection'].astype('category')
+
+        if parameters['type'] == 'scatter':
+            # Validates the data for this plot type
+            if len(dataframe.point_id.unique()) == 1:
+                fig = px.scatter(df,
+                                y=['class', 'collection'],
+                                x="date", color="class",
+                                symbol="class",
+                                labels={
+                                    "date": parameters['date'],
+                                    "value": parameters['value'],
+                                },
+                                title=parameters['title'],
+                                width=parameters['width'], height=parameters['height'])
+                fig.update_traces(marker_size=parameters['marker_size'])
+                fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
+                    size=parameters['font_size'],
+                ))
+
+                return fig
+            else:
+                raise ValueError("The scatter plot is for one point only! Please try another type: bar plot.")
+
+        if parameters['type'] == 'bar':
+            # Validates the data for this plot type - Unique collection or multiples collections
+            if len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
+                df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
+                fig = px.bar(df_group, title=parameters['title'],
+                            width=parameters['width'], height=parameters['height'],
+                            labels={
+                                "date": parameters['date'],
+                                "value": parameters['value'],
+                            },
+                            )
+                fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
+                    size=parameters['font_size'],
+                ))
+
+                return fig
+
+            elif len(dataframe.collection.unique()) >= 1 and len(dataframe.point_id.unique()) >= 1:
+                mydf = (
+                    dataframe.groupby(['date', 'collection'])
+                    .apply(lambda x: x.groupby('class').count())
+                    .rename(columns={'collection': 'size', 'date': 'date_old'}).reset_index()
+                )
+
+                fig = px.bar(mydf, x="date", y="size", facet_col="collection", color="class",
+                            text="size",
+                            barmode="overlay",
+                            width=parameters['width'], height=parameters['height'],
+                            labels={
+                                "size": parameters['title_y'],
+                                "date": parameters['date'],
+                                "collection": "Collection"
+                            },
+                )
+
+                fig.update_traces(width=0.7, textfont_size=15)
+                fig.update_layout(legend_title_text='Class', font=dict(size=12, ))
+
+                return fig
+        else:
+            raise RuntimeError("No plot support for this trajectory!")
+
     def __str__(self):
         """Return the string representation of the WLTS object."""
         text = f'WLTS:\n\tURL: {self._url}'
@@ -216,7 +326,7 @@ class WLTS:
 
     def _repr_html_(self):
         """Display the WLTS object as HTML.
-        
+
         This integrates a rich display in IPython.
         """
         cl_list = self._list_collections()
