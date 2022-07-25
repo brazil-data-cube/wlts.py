@@ -45,6 +45,12 @@ class WLTS:
         """
         return self._list_collections()
 
+    def _support_language(self):
+        """Get the support language from service."""
+        import enum
+        data = Utils._get(f'{self._url}/')
+        return enum.Enum('Language', {i['language']: i['language'] for i in data['supported_language']}, type=str)
+
     def tj(self, latitude, longitude, **options):
         """Retrieve the trajectory for a given location and time interval.
 
@@ -89,6 +95,14 @@ class WLTS:
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
+
+        if 'language' in options:
+            self._support_l = self._support_language()
+            if options['language'] in [e.value for e in self._support_l]:
+                pass
+            else:
+                s = ', '.join([e for e in self.allowed_language])
+                raise KeyError(f'Language not supported! Use: {s}')
 
         if type(latitude) != list and type(longitude) != list:
             validate_lat_long(latitude, longitude)
@@ -287,7 +301,7 @@ class WLTS:
 
                 return fig
         else:
-            raise "No plot support for this trajectory!"
+            raise RuntimeError("No plot support for this trajectory!")
 
     def __str__(self):
         """Return the string representation of the WLTS object."""
