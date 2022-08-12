@@ -1,11 +1,11 @@
 <b>Query</b>
-{% if tj.query['start_date'] %}
 <div>
     <b>Latitude:</b> {{tj.query['latitude']}}
 </div>
 <div>
     <b>Longitude:</b> {{tj.query['start_date']}}
 </div>
+{% if tj.query['start_date'] %}
 <div>
     <b>Start Date:</b> {{tj.query['start_date']}}
 </div>
@@ -28,6 +28,10 @@
 </br>
 </br>
 {% if 'geometry' in tj.trajectory %}
+<div>
+    <b>Geometry:</b> {{tj.trajectory['geometry']}}
+</div>
+{% endif %}
 <b>Trajectory</b>
 <div>
     <table>
