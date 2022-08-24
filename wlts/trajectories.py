@@ -1,11 +1,11 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for WLTS."""
+"""A class that represents Trajectories in WLTS."""
 from .utils import Utils
 
 
@@ -26,11 +26,14 @@ class Trajectories(dict):
         super(Trajectories, self).__init__(data or {})
 
     def _repr_html_(self):
-        """HTML repr."""
+        """Display the trajectories as HTML.
+
+        This integrates a rich display in IPython.
+        """
         return Utils.render_html('trajectory.html', trajectories=self)
 
     def df(self, **options):
-        """Plot trajectory as dataframe."""
+        """Return the dataframe representation of the Trajectories object."""
         import pandas as pd
 
         trjs_df = [trj.df() for trj in self['trajectories']]

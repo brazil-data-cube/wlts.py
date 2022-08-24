@@ -1,11 +1,11 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for WLTS."""
+"""A class that represents Trajectory in WLTS."""
 from .utils import Utils
 
 
@@ -36,13 +36,13 @@ class Trajectory(dict):
         return self['query']
 
     def df(self, **options):
-        """Plot trajectory as dataframe."""
+        """Return the dataframe representation of the Trajectory object."""
         import pandas as pd
 
         return pd.DataFrame(self.trajectory)
 
     def geodf(self, **options):
-        """Plot trajectory as geodataframe."""
+        """Return the geodataframe representation of the Trajectory object."""
         if not all(['geom' in i for i in self.trajectory]):
             raise RuntimeError("Geometry field not exist! Verify if you pass geometry=True in service.trj!")
         try:
@@ -61,5 +61,8 @@ class Trajectory(dict):
         return gdf
 
     def _repr_html_(self):
-        """HTML repr."""
+        """Display the trajectory as HTML.
+
+        This integrates a rich display in IPython.
+        """
         return Utils.render_html('trajectory-item.html', tj=self)

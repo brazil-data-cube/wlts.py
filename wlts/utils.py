@@ -1,11 +1,11 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Utility data structures and algorithms."""
+"""Utility functions for WLTS client library."""
 import jinja2
 from pkg_resources import resource_filename
 
@@ -14,8 +14,7 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 
 
 class Utils:
-    """Utils WLTS object."""
-    
+    """A class that represents a Utils in WLTS."""
     @staticmethod
     def render_html(template_name, **kwargs):
         """Render Jinja2 HTML template."""
