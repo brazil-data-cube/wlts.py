@@ -48,7 +48,13 @@ class WLTS:
     def _support_language(self):
         """Get the support language from service."""
         import enum
-        data = Utils._get(f'{self._url}/')
+
+        response = requests.get(f'{self._url}/')
+
+        response.raise_for_status()
+
+        data = response.json()
+
         return enum.Enum('Language', {i['language']: i['language'] for i in data['supported_language']}, type=str)
 
     def tj(self, latitude, longitude, **options):
@@ -234,10 +240,34 @@ class WLTS:
         parameters.setdefault('font_size', 12)
         parameters.setdefault('type', 'scatter')
 
+        # Parameters to update traces
+        parameters.setdefault('textfont_size', 12)
+        parameters.setdefault('textangle', 0)
+        parameters.setdefault('textposition', "auto")
+        parameters.setdefault('cliponaxis', False)
+
+        # Parameters to update layout
+        parameters.setdefault('text_auto', True)
+        parameters.setdefault('textposition', 'auto')
+        parameters.setdefault('opacity', 0.8)
+        parameters.setdefault('marker_line_width', 1.5)
+
+        # Update column title bar plot
+        parameters.setdefault('bar_title', False)
+
         df = dataframe.copy()
         df['class'] = df['class'].astype('category')
         df['date'] = df['date'].astype('category')
         df['collection'] = df['collection'].astype('category')
+
+        def update_column_title(title):
+            """Update the collection name with spaces and capitalize."""
+            new_title = (title.text.split("=")[-1]).capitalize()
+
+            if len(new_title.split("_")) > 1:
+                return new_title.split("_")[0] + " " + new_title.split("_")[-1].capitalize()
+
+            return new_title.split("_")[0]
 
         if parameters['type'] == 'scatter':
             # Validates the data for this plot type
@@ -265,16 +295,26 @@ class WLTS:
             # Validates the data for this plot type - Unique collection or multiples collections
             if len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
                 df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
-                fig = px.bar(df_group, title=parameters['title'],
-                            width=parameters['width'], height=parameters['height'],
-                            labels={
-                                "date": parameters['date'],
-                                "value": parameters['value'],
-                            },
-                            )
-                fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
-                    size=parameters['font_size'],
-                ))
+                fig = px.bar(
+                    df_group,
+                    title=parameters['title'],
+                    width=parameters['width'],
+                    height=parameters['height'],
+                    labels={"date": parameters['date'], "value": parameters['value']},
+                    text_auto=parameters['text_auto'],
+                    )
+                fig.update_layout(
+                    legend_title_text=parameters['legend_title_text'],
+                    font=dict(size=parameters['font_size'])
+                )
+                fig.update_traces(
+                    textfont_size=parameters["textfont_size"],
+                    textangle=parameters["textangle"],
+                    textposition=parameters["textposition"],
+                    cliponaxis=parameters["cliponaxis"],
+                    opacity=parameters["opacity"],
+                    marker_line_width=parameters["marker_line_width"]
+                )
 
                 return fig
 
@@ -285,19 +325,39 @@ class WLTS:
                     .rename(columns={'collection': 'size', 'date': 'date_old'}).reset_index()
                 )
 
-                fig = px.bar(mydf, x="date", y="size", facet_col="collection", color="class",
-                            text="size",
-                            barmode="overlay",
-                            width=parameters['width'], height=parameters['height'],
-                            labels={
-                                "size": parameters['title_y'],
-                                "date": parameters['date'],
-                                "collection": "Collection"
-                            },
+                fig = px.bar(
+                    mydf,
+                    x="date",
+                    y="size",
+                    facet_col="collection",
+                    color="class",
+                    text="size",
+                    barmode="overlay",
+                    width=parameters['width'], height=parameters['height'],
+                    labels={
+                        "size": parameters['title_y'],
+                        "date": parameters['date'],
+                        "collection": "Collection"
+                    },
                 )
 
-                fig.update_traces(width=0.7, textfont_size=15)
-                fig.update_layout(legend_title_text='Class', font=dict(size=12, ))
+                fig.update_traces(
+                    textfont_size=parameters["textfont_size"],
+                    textangle=parameters["textangle"],
+                    textposition=parameters["textposition"],
+                    cliponaxis=parameters["cliponaxis"],
+                    opacity=parameters["opacity"],
+                    marker_line_width=parameters["marker_line_width"]
+
+                )
+                fig.update_layout(
+                    legend_title_text='Class',
+                    font=dict(size=12, ),
+                    title_text=parameters['title'],
+                )
+
+                if parameters['bar_title']:
+                    fig.for_each_annotation(lambda a: a.update(text=update_column_title(a)))
 
                 return fig
         else:
