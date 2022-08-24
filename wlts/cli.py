@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -20,6 +20,7 @@ class Config:
         """Initialization of Config decorator."""
         self.url = None
         self.service = None
+        self.lccs_url = None
 
 
 pass_config = click.make_pass_decorator(Config, ensure=True)
@@ -28,13 +29,15 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 @click.group()
 @click.option('--url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/wlts/',
               help='The WLTS server address (an URL).')
+@click.option('--lccs-url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/lccs',
+              help='The LCCS-WS address (an URL).')
 @click.option('--access-token', default=None, help='Personal Access Token of the BDC Auth')
 @click.version_option()
 @pass_config
-def cli(config, url, access_token):
+def cli(config, url, lccs_url, access_token):
     """WLTS on command line."""
     config.url = url
-    config.service = WLTS(url, access_token=access_token)
+    config.service = WLTS(url, lccs_url=lccs_url, access_token=access_token)
 
 
 @cli.command()
@@ -84,24 +87,40 @@ def describe(config: Config, verbose, collection):
               help='Latitude in EPSG:4326')
 @click.option('--longitude', required=True, type=float,
               help='Longitude in EPSG:4326')
-@click.option('--start-date', required=False, type=str,
+@click.option('--start-date', required=False, default=None, type=str,
               help='Start date')
-@click.option('--end-date', required=False, type=str,
+@click.option('--end-date', required=False, default=None, type=str,
               help='End date')
-@click.option('--start-date', required=False, type=str,
+@click.option('--start-date', required=False, default=None, type=str,
               help='Start date')
-@click.option('--end-date', required=False, type=str,
+@click.option('--end-date', required=False, default=None, type=str,
               help='End date')
+@click.option('--language', required=False, default=None, type=str,
+              help='Language')
 @pass_config
-def trajectory(config: Config, verbose, collections, start_date, end_date, latitude, longitude):
+def trajectory(config: Config, verbose, collections, start_date, end_date, latitude, longitude, language):
     """Return the trajectory associated to the location."""
     if verbose:
         click.secho(f'Server: {config.url}', bold=True, fg='black')
         click.secho('\tRetrieving trajectory... ',
                     bold=False, fg='black')
 
-    retval = config.service.tj(latitude=latitude, longitude=longitude,
-                               collections=collections, start_date=start_date, end_date=end_date)
+    args = dict()
+
+    if collections:
+        args["collections"] = collections
+    if start_date:
+        args["start_date"] = start_date
+    if end_date:
+        args["end_date"] = end_date
+    if language:
+        args["language"] = language
+
+    retval = config.service.tj(
+        latitude=latitude,
+        longitude=longitude,
+        **args
+    )
 
     click.secho(f'\ttrajectory: {retval.trajectory}')
 
