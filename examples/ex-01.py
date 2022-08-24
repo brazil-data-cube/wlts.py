@@ -7,7 +7,6 @@
 #
 """WLTS Python Client Examples."""
 
-
 from wlts import WLTS
 
 # You should create a WLTS object attached to a given service
@@ -23,10 +22,14 @@ print(service.collections)
 # Return the metadata of a specific collection
 # The collection name may not be same.
 # Make sure the collection is available in service, using the previous operation (service.collection)
-print(service['deter_amz_legal'])
+print(service['deter_amazonia_legal'])
 
 # Example of trajectory operation
 # The collection name may not be same.
 # Make sure the collection is available in service, using the previous operation (service.collection)
-tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amazonia-v5')
+tj = service.tj(
+    latitude=-12.0,
+    longitude=-54.0,
+    collections='mapbiomas-v6'
+)
 

@@ -1,11 +1,15 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for WLTS."""
+"""Python Client Library for WLTS.
+
+This module introduces a class named ``WLTS`` that can be used to retrieve
+trajectories for a given location.
+"""
 import json
 
 import lccs
@@ -18,7 +22,7 @@ from .utils import Utils
 
 
 class WLTS:
-    """This class implements a Python API client wrapper for WLTS.
+    """This class implement a client for WLTS.
 
     .. note::
         For more information about WLTS, please, refer to
@@ -30,10 +34,16 @@ class WLTS:
 
         Args:
             url (str): URL for the WLTS server.
+            lccs_url (str, optional): URL for the LCCS server.
             access_token (str, optional): Authentication token to be used with the WLTS server.
         """
+        #: str: URL for the WLTS server.
         self._url = url if url[-1] != '/' else url[0:-1]
+
+        #: str: Authentication token to be used with the WTSS server.
         self._access_token = access_token
+
+        #: str: URL for the LCCS server.
         self._lccs_url = lccs_url if lccs_url else 'https://brazildatacube.dpi.inpe.br/lccs/'
 
     @property
@@ -42,11 +52,16 @@ class WLTS:
 
         Returns:
             list: A list with the names of available collections in the service.
+
+        Raises:
+            ConnectionError: If the server is not reachable.
+            HTTPError: If the server response indicates an error.
+            ValueError: If the response body is not a json document.
         """
         return self._list_collections()
 
     def _support_language(self):
-        """Get the support language from service."""
+        """Returns the languages supported by the service."""
         import enum
 
         response = requests.get(f'{self._url}/')
@@ -82,9 +97,9 @@ class WLTS:
 
                 >>> from wlts import *
                 >>> service = WLTS(WLTS_EXAMPLE_URL)
-                >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas_amazonia-v5,terraclass_amazonia', target_system='terraclass_amazonia')
+                >>> tj = service.tj(latitude=-12.0, longitude=-54.0, collections='mapbiomas-v6,terraclass_amazonia')
                 >>> ts.trajectory
-                [{'class': 'Formação Florestal', 'collection': 'mapbiomas5_amazonia', 'date': '2007'}]
+                [{'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2007'}, ...]
         """
         def validate_lat_long(lat, long):
             if (type(lat) not in (float, int)) or (type(long) not in (float, int)):
@@ -143,6 +158,7 @@ class WLTS:
         return Trajectories({"trajectories": result})
 
     def _harmonize(self, data, target_system):
+        """Harmonize the trajectories into target classification system."""
         import pandas as pd
 
         lccs_service = lccs.LCCS(url=self._lccs_url, access_token=self._access_token)
@@ -205,14 +221,14 @@ class WLTS:
             Collection: A collection metadata object.
 
         Example:
-            Get a collection object named ``deter_amz_legal``:
+            Get a collection object named ``deter_amazonia_legal``:
 
             .. doctest::
                 :skipif: WLTS_EXAMPLE_URL is None
 
                 >>> from wlts import *
                 >>> service = WLTS(WLTS_EXAMPLE_URL)
-                >>> service['deter_amz_legal']
+                >>> service['deter_amazonia_legal']
                 Collection...
         """
         cv_meta = self._describe_collection(key)
@@ -226,8 +242,39 @@ class WLTS:
 
     @classmethod
     def plot(cls, dataframe, **parameters):
-        """Plot land use and cover trajectory."""
-        import plotly.express as px
+        """Plot the trajectory on a scatter or bar plot.
+
+        Args:
+            dataframe (pandas.DataFrame): The trajectory as dataframe representation.
+
+        Keyword Args:
+            marker_size (int): The marker size .
+            title (str): The title. Ex: Land Use and Cover Trajectory.
+            title_y (str): The title in the y-axis. Ex: Number of Points.
+            date (str): Title of date. Ex: Year.
+            value (str): The label of value. Ex: Collection.
+            width (int): The width size.
+            height (int): The height size.
+            font_size (int): The font size.
+            type (str): The graphic type: scatter or bar.
+            textfont_size (int): The text font size.
+            textangle (int): The text angle. Ex: 0.
+            textposition (str): Specifies the location of the text. Like “inside
+            cliponaxis (bool): Determines whether the text nodes are clipped abo
+            text_auto (bool): Determines  the display of text.
+            textposition (str): Specifies the location of the text.
+            opacity (float): The text opacity.
+            marker_line_width (float): The marker line width.
+            bar_title (bool): Update the title with spaces and letter uppercase.
+
+        Raises:
+            ImportError: If plotly could not be imported.
+
+        """
+        try:
+            import plotly.express as px
+        except ImportError:
+            raise ImportError('You should install Plotly!')
 
         parameters.setdefault('marker_size', 10)
         parameters.setdefault('title', 'Land Use and Cover Trajectory')
