@@ -50,6 +50,11 @@ class Collections(dict):
         return self['name']
 
     @property
+    def title(self):
+        """Return the title of the collection."""
+        return self['title']
+
+    @property
     def period(self):
         """Return the period of the collection."""
         return self['period']
