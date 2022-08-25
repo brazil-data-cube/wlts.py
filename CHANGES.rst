@@ -10,7 +10,7 @@
 Changes
 =======
 
-Version 0.9.0 (2022-08-25)
+Version 1.0.0 (2022-08-25)
 --------------------------
 - Review documentation (`#64 <https://github.com/brazil-data-cube/wlts.py/issues/64>`_).
 

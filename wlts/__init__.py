@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2021 INPE.
+# Copyright (C) 2020-2022 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -12,5 +12,4 @@ from . import cli
 from .version import __version__
 from .wlts import WLTS
 
-__all__ = ('__version__',
-           'WLTS',)
+__all__ = ('__version__', 'WLTS',)
