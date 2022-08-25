@@ -10,6 +10,23 @@
 Changes
 =======
 
+Version 1.0.0 (2022-08-25)
+--------------------------
+- Review documentation (`#64 <https://github.com/brazil-data-cube/wlts.py/issues/64>`_).
+
+- Review command line (`#62 <https://github.com/brazil-data-cube/wlts.py/issues/62>`_).
+
+- Update trajectory item template (`#61 <https://github.com/brazil-data-cube/wlts.py/issues/61>`_).
+
+- Add update traces in bar plot (`#60 <https://github.com/brazil-data-cube/wlts.py/issues/60>`_).
+
+- Add support for LCCS-DB version 0.8.1 (`#57 <https://github.com/brazil-data-cube/wlts.py/issues/57>`_).
+
+- Add support for internationalization.
+
+- Add scatter plot (`#56 <https://github.com/brazil-data-cube/wlts.py/issues/56>`_).
+
+- Add bar plot for support trajectories of with multiples collections and points. (`#55 <https://github.com/brazil-data-cube/wlts.py/issues/55>`_).
 
 Version 0.8.0 (2021-09-30)
 --------------------------
