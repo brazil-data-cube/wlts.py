@@ -27,9 +27,9 @@ Documentation
    :caption: Contents:
 
    installation
-   api
    cli
    examples
+   api
    repository
    history
    license
