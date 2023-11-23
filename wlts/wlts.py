@@ -178,7 +178,7 @@ class WLTS:
         for i in df['collection'].unique():
             ds = self._describe_collection(i)
             mappings = lccs_service.mappings(
-                system_source=f"{ds['classification_system']['classification_system_id']}",
+                system_source=f"{ds['classification_system']['id']}",
                 system_target=target_system)
             for map in mappings.mappings:
                 df.loc[(df['collection'] == i) & (df["class"] == map.source_class.title), [
