@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2022 INPE.
+    Copyright (C) 2023 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ Retrieve the trajectory given a longitude and latitude::
              --longitude -54.0  \
              --start-date 2001 \
              --end-date 2011 \
-             --collections mapbiomas-v6
+             --collections mapbiomas-v8
 
 
 The above command will return a document as:
@@ -54,17 +54,17 @@ The above command will return a document as:
 .. code-block:: shell
 
        trajectory: [
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2001'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2002'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2003'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2004'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2005'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2006'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2007'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2008'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2009'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2010'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2011'}
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2001'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2002'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2003'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2004'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2005'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2006'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2007'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2008'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2009'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2010'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2011'}
        ]
 
 .. note::
