@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2022 INPE.
+# Copyright (C) 2023 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -30,6 +30,6 @@ print(service['deter_amazonia_legal'])
 tj = service.tj(
     latitude=-12.0,
     longitude=-54.0,
-    collections='mapbiomas-v6'
+    collections='mapbiomas-v8'
 )
 

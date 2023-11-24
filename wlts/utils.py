@@ -25,6 +25,7 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 
 class Utils:
     """A class that represents a Utils in WLTS."""
+
     @staticmethod
     def render_html(template_name, **kwargs):
         """Render Jinja2 HTML template."""
