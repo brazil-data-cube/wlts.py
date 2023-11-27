@@ -20,8 +20,20 @@
 Changes
 =======
 
+Version 1.0.1 (2023-10-28)
+--------------------------
+
+- Change license to GPLv3 (`#67 <https://github.com/brazil-data-cube/wlts.py/issues/67>`_).
+
+- Update lccs.py version to 0.8.2 (`#69 <https://github.com/brazil-data-cube/wlts.py/issues/69>`_).
+
+- Bug fix: in trajectory harmonize change system source to id (`#71 <https://github.com/brazil-data-cube/wlts.py/issues/71>`_).
+
+- Review of code examples (`#72 <https://github.com/brazil-data-cube/wlts.py/issues/72>`_).
+
 Version 1.0.0 (2022-08-25)
 --------------------------
+
 - Review documentation (`#64 <https://github.com/brazil-data-cube/wlts.py/issues/64>`_).
 
 - Review command line (`#62 <https://github.com/brazil-data-cube/wlts.py/issues/62>`_).
