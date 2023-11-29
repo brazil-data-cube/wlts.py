@@ -22,7 +22,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Python Client Library for Web Land Trajectory Service'
-copyright = '2022, INPE'
+copyright = '2023, INPE'
 author = 'Brazil Data Cube Team'
 release = wlts.__version__
 
