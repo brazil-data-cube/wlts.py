@@ -1,9 +1,19 @@
 #
-# This file is part of Python Client Library for WLTS.
-# Copyright (C) 2020-2022 INPE.
+# This file is part of Python Client Library for the WLTS.
+# Copyright (C) 2022 INPE.
 #
-# Python Client Library for WLTS is free software; you can redistribute it and/or modify it
-# under the terms of the MIT License; see LICENSE file for more details.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """Python Client Library for WLTS.
 
@@ -168,7 +178,7 @@ class WLTS:
         for i in df['collection'].unique():
             ds = self._describe_collection(i)
             mappings = lccs_service.mappings(
-                system_source=f"{ds['classification_system']['classification_system_id']}",
+                system_source=f"{ds['classification_system']['id']}",
                 system_target=target_system)
             for map in mappings.mappings:
                 df.loc[(df['collection'] == i) & (df["class"] == map.source_class.title), [

@@ -28,7 +28,7 @@ print(tj.trajectory)
 tj_m = service.tj(
     latitude=[-12.0, -10.3378],
     longitude=[-47.3200, -54.0],
-    collections='prodes_amazonia_legal,mapbiomas-v6',
+    collections='prodes_amazonia_legal,mapbiomas-v8',
     start_date='2010'
 )
 for tj in tj_m['trajectories']:
