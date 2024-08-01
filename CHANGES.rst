@@ -20,7 +20,7 @@
 Changes
 =======
 
-Version 1.1.0 (2023-08-01)
+Version 1.1.0 (2024-08-01)
 --------------------------
 
 - Update lccs version with support to INPE Identity Access Management (`#80 <https://github.com/brazil-data-cube/wlts.py/issues/80>`_)
