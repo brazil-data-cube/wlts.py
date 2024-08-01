@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2023 INPE.
+    Copyright (C) 2024 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,12 @@
 =======
 Changes
 =======
+
+Version 1.1.0 (2023-08-01)
+--------------------------
+
+- Update lccs version with support to INPE Identity Access Management (`#80 <https://github.com/brazil-data-cube/wlts.py/issues/80>`_)
+
 
 Version 1.0.1 (2023-11-29)
 --------------------------
