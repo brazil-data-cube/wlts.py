@@ -68,13 +68,13 @@ If you want to know more about WLTS service, please, take a look at its `specifi
 Installation
 ============
 
-See `INSTALL.rst <./INSTALL.rst>`_.
+See https://wlts.readthedocs.io/en/latest/installation.html
 
 
 Using WLTS in the Command Line
 ==============================
 
-See `CLI.rst <./CLI.rst>`_.
+See https://wlts.readthedocs.io/en/latest/cli.html
 
 
 Developer Documentation

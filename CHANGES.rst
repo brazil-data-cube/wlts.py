@@ -16,9 +16,15 @@
     along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 
 
-=======
 Changes
 =======
+
+
+Version 1.0.2 (2024-09-11)
+--------------------------
+
+- Fix typo for twine build packaging
+
 
 Version 1.0.1 (2023-11-29)
 --------------------------

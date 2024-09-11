@@ -64,7 +64,7 @@ install_requires = [
     'pandas>=1.1',
     'geopandas>=0.8.2',
     'plotly==5.5.0',
-    'lccs @ git+https://github.com/brazil-data-cube/lccs.py@v0.8.2',
+    'lccs==0.8.3',
 ]
 
 packages = find_packages()
@@ -79,10 +79,11 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
     keywords=['Land Use Land Cover', 'GIS', 'Web Services', 'OGC WFS', 'OGC WCS', 'Web Time Series Service'],
     license='GPLv3',
     author='Brazil Data Cube Team',
-    author_email='brazildatacube@inpe.br',
+    author_email='data.support@inpe.br',
     url='https://github.com/brazil-data-cube/wlts.py',
     packages=packages,
     zip_safe=False,
