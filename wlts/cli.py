@@ -17,8 +17,12 @@
 #
 
 """Command line interface for the WLTS client."""
-
 import click
+from rich.console import Console
+from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn
+from rich.table import Table
+from time import time
+from rich.syntax import Syntax
 
 from .wlts import WLTS
 
@@ -35,9 +39,12 @@ class Config:
 
 pass_config = click.make_pass_decorator(Config, ensure=True)
 
+console = Console()
+
+
 
 @click.group()
-@click.option('--url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/wlts/',
+@click.option('--url', type=click.STRING, default='https://data.inpe.br/bdc/wlts/v1/',
               help='The WLTS server address (an URL).')
 @click.option('--lccs-url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/lccs',
               help='The LCCS-WS address (an URL).')
@@ -56,17 +63,21 @@ def cli(config, url, lccs_url, access_token):
 def list_collections(config: Config, verbose):
     """Return the list of available collections in the service provider."""
     if verbose:
-        click.secho(f'Server: {config.url}', bold=True, fg='black')
-        click.secho('\tRetrieving the list of available coverages... ',
-                    bold=False, fg='black')
-        for collection in config.service.collections:
-            click.secho(f'\t\t- {collection}', bold=True, fg='green')
+        console.print(f'[bold black]Server: [green]{config.url}[/green]', style="bold")
+        console.print('[black]\tRetrieving the list of available coverages...[/black]')
 
-        click.secho('\tFinished!', bold=False, fg='black')
+        table = Table(title="Available Collections", show_header=True, header_style="bold magenta")
+        table.add_column("Collection Name", style="green", no_wrap=True)
+
+        for collection in config.service.collections:
+            table.add_row(collection)
+
+        console.print(table)
+        console.print('[black]\tFinished![/black]')
 
     else:
-        for cv in config.service.collections:
-            click.secho(f'{cv}', bold=True, fg='green')
+        for collection in config.service.collections:
+            console.print(f'[green]{collection}[/green]', style="bold")
 
 
 @cli.command()
@@ -75,18 +86,25 @@ def list_collections(config: Config, verbose):
               help='The collection name')
 @pass_config
 def describe(config: Config, verbose, collection):
-    """Retrieve the coverage metadata."""
+    """Retrieve the collection metadata."""
+    import json
     if verbose:
-        click.secho(f'Server: {config.url}', bold=True, fg='black')
-        click.secho('\tRetrieving the collection metadata... ',
-                    bold=False, fg='black')
+        console.print(f'[bold black]Server: [green]{config.url}[/green]', style="bold")
+        console.print('[black]\tRetrieving the collection metadata...[/black]')
 
+    # Retrieve the collection metadata
     cv = config.service[collection]
 
-    click.secho(f'\t- {cv}', bold=True, fg='green')
+    # Convert the metadata to a formatted JSON string
+    formatted_json = json.dumps(cv, indent=4,ensure_ascii=False)
+
+    # Use Syntax from rich to display JSON nicely formatted
+    syntax = Syntax(formatted_json, "json", theme="monokai", line_numbers=True)
+    console.print(f'\t[green bold]- Collection Metadata:[/green bold]')
+    console.print(syntax)  # Pretty formatted JSON with syntax highlighting
 
     if verbose:
-        click.secho('\tFinished!', bold=False, fg='black')
+        console.print('[black]\tFinished![/black]')
 
 
 @cli.command()
@@ -111,12 +129,11 @@ def describe(config: Config, verbose, collection):
 def trajectory(config: Config, verbose, collections, start_date, end_date, latitude, longitude, language):
     """Return the trajectory associated to the location."""
     if verbose:
-        click.secho(f'Server: {config.url}', bold=True, fg='black')
-        click.secho('\tRetrieving trajectory... ',
-                    bold=False, fg='black')
+        console.print(f"[bold black]Server: [green]{config.url}[/green]")
+        console.print('[black]\tRetrieving trajectory...[/black]')
 
+    # Prepare query parameters
     args = dict()
-
     if collections:
         args["collections"] = collections
     if start_date:
@@ -126,13 +143,76 @@ def trajectory(config: Config, verbose, collections, start_date, end_date, latit
     if language:
         args["language"] = language
 
-    retval = config.service.tj(
-        latitude=latitude,
-        longitude=longitude,
-        **args
-    )
+    # Progress bar to indicate processing time
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TimeElapsedColumn(),
+    ) as progress:
+        task = progress.add_task("[cyan]Processing trajectory request...", total=100)
 
-    click.secho(f'\ttrajectory: {retval.trajectory}')
+        # Measure start time
+        start_time = time()
+
+        # Simulate progress
+        for _ in range(5):
+            progress.update(task, advance=20)
+
+        # Retrieve trajectory data
+        retval = config.service.tj(latitude=latitude, longitude=longitude, **args)
+
+        # Measure end time
+        end_time = time()
+
+        # Calculate total time
+        total_time = end_time - start_time
+
+    # Display the trajectory data in a table format
+    table = Table(title=f"Trajectory Results (Time: {total_time:.2f} seconds)")
+
+    # Add table columns
+    table.add_column("Class", style="cyan", no_wrap=True)
+    table.add_column("Collection", style="magenta")
+    table.add_column("Date", justify="right", style="green")
+    table.add_column("Point ID", justify="right", style="yellow")
+
+    # Add rows from the trajectory data
+    for entry in retval.trajectory:
+        table.add_row(entry['class'], entry['collection'], entry['date'], str(entry['point_id']))
+
+    # Display the table
+    console.print(table)
 
     if verbose:
-        click.secho('\tFinished!', bold=False, fg='black')
+        console.print(f'[black]\tFinished in {total_time:.2f} seconds![/black]')
+
+
+    # # Progress bar to indicate processing time
+    # with Progress() as progress:
+    #     task = progress.add_task("[cyan]Processing trajectory request...", total=100)
+        
+    #     # Simulate progress
+    #     for _ in range(5):
+    #         progress.update(task, advance=20)
+        
+    #     # Retrieve trajectory data
+    #     retval = config.service.tj(latitude=latitude, longitude=longitude, **args)
+
+    # # Display the trajectory data in a table format
+    # table = Table(title="Trajectory Results")
+
+    # # Add table columns
+    # table.add_column("Class", style="cyan", no_wrap=True)
+    # table.add_column("Collection", style="magenta")
+    # table.add_column("Date", justify="right", style="green")
+    # table.add_column("Point ID", justify="right", style="yellow")
+
+    # # Add rows from the trajectory data
+    # for entry in retval.trajectory:
+    #     table.add_row(entry['class'], entry['collection'], entry['date'], str(entry['point_id']))
+
+    # # Display the table
+    # console.print(table)
+
+    # if verbose:
+    #     console.print('[black]\tFinished![/black]')
