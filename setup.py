@@ -64,6 +64,7 @@ install_requires = [
     'pandas>=1.1',
     'geopandas>=0.8.2',
     'plotly==5.5.0',
+    'rich>=13.9.2',
     'lccs @ git+https://github.com/brazil-data-cube/lccs.py@v0.8.2',
 ]
 

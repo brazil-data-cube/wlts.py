@@ -16,9 +16,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """A class that represents Trajectories in WLTS."""
-from .utils import Utils
+from typing import Any, Dict
+
 import pandas as pd
-from typing import Dict, Any
+
+from .utils import Utils
 
 
 class Trajectories(dict):

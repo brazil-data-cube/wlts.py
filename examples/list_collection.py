@@ -11,7 +11,7 @@ from wlts import WLTS
 
 # You should create a wlts object attached to a given service
 # Specify the URL of the WLTS instance to be used
-service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/')
+service = WLTS('https://data.inpe.br/bdc/wlts/v1/')
 
 # Returns the list of collections available on the service
 print(service.collections)

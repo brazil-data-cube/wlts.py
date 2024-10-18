@@ -16,8 +16,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """A class that represents a Collection in WLTS."""
-from .utils import Utils
 from typing import Any, Dict, Union
+
+from .utils import Utils
+
 
 class Collections(dict):
     """A class that describes a collection in WLTS.

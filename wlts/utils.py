@@ -16,9 +16,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """Utility functions for WLTS client library."""
+from typing import Any
+
 import jinja2
 from pkg_resources import resource_filename
-from typing import Any
 
 templateLoader = jinja2.FileSystemLoader(searchpath=resource_filename(__name__, 'templates/'))
 templateEnv = jinja2.Environment(loader=templateLoader)

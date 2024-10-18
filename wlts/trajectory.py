@@ -16,11 +16,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """A class that represents Trajectory in WLTS."""
-from .utils import Utils
 from typing import Any, Dict, List
-import pandas as pd
+
 import geopandas as gpd
+import pandas as pd
 from shapely.geometry import shape
+
+from .utils import Utils
 
 
 class Trajectory(dict):

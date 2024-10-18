@@ -17,12 +17,13 @@
 #
 
 """Command line interface for the WLTS client."""
+from time import time
+
 import click
 from rich.console import Console
-from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn
-from rich.table import Table
-from time import time
+from rich.progress import BarColumn, Progress, TextColumn, TimeElapsedColumn
 from rich.syntax import Syntax
+from rich.table import Table
 
 from .wlts import WLTS
 

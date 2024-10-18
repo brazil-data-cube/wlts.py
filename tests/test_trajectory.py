@@ -163,7 +163,7 @@ class TestCli:
                                                          ], obj=config_obj)
 
             assert result.exit_code == 0
-            assert 'trajectory:' in result.output
+            assert 'Processing trajectory request...' in result.output
 
 
 if __name__ == '__main__':

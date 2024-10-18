@@ -9,7 +9,7 @@
 
 from wlts import *
 
-service = WLTS('https://brazildatacube.dpi.inpe.br/wlts/')
+service = WLTS('https://data.inpe.br/bdc/wlts/v1/')
 
 print(service)
 print(str(service))

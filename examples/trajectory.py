@@ -9,7 +9,7 @@
 from wlts import WLTS
 
 # Specify the URL of the WLTS instance to be used
-service = WLTS(url='https://brazildatacube.dpi.inpe.br/wlts/', access_token='change-me')
+service = WLTS(url='https://data.inpe.br/bdc/wlts/v1/')
 
 # Example of trajectory operation
 # Make sure the collection is available in service
@@ -31,6 +31,7 @@ tj_m = service.tj(
     collections='prodes_amazonia_legal,mapbiomas-v8',
     start_date='2010'
 )
+print (tj_m)
 for tj in tj_m['trajectories']:
     print(tj.trajectory)
 
