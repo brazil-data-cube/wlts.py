@@ -186,34 +186,3 @@ def trajectory(config: Config, verbose, collections, start_date, end_date, latit
 
     if verbose:
         console.print(f'[black]\tFinished in {total_time:.2f} seconds![/black]')
-
-
-    # # Progress bar to indicate processing time
-    # with Progress() as progress:
-    #     task = progress.add_task("[cyan]Processing trajectory request...", total=100)
-        
-    #     # Simulate progress
-    #     for _ in range(5):
-    #         progress.update(task, advance=20)
-        
-    #     # Retrieve trajectory data
-    #     retval = config.service.tj(latitude=latitude, longitude=longitude, **args)
-
-    # # Display the trajectory data in a table format
-    # table = Table(title="Trajectory Results")
-
-    # # Add table columns
-    # table.add_column("Class", style="cyan", no_wrap=True)
-    # table.add_column("Collection", style="magenta")
-    # table.add_column("Date", justify="right", style="green")
-    # table.add_column("Point ID", justify="right", style="yellow")
-
-    # # Add rows from the trajectory data
-    # for entry in retval.trajectory:
-    #     table.add_row(entry['class'], entry['collection'], entry['date'], str(entry['point_id']))
-
-    # # Display the table
-    # console.print(table)
-
-    # if verbose:
-    #     console.print('[black]\tFinished![/black]')
