@@ -21,7 +21,9 @@ This module introduces a class named ``WLTS`` that can be used to retrieve
 trajectories for a given location.
 """
 import json
+from typing import Any, Dict, Iterator, Optional
 
+import httpx
 import lccs
 import requests
 
@@ -48,13 +50,18 @@ class WLTS:
             access_token (str, optional): Authentication token to be used with the WLTS server.
         """
         #: str: URL for the WLTS server.
-        self._url = url if url[-1] != '/' else url[0:-1]
+        self._url = url if url[-1] != "/" else url[0:-1]
 
-        #: str: Authentication token to be used with the WTSS server.
-        self._access_token = access_token
+        #: str: Authentication token to be used with the WLTS server.
+        self._access_token: str = access_token or ""
+        self._headers: Dict[str, str] = (
+            {"x-api-key": self._access_token} if self._access_token else {}
+        )
 
         #: str: URL for the LCCS server.
-        self._lccs_url = lccs_url if lccs_url else 'https://brazildatacube.dpi.inpe.br/lccs/'
+        self._lccs_url = (
+            lccs_url if lccs_url else "https://brazildatacube.dpi.inpe.br/lccs/"
+        )
 
     @property
     def collections(self):
@@ -74,13 +81,17 @@ class WLTS:
         """Returns the languages supported by the service."""
         import enum
 
-        response = requests.get(f'{self._url}/')
+        response = requests.get(f"{self._url}/")
 
         response.raise_for_status()
 
         data = response.json()
 
-        return enum.Enum('Language', {i['language']: i['language'] for i in data['supported_language']}, type=str)
+        return enum.Enum(
+            "Language",
+            {i["language"]: i["language"] for i in data["supported_language"]},
+            type=str,
+        )
 
     def tj(self, latitude, longitude, **options):
         """Retrieve the trajectory for a given location and time interval.
@@ -111,41 +122,52 @@ class WLTS:
                 >>> ts.trajectory
                 [{'class': 'Formação Florestal', 'collection': 'mapbiomas-v6', 'date': '2007'}, ...]
         """
+
         def validate_lat_long(lat, long):
             if (type(lat) not in (float, int)) or (type(long) not in (float, int)):
                 raise ValueError("Arguments latitude and longitude must be numeric.")
 
             if (lat < -90.0) or (lat > 90.0):
-                raise ValueError('latitude is out-of range [-90,90]!')
+                raise ValueError("latitude is out-of range [-90,90]!")
 
             if (long < -180.0) or (long > 180.0):
-                raise ValueError('longitude is out-of range [-180,180]!')
+                raise ValueError("longitude is out-of range [-180,180]!")
 
-        invalid_parameters = set(options) - {"start_date", "end_date", "collections", "geometry", "target_system",
-                                             "language"}
+        invalid_parameters = set(options) - {
+            "start_date",
+            "end_date",
+            "collections",
+            "geometry",
+            "target_system",
+            "language",
+        }
 
         if invalid_parameters:
-            raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
+            raise AttributeError("invalid parameter(s): {}".format(invalid_parameters))
 
-        if 'language' in options:
+        if "language" in options:
             self._support_l = self._support_language()
-            if options['language'] in [e.value for e in self._support_l]:
+            if options["language"] in [e.value for e in self._support_l]:
                 pass
             else:
-                s = ', '.join([e for e in self.allowed_language])
-                raise KeyError(f'Language not supported! Use: {s}')
+                s = ", ".join([e for e in self.allowed_language])
+                raise KeyError(f"Language not supported! Use: {s}")
 
         if type(latitude) != list and type(longitude) != list:
             validate_lat_long(latitude, longitude)
 
-            data = self._trajectory(**{'latitude': latitude, 'longitude': longitude, **options})
+            data = self._trajectory(
+                **{"latitude": latitude, "longitude": longitude, **options}
+            )
 
-            for trj in data['result']['trajectory']:
-                trj['point_id'] = 1
+            for trj in data["result"]["trajectory"]:
+                trj["point_id"] = 1
 
             if "target_system" in options:
-                j = self._harmonize(data['result']['trajectory'], target_system=options["target_system"])
-                data['result']['trajectory'] = json.loads(j)
+                j = self._harmonize(
+                    data["result"]["trajectory"], target_system=options["target_system"]
+                )
+                data["result"]["trajectory"] = json.loads(j)
 
                 return Trajectory(data)
 
@@ -157,10 +179,10 @@ class WLTS:
         for lat, long in zip(latitude, longitude):
             validate_lat_long(lat, long)
 
-            data = self._trajectory(**{'latitude': lat, 'longitude': long, **options})
+            data = self._trajectory(**{"latitude": lat, "longitude": long, **options})
 
-            for trj in data['result']['trajectory']:
-                trj['point_id'] = index
+            for trj in data["result"]["trajectory"]:
+                trj["point_id"] = index
 
             index = index + 1
             result.append(Trajectory(data))
@@ -175,22 +197,25 @@ class WLTS:
 
         df = pd.DataFrame(data)
 
-        for i in df['collection'].unique():
+        for i in df["collection"].unique():
             ds = self._describe_collection(i)
             mappings = lccs_service.mappings(
                 system_source=f"{ds['classification_system']['id']}",
-                system_target=target_system)
+                system_target=target_system,
+            )
             for map in mappings.mappings:
-                df.loc[(df['collection'] == i) & (df["class"] == map.source_class.title), [
-                    'class']] = map.target_class.title
+                df.loc[
+                    (df["collection"] == i) & (df["class"] == map.source_class.title),
+                    ["class"],
+                ] = map.target_class.title
 
         return df.to_json()
 
     def _list_collections(self):
         """Return the list of available collections."""
-        result = self._get(self._url, op='list_collections')
+        result = self._get(self._url, op="list_collections")
 
-        return result['collections']
+        return result["collections"]
 
     def _trajectory(self, **params):
         """Retrieve the trajectories of collections associated with a given location in space.
@@ -211,7 +236,7 @@ class WLTS:
          Returns:
             Trajectory: A trajectory object as a dictionary.
         """
-        return self._get(self._url, op='trajectory', **params)
+        return self._get(self._url, op="trajectory", **params)
 
     def _describe_collection(self, collection_id):
         """Describe a give collection.
@@ -222,7 +247,9 @@ class WLTS:
         :returns: Collection description.
         :rtype: dict
         """
-        return self._get(self._url, op='describe_collection', collection_id=collection_id)
+        return self._get(
+            self._url, op="describe_collection", collection_id=collection_id
+        )
 
     def __getitem__(self, key):
         """Get collection whose name is identified by the key.
@@ -284,85 +311,103 @@ class WLTS:
         try:
             import plotly.express as px
         except ImportError:
-            raise ImportError('You should install Plotly!')
+            raise ImportError("You should install Plotly!")
 
-        parameters.setdefault('marker_size', 10)
-        parameters.setdefault('title', 'Land Use and Cover Trajectory')
-        parameters.setdefault('title_y', 'Number of Points')
-        parameters.setdefault('legend_title_text', 'Class')
-        parameters.setdefault('date', 'Year')
-        parameters.setdefault('value', 'Collection')
-        parameters.setdefault('width', 950)
-        parameters.setdefault('height', 320)
-        parameters.setdefault('font_size', 12)
-        parameters.setdefault('type', 'scatter')
+        parameters.setdefault("marker_size", 10)
+        parameters.setdefault("title", "Land Use and Cover Trajectory")
+        parameters.setdefault("title_y", "Number of Points")
+        parameters.setdefault("legend_title_text", "Class")
+        parameters.setdefault("date", "Year")
+        parameters.setdefault("value", "Collection")
+        parameters.setdefault("width", 950)
+        parameters.setdefault("height", 320)
+        parameters.setdefault("font_size", 12)
+        parameters.setdefault("type", "scatter")
 
         # Parameters to update traces
-        parameters.setdefault('textfont_size', 12)
-        parameters.setdefault('textangle', 0)
-        parameters.setdefault('textposition', "auto")
-        parameters.setdefault('cliponaxis', False)
+        parameters.setdefault("textfont_size", 12)
+        parameters.setdefault("textangle", 0)
+        parameters.setdefault("textposition", "auto")
+        parameters.setdefault("cliponaxis", False)
 
         # Parameters to update layout
-        parameters.setdefault('text_auto', True)
-        parameters.setdefault('textposition', 'auto')
-        parameters.setdefault('opacity', 0.8)
-        parameters.setdefault('marker_line_width', 1.5)
+        parameters.setdefault("text_auto", True)
+        parameters.setdefault("textposition", "auto")
+        parameters.setdefault("opacity", 0.8)
+        parameters.setdefault("marker_line_width", 1.5)
 
         # Update column title bar plot
-        parameters.setdefault('bar_title', False)
+        parameters.setdefault("bar_title", False)
 
         df = dataframe.copy()
-        df['class'] = df['class'].astype('category')
-        df['date'] = df['date'].astype('category')
-        df['collection'] = df['collection'].astype('category')
+        df["class"] = df["class"].astype("category")
+        df["date"] = df["date"].astype("category")
+        df["collection"] = df["collection"].astype("category")
 
         def update_column_title(title):
             """Update the collection name with spaces and capitalize."""
             new_title = (title.text.split("=")[-1]).capitalize()
 
             if len(new_title.split("_")) > 1:
-                return new_title.split("_")[0] + " " + new_title.split("_")[-1].capitalize()
+                return (
+                    new_title.split("_")[0]
+                    + " "
+                    + new_title.split("_")[-1].capitalize()
+                )
 
             return new_title.split("_")[0]
 
-        if parameters['type'] == 'scatter':
+        if parameters["type"] == "scatter":
             # Validates the data for this plot type
             if len(dataframe.point_id.unique()) == 1:
-                fig = px.scatter(df,
-                                y=['class', 'collection'],
-                                x="date", color="class",
-                                symbol="class",
-                                labels={
-                                    "date": parameters['date'],
-                                    "value": parameters['value'],
-                                },
-                                title=parameters['title'],
-                                width=parameters['width'], height=parameters['height'])
-                fig.update_traces(marker_size=parameters['marker_size'])
-                fig.update_layout(legend_title_text=parameters['legend_title_text'], font=dict(
-                    size=parameters['font_size'],
-                ))
+                fig = px.scatter(
+                    df,
+                    y=["class", "collection"],
+                    x="date",
+                    color="class",
+                    symbol="class",
+                    labels={
+                        "date": parameters["date"],
+                        "value": parameters["value"],
+                    },
+                    title=parameters["title"],
+                    width=parameters["width"],
+                    height=parameters["height"],
+                )
+                fig.update_traces(marker_size=parameters["marker_size"])
+                fig.update_layout(
+                    legend_title_text=parameters["legend_title_text"],
+                    font=dict(
+                        size=parameters["font_size"],
+                    ),
+                )
 
                 return fig
             else:
-                raise ValueError("The scatter plot is for one point only! Please try another type: bar plot.")
+                raise ValueError(
+                    "The scatter plot is for one point only! Please try another type: bar plot."
+                )
 
-        if parameters['type'] == 'bar':
+        if parameters["type"] == "bar":
             # Validates the data for this plot type - Unique collection or multiples collections
-            if len(dataframe.collection.unique()) == 1 and len(dataframe.point_id.unique()) >= 1:
-                df_group = dataframe.groupby(['date', 'class']).count()['point_id'].unstack()
+            if (
+                len(dataframe.collection.unique()) == 1
+                and len(dataframe.point_id.unique()) >= 1
+            ):
+                df_group = (
+                    dataframe.groupby(["date", "class"]).count()["point_id"].unstack()
+                )
                 fig = px.bar(
                     df_group,
-                    title=parameters['title'],
-                    width=parameters['width'],
-                    height=parameters['height'],
-                    labels={"date": parameters['date'], "value": parameters['value']},
-                    text_auto=parameters['text_auto'],
-                    )
+                    title=parameters["title"],
+                    width=parameters["width"],
+                    height=parameters["height"],
+                    labels={"date": parameters["date"], "value": parameters["value"]},
+                    text_auto=parameters["text_auto"],
+                )
                 fig.update_layout(
-                    legend_title_text=parameters['legend_title_text'],
-                    font=dict(size=parameters['font_size'])
+                    legend_title_text=parameters["legend_title_text"],
+                    font=dict(size=parameters["font_size"]),
                 )
                 fig.update_traces(
                     textfont_size=parameters["textfont_size"],
@@ -370,16 +415,20 @@ class WLTS:
                     textposition=parameters["textposition"],
                     cliponaxis=parameters["cliponaxis"],
                     opacity=parameters["opacity"],
-                    marker_line_width=parameters["marker_line_width"]
+                    marker_line_width=parameters["marker_line_width"],
                 )
 
                 return fig
 
-            elif len(dataframe.collection.unique()) >= 1 and len(dataframe.point_id.unique()) >= 1:
+            elif (
+                len(dataframe.collection.unique()) >= 1
+                and len(dataframe.point_id.unique()) >= 1
+            ):
                 mydf = (
-                    dataframe.groupby(['date', 'collection'])
-                    .apply(lambda x: x.groupby('class').count())
-                    .rename(columns={'collection': 'size', 'date': 'date_old'}).reset_index()
+                    dataframe.groupby(["date", "collection"])
+                    .apply(lambda x: x.groupby("class").count())
+                    .rename(columns={"collection": "size", "date": "date_old"})
+                    .reset_index()
                 )
 
                 fig = px.bar(
@@ -390,11 +439,12 @@ class WLTS:
                     color="class",
                     text="size",
                     barmode="overlay",
-                    width=parameters['width'], height=parameters['height'],
+                    width=parameters["width"],
+                    height=parameters["height"],
                     labels={
-                        "size": parameters['title_y'],
-                        "date": parameters['date'],
-                        "collection": "Collection"
+                        "size": parameters["title_y"],
+                        "date": parameters["date"],
+                        "collection": "Collection",
                     },
                 )
 
@@ -404,17 +454,20 @@ class WLTS:
                     textposition=parameters["textposition"],
                     cliponaxis=parameters["cliponaxis"],
                     opacity=parameters["opacity"],
-                    marker_line_width=parameters["marker_line_width"]
-
+                    marker_line_width=parameters["marker_line_width"],
                 )
                 fig.update_layout(
-                    legend_title_text='Class',
-                    font=dict(size=12, ),
-                    title_text=parameters['title'],
+                    legend_title_text="Class",
+                    font=dict(
+                        size=12,
+                    ),
+                    title_text=parameters["title"],
                 )
 
-                if parameters['bar_title']:
-                    fig.for_each_annotation(lambda a: a.update(text=update_column_title(a)))
+                if parameters["bar_title"]:
+                    fig.for_each_annotation(
+                        lambda a: a.update(text=update_column_title(a))
+                    )
 
                 return fig
         else:
@@ -422,7 +475,7 @@ class WLTS:
 
     def __str__(self):
         """Return the string representation of the WLTS object."""
-        text = f'WLTS:\n\tURL: {self._url}'
+        text = f"WLTS:\n\tURL: {self._url}"
 
         return text
 
@@ -448,7 +501,7 @@ class WLTS:
         """
         cl_list = self._list_collections()
 
-        html = Utils.render_html('wlts.html', url=self._url, collections=cl_list)
+        html = Utils.render_html("wlts.html", url=self._url, collections=cl_list)
 
         return html
 
@@ -468,20 +521,16 @@ class WLTS:
         :rtype: dict
 
         :raises ValueError: If the response body does not contain a valid json.
-        """
-        url_components = [url, op]
+       """ 
+        url = f"{self._url}/{op}"
+        params.setdefault("access_token", self._access_token)
 
-        params.setdefault('access_token', self._access_token)
+        with httpx.Client() as client:
+            response = client.get(url, params=params, headers=self._headers)
+            response.raise_for_status()
 
-        url = '/'.join(s.strip('/') for s in url_components)
-
-        response = requests.get(url, params=params)
-
-        response.raise_for_status()
-
-        content_type = response.headers.get('content-type')
-
-        if content_type.count('application/json') == 0:
-            raise ValueError(f'HTTP response is not JSON: Content-Type: {content_type}')
+        content_type = response.headers.get("content-type", "")
+        if "application/json" not in content_type:
+            raise ValueError(f"HTTP Response is not JSON: Content-Type: {content_type}")
 
         return response.json()
