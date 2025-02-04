@@ -19,12 +19,13 @@
 <div>
     <li><b>Collections:</b></li>
         <ul>
-        {% for cl in tj.query['collections'] -%}
+        {% for cl in tj.query['collections'] %}
             <li>{{ cl }}</li>
-        {%- endfor %}
+        {% endfor %}
         </ul>
 </div>
 {% endif %}
+
 {% if 'geometry' in tj.trajectory %}
 <div>
     <b>Geometry:</b> {{tj.trajectory['geometry']}}
@@ -32,44 +33,48 @@
 <b>Trajectory</b>
 <div>
     <table>
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Collection</th>
+                <th>Date</th>
+                <th>Geometry</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for traj in tj.trajectory['trajectory'] %}
         <tr>
-        </tr>
-        <tr>
-            <th>Class</th>
-            <th>Collection</th>
-            <th>Date</th>
-            <th>Geometry</th>
-        </tr>
-        {% for tj in tj.trajectory['trajectory']%}
-        <tr>
-            <td>{{tj['class']}}</td>
-            <td>{{tj['collection']}}</td>
-            <td>{{tj['date']}}</td>
-            <td>{{tj['geometry']}}</td>
+            <td>{{ traj['class'] }}</td>
+            <td>{{ traj['collection'] }}</td>
+            <td>{{ traj['date'] }}</td>
+            <td>{{ traj['geometry'] }}</td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </div>
-</br>
+<br>
 {% else %}
 <b>Trajectory</b>
 <div>
    <table>
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Collection</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for traj in tj.trajectory %}
         <tr>
-        </tr>
-        <tr>
-            <th>Class</th>
-            <th>Collection</th>
-            <th>Date</th>
-        </tr>
-        {% for tj in tj.trajectory%}
-        <tr>
-            <td>{{tj['class']}}</td>
-            <td>{{tj['collection']}}</td>
-            <td>{{tj['date']}}</td>
+            <td>{{ traj['class'] }}</td>
+            <td>{{ traj['collection'] }}</td>
+            <td>{{ traj['date'] }}</td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </div>
-</br>
+<br>
 {% endif %}

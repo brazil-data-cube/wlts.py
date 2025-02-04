@@ -16,6 +16,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """A class that represents Trajectory in WLTS."""
+from typing import Any, Dict, List
+
+import geopandas as gpd
+import pandas as pd
+from shapely.geometry import shape
+
 from .utils import Utils
 
 
@@ -27,7 +33,7 @@ class Trajectory(dict):
         `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
-    def __init__(self, data):
+    def __init__(self, data: Dict[str, Any]) -> None:
         """Create a Trajectory object.
 
         Args:
@@ -36,31 +42,23 @@ class Trajectory(dict):
         super(Trajectory, self).__init__(data or {})
 
     @property
-    def trajectory(self, as_date=False, index: int = 1, fmt=''):
+    def trajectory(self, as_date=False, index: int = 1, fmt='') -> List[Dict[str, Any]]:
         """Return the trajectory associated with a location in space."""
         return self['result']['trajectory']
 
     @property
-    def query(self, as_date=False, fmt=''):
+    def query(self, as_date=False, fmt='') -> Dict[str, Any]:
         """Return the query."""
         return self['query']
 
-    def df(self, **options):
+    def df(self, **options) -> pd.DataFrame:
         """Return the dataframe representation of the Trajectory object."""
-        import pandas as pd
-
         return pd.DataFrame(self.trajectory)
 
-    def geodf(self, **options):
+    def geodf(self, **options) -> gpd.GeoDataFrame:
         """Return the geodataframe representation of the Trajectory object."""
         if not all(['geom' in i for i in self.trajectory]):
             raise RuntimeError("Geometry field not exist! Verify if you pass geometry=True in service.trj!")
-        try:
-            import geopandas as gpd
-            from shapely.geometry import shape
-        except:
-            raise ImportError('You should install GeoPandas, Shapely and Descartes!')
-
         gdf = gpd.GeoDataFrame(self.trajectory)
         
         gdf["geom"] = gdf.apply(lambda x: shape(x["geom"]), axis=1)
@@ -70,7 +68,7 @@ class Trajectory(dict):
 
         return gdf
 
-    def _repr_html_(self):
+    def _repr_html_(self) -> str:
         """Display the trajectory as HTML.
 
         This integrates a rich display in IPython.

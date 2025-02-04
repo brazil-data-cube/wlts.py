@@ -16,6 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """Utility functions for WLTS client library."""
+from typing import Any
+
 import jinja2
 from pkg_resources import resource_filename
 
@@ -27,7 +29,16 @@ class Utils:
     """A class that represents a Utils in WLTS."""
 
     @staticmethod
-    def render_html(template_name, **kwargs):
-        """Render Jinja2 HTML template."""
+    def render_html(template_name: str, **kwargs: Any) -> str:
+        """
+        Render a Jinja2 HTML template.
+
+        Args:
+            template_name (str): The name of the template file to render.
+            **kwargs (Any): Arbitrary keyword arguments to be passed to the template.
+
+        Returns:
+            str: The rendered HTML as a string.
+        """
         template = templateEnv.get_template(template_name)
         return template.render(**kwargs)

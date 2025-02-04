@@ -16,86 +16,82 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """A class that represents a Collection in WLTS."""
+from typing import Any, Dict, Union
+
 from .utils import Utils
 
 
 class Collections(dict):
     """A class that describes a collection in WLTS.
 
-    .. note::
-        For more information about collection definition, please, refer to
-        `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
+    For more information about collection definition, refer to
+    `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
-    def __init__(self, service, metadata=None):
+    def __init__(self, service: Any, metadata: Dict[str, Any] = None) -> None:
         """Create a collection object associated to a WLTS client.
 
         Args:
             service (wlts.WLTS): The client to be used by the collection object.
-            metadata (dict): The collection metadata.
+            metadata (Dict[str, Any]): The collection metadata.
         """
-        #: WLTS: The associated WLTS client to be used by the collection object.
         self._service = service
-
-        super(Collections, self).__init__(metadata or {})
+        super().__init__(metadata or {})
 
     @property
-    def collection_type(self):
+    def collection_type(self) -> str:
         """Return the type of the collection."""
         return self['collection_type']
 
     @property
-    def description(self):
+    def description(self) -> str:
         """Return the description of the collection."""
         return self['description']
 
     @property
-    def detail(self):
+    def detail(self) -> str:
         """Return the detail of the collection."""
         return self['detail']
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the name of the collection."""
         return self['name']
 
     @property
-    def title(self):
+    def title(self) -> str:
         """Return the title of the collection."""
         return self['title']
 
     @property
-    def period(self):
+    def period(self) -> Union[str, None]:
         """Return the period of the collection."""
-        return self['period']
+        return self.get('period')
 
     @property
-    def temporal_resolution(self):
+    def temporal_resolution(self) -> str:
         """Return the temporal resolution of the collection."""
         return self['temporal_resolution']
 
     @property
-    def spatial_extent(self):
+    def spatial_extent(self) -> Dict[str, Any]:
         """Return the spatial extent of the collection."""
         return self['spatial_extent']
 
     @property
-    def classification_system(self):
+    def classification_system(self) -> Dict[str, Any]:
         """Return the classification system of the collection."""
         return self['classification_system']
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return the string representation of the Collection object."""
         return super().__str__()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return the Collection object representation."""
         wlts_repr = repr(self._service)
+        return f'Collection(service={wlts_repr}, metadata={super().__repr__()})'
 
-        text = f'Collection(service={wlts_repr}, metadata={super().__repr__()}'
-
-        return text
-
-    def _repr_html_(self):
-        """HTML repr."""
+    def _repr_html_(self) -> str:
+        """HTML representation for IPython rich display."""
         return Utils.render_html('collection.html', collection=self)

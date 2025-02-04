@@ -16,37 +16,33 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """A class that represents Trajectories in WLTS."""
+from typing import Any, Dict
+
+import pandas as pd
+
 from .utils import Utils
 
 
 class Trajectories(dict):
-    """A class that represents a multiples trajectories in WLTS.
+    """A class that represents multiple trajectories in WLTS.
 
-    .. note::
-        For more information about trajectory definition, please, refer to
-        `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
+    For more information about trajectory definition, refer to
+    `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
-    def __init__(self, data):
+    def __init__(self, data: Dict[str, Any]) -> None:
         """Create a Trajectories object.
 
         Args:
-            data: The trajectories.
+            data (Dict[str, Any]): The trajectories data.
         """
-        super(Trajectories, self).__init__(data or {})
+        super().__init__(data or {})
 
-    def _repr_html_(self):
-        """Display the trajectories as HTML.
-
-        This integrates a rich display in IPython.
-        """
+    def _repr_html_(self) -> str:
+        """Display the trajectories as HTML for IPython rich display."""
         return Utils.render_html('trajectory.html', trajectories=self)
 
-    def df(self, **options):
+    def df(self, **options: Any) -> pd.DataFrame:
         """Return the dataframe representation of the Trajectories object."""
-        import pandas as pd
-
         trjs_df = [trj.df() for trj in self['trajectories']]
-
         return pd.concat(trjs_df, axis=0).reset_index(drop=True)
-
