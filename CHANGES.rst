@@ -20,6 +20,15 @@
 Changes
 =======
 
+Version 1.2.0 (2025-03-11)
+--------------------------
+
+- Add pyproject.toml (`#87 <https://github.com/brazil-data-cube/wlts.py/issues/87>`_)
+- Change request to httpx (`#86 <https://github.com/brazil-data-cube/wlts.py/issues/86>`_)
+- Add support for lccs 1.0.0 (`#85 <https://github.com/brazil-data-cube/wlts.py/issues/85>`_)
+- Improve command line interface (`#83 <https://github.com/brazil-data-cube/wlts.py/issues/83>`_)
+
+
 Version 1.1.0 (2024-08-01)
 --------------------------
 
