@@ -29,24 +29,24 @@ If you want to know the WLTS version, use the option ``--version`` as in::
 
 List the available collections::
 
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' list-collections
+    wlts-cli --url 'https://data.inpe.br/bdc/wlts/v1' list-collections
 
 
 To get more information about a specific collection, use the ``describe`` command::
 
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' describe --collection prodes_amazonia_legal
+    wlts-cli --url 'https://data.inpe.br/bdc/wlts/v1' describe --collection prodes_amazonia_legal
 
 
 Retrieve the trajectory given a longitude and latitude::
 
-    wlts-cli --url 'https://brazildatacube.dpi.inpe.br/wlts/' \
+    wlts-cli --url 'https://data.inpe.br/bdc/wlts/v1' \
              --access-token='change-me' \
              trajectory \
              --latitude -12.0 \
              --longitude -54.0  \
              --start-date 2001 \
              --end-date 2011 \
-             --collections mapbiomas-v8
+             --collections mapbiomas-v9
 
 
 The above command will return a document as:
@@ -54,17 +54,17 @@ The above command will return a document as:
 .. code-block:: shell
 
        trajectory: [
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2001'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2002'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2003'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2004'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2005'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2006'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2007'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2008'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2009'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2010'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2011'}
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2001'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2002'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2003'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2004'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2005'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2006'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2007'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2008'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2009'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2010'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2011'}
        ]
 
 .. note::
