@@ -54,17 +54,17 @@ The above command will return a document as:
 .. code-block:: shell
 
        trajectory: [
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2001'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2002'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2003'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2004'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2005'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2006'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2007'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2008'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2009'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2010'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v8', 'date': '2011'}
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2001'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2002'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2003'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2004'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2005'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2006'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2007'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2008'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2009'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2010'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v9', 'date': '2011'}
        ]
 
 .. note::

@@ -30,6 +30,6 @@ print(service['deter_amazonia_legal'])
 tj = service.tj(
     latitude=-12.0,
     longitude=-54.0,
-    collections='mapbiomas-v8'
+    collections='mapbiomas-v9'
 )
 
