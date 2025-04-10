@@ -9,16 +9,12 @@
 from wlts import WLTS
 
 # Specify the URL of the WLTS instance to be used
-service = WLTS(url='https://data.inpe.br/bdc/wlts/v1/')
+service = WLTS(url="https://data.inpe.br/bdc/wlts/v1/")
 
 # Example of trajectory operation
 # Make sure the collection is available in service
 
-tj = service.tj(
-    latitude=-12.0,
-    longitude=-54.0,
-    collections='prodes_amazonia_legal'
-)
+tj = service.tj(latitude=-12.0, longitude=-54.0, collections="prodes_amazonia_legal")
 
 print(tj.trajectory)
 
@@ -28,11 +24,11 @@ print(tj.trajectory)
 tj_m = service.tj(
     latitude=[-12.0, -10.3378],
     longitude=[-47.3200, -54.0],
-    collections='prodes_amazonia_legal,mapbiomas-v8',
-    start_date='2010'
+    collections="prodes_amazonia_legal,mapbiomas-v9",
+    start_date="2010",
 )
-print (tj_m)
-for tj in tj_m['trajectories']:
+print(tj_m)
+for tj in tj_m["trajectories"]:
     print(tj.trajectory)
 
 #
@@ -40,5 +36,7 @@ for tj in tj_m['trajectories']:
 # The collection name may not be same.
 # Make sure the collection is available in service
 
-tj_two = service.tj(latitude=-10.3378, longitude=-47.3200, collections='prodes_cerrado', geometry=True)
+tj_two = service.tj(
+    latitude=-10.3378, longitude=-47.3200, collections="prodes_cerrado", geometry=True
+)
 print(tj_two.trajectory)
