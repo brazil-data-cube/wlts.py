@@ -359,7 +359,7 @@ class WLTS:
 
         if parameters["type"] == "scatter":
             # Validates the data for this plot type
-            if len(dataframe.point_id.unique()) == 1:
+            if len(df.point_id.unique()) == 1:
                 fig = px.scatter(
                     df,
                     y=["class", "collection"],
@@ -391,24 +391,26 @@ class WLTS:
         if parameters["type"] == "bar":
             # Validates the data for this plot type - Unique collection or multiples collections
             if (
-                len(dataframe.collection.unique()) == 1
-                and len(dataframe.point_id.unique()) >= 1
+                len(df.collection.unique()) == 1
+                and len(df.point_id.unique()) >= 1
             ):
                 df_group = (
-                    dataframe.groupby(["date", "class"]).count()["point_id"].unstack()
+                    df.groupby(["date", "class"]).count()["point_id"].unstack()
                 )
                 fig = px.bar(
                     df_group,
                     title=parameters["title"],
                     width=parameters["width"],
                     height=parameters["height"],
-                    labels={"date": parameters["date"], "value": parameters["value"]},
+                    labels={"date": parameters["date"], "value": parameters["title_y"]},
                     text_auto=parameters["text_auto"],
                 )
+
                 fig.update_layout(
                     legend_title_text=parameters["legend_title_text"],
                     font=dict(size=parameters["font_size"]),
                 )
+
                 fig.update_traces(
                     textfont_size=parameters["textfont_size"],
                     textangle=parameters["textangle"],
@@ -424,28 +426,33 @@ class WLTS:
                 len(dataframe.collection.unique()) >= 1
                 and len(dataframe.point_id.unique()) >= 1
             ):
-                mydf = (
-                    dataframe.groupby(["date", "collection"])
-                    .apply(lambda x: x.groupby("class").count())
-                    .rename(columns={"collection": "size", "date": "date_old"})
+                df_group = (
+                    df.groupby(["collection", "date", "class"], observed=False)  # ou True
+                    .agg(count=("point_id", "count"))
                     .reset_index()
                 )
 
                 fig = px.bar(
-                    mydf,
+                    df_group,
                     x="date",
-                    y="size",
-                    facet_col="collection",
+                    y="count",
                     color="class",
-                    text="size",
-                    barmode="overlay",
+                    facet_col="collection",
+                    title=parameters["title"],
                     width=parameters["width"],
                     height=parameters["height"],
                     labels={
-                        "size": parameters["title_y"],
                         "date": parameters["date"],
-                        "collection": "Collection",
+                        "count": parameters["title_y"],
+                        "class": parameters["legend_title_text"],
                     },
+                    text="count",
+                    text_auto=parameters["text_auto"],
+                )
+
+                fig.update_layout(
+                    legend_title_text=parameters["legend_title_text"],
+                    font=dict(size=parameters["font_size"]),
                 )
 
                 fig.update_traces(
@@ -456,18 +463,6 @@ class WLTS:
                     opacity=parameters["opacity"],
                     marker_line_width=parameters["marker_line_width"],
                 )
-                fig.update_layout(
-                    legend_title_text="Class",
-                    font=dict(
-                        size=12,
-                    ),
-                    title_text=parameters["title"],
-                )
-
-                if parameters["bar_title"]:
-                    fig.for_each_annotation(
-                        lambda a: a.update(text=update_column_title(a))
-                    )
 
                 return fig
         else:
