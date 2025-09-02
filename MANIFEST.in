@@ -37,4 +37,6 @@ recursive-include examples *.png
 recursive-include tests *.py
 recursive-include tests *.json
 recursive-include wlts *.html
+recursive-include wlts/templates *.html
+recursive-include wlts/jsonschemas *.json
 

@@ -21,12 +21,11 @@ from time import time
 
 import click
 from rich.console import Console
+from rich.panel import Panel
 from rich.progress import BarColumn, Progress, TextColumn, TimeElapsedColumn
 from rich.syntax import Syntax
 from rich.table import Table
-from rich.panel import Panel
 from rich.tree import Tree
-
 
 from .wlts import WLTS
 
@@ -105,7 +104,6 @@ def list_collections(config: Config, verbose):
 @pass_config
 def describe(config: Config, verbose, collection):
     """Retrieve the collection metadata."""
-    # Retrieve the collection metadata
     cv = config.service[collection]
 
     if verbose:
@@ -139,11 +137,8 @@ def describe(config: Config, verbose, collection):
         console.print("[black]\tFinished![/black]")
 
     else:
-        import json
-        # Convert the metadata to a formatted JSON string
         formatted_json = json.dumps(cv, indent=4, ensure_ascii=False)
 
-        # Use Syntax from rich to display JSON nicely formatted
         syntax = Syntax(formatted_json, "json", theme="monokai", line_numbers=True)
         console.print(f"\t[green bold]- Collection Metadata:[/green bold]")
         console.print(syntax)  # Pretty formatted JSON with syntax highlighting
@@ -181,7 +176,6 @@ def trajectory(
         console.print(f"[bold black]Server: [green]{config.url}[/green]")
         console.print("[black]\tRetrieving trajectory...[/black]")
 
-    # Prepare query parameters
     args = dict()
     if collections:
         args["collections"] = collections
@@ -192,7 +186,6 @@ def trajectory(
     if language:
         args["language"] = language
 
-    # Progress bar to indicate processing time
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),

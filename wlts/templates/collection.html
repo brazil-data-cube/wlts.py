@@ -1,53 +1,121 @@
-<div>
-    <b>Collection Name:</b> {{collection.name}}
+<style>
+    .container {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h3, h4 {
+        color: #333;
+        border-bottom: 2px solid #007BFF;
+        padding-bottom: 5px;
+    }
+
+    p, td {
+        color: #222;
+    }
+
+    .table-container {
+        margin-top: 10px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background: #fff;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background: #007BFF;
+        color: white;
+    }
+
+    tr:hover {
+        background: #f1f1f1;
+    }
+</style>
+
+<div class="container">
+    <h3><strong>Title: </strong>{{ collection.title }} ({{ collection.name }})</h3>
+    <p><strong>Type:</strong> {{ collection.collection_type }}</p>
+    <p><strong>Description:</strong> {{ collection.description }}</p>
+
+   <h4>Temporal Information</h4>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Resolution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ collection.period['start_date'] }}</td>
+                    <td>{{ collection.period['end_date'] }}</td>
+                    <td>{{ collection.temporal_resolution['value'] }} {{ collection.temporal_resolution['unit'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Classification System</h4>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Name</th>
+                    <th>Version</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ collection.classification_system['id'] }}</td>
+                    <td>{{ collection.classification_system['title'] }}</td>
+                    <td>{{ collection.classification_system['name'] }}</td>
+                    <td>{{ collection.classification_system['version'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <h4>Spatial Extent</h4>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Max X</th>
+                    <th>Min X</th>
+                    <th>Max Y</th>
+                    <th>Min Y</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ collection.spatial_extent['xmax'] }}</td>
+                    <td>{{ collection.spatial_extent['xmin'] }}</td>
+                    <td>{{ collection.spatial_extent['ymax'] }}</td>
+                    <td>{{ collection.spatial_extent['ymin'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div>
-    <b>Collection Title:</b> {{collection.title}}
-</div>
-<div>
-    <b>Collection Type:</b> {{collection.collection_type}}
-</div>
-<div>
-    <b>Description:</b> {{collection.description}}
-</div>
-<div>
-    <b>Start date:</b> {{collection.period['start_date']}}
-    <b>End date:</b> {{collection.period['end_date']}}
-</div>
-<b>Temporal Resolution:</b>
-<div>
-    <b>Unit:</b> {{collection.temporal_resolution['unit']}}
-    <b>Value:</b> {{collection.temporal_resolution['value']}}
-</div>
-<br>
-<b>Classification System:</b>
-<div>
-    <b>Id:</b> {{collection.classification_system['id']}}
-    <b>Title:</b> {{collection.classification_system['title']}}
-    <b>Name:</b> {{collection.classification_system['name']}}
-    <b>Version:</b> {{collection.classification_system['version']}}
-</div>
-<br>
-<div>
-    <b>Extent</b>
-</div>
-<div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>max_x</th>
-                <th>min_x</th>
-                <th>max_y</th>
-                <th>min_y</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{collection.spatial_extent['xmax']}}</td>
-                <td>{{collection.spatial_extent['xmin']}}</td>
-                <td>{{collection.spatial_extent['ymax']}}</td>
-                <td>{{collection.spatial_extent['ymin']}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+

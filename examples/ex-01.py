@@ -11,7 +11,7 @@ from wlts import WLTS
 
 # You should create a WLTS object attached to a given service
 # (Specify the URL of the WLTS instance to be used ):
-service = WLTS('https://data.inpe.br/bdc/wlts/v1', access_token='change-me')
+service = WLTS('https://data.inpe.br/bdc/wlts/v1/')
 
 print(repr(service))
 print(str(service))
@@ -32,4 +32,3 @@ tj = service.tj(
     longitude=-54.0,
     collections='mapbiomas-v9'
 )
-

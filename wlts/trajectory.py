@@ -42,14 +42,14 @@ class Trajectory(dict):
         super(Trajectory, self).__init__(data or {})
 
     @property
-    def trajectory(self, as_date=False, index: int = 1, fmt='') -> List[Dict[str, Any]]:
+    def trajectory(self, as_date=False, index: int = 1, fmt="") -> List[Dict[str, Any]]:
         """Return the trajectory associated with a location in space."""
-        return self['result']['trajectory']
+        return self["result"]["trajectory"]
 
     @property
-    def query(self, as_date=False, fmt='') -> Dict[str, Any]:
+    def query(self, as_date=False, fmt="") -> Dict[str, Any]:
         """Return the query."""
-        return self['query']
+        return self["query"]
 
     def df(self, **options) -> pd.DataFrame:
         """Return the dataframe representation of the Trajectory object."""
@@ -57,10 +57,12 @@ class Trajectory(dict):
 
     def geodf(self, **options) -> gpd.GeoDataFrame:
         """Return the geodataframe representation of the Trajectory object."""
-        if not all(['geom' in i for i in self.trajectory]):
-            raise RuntimeError("Geometry field not exist! Verify if you pass geometry=True in service.trj!")
+        if not all(["geom" in i for i in self.trajectory]):
+            raise RuntimeError(
+                "Geometry field not exist! Verify if you pass geometry=True in service.trj!"
+            )
         gdf = gpd.GeoDataFrame(self.trajectory)
-        
+
         gdf["geom"] = gdf.apply(lambda x: shape(x["geom"]), axis=1)
 
         gdf.set_geometry("geom", inplace=True)
@@ -73,4 +75,4 @@ class Trajectory(dict):
 
         This integrates a rich display in IPython.
         """
-        return Utils.render_html('trajectory-item.html', tj=self)
+        return Utils.render_html("trajectory-item.html", tj=self)

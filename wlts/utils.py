@@ -16,12 +16,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
 """Utility functions for WLTS client library."""
+from importlib.resources import files
 from typing import Any
 
 import jinja2
-from pkg_resources import resource_filename
 
-templateLoader = jinja2.FileSystemLoader(searchpath=resource_filename(__name__, 'templates/'))
+template_dir = files("wlts").joinpath("templates")
+templateLoader = jinja2.FileSystemLoader(str(template_dir))
 templateEnv = jinja2.Environment(loader=templateLoader)
 
 
@@ -42,3 +43,13 @@ class Utils:
         """
         template = templateEnv.get_template(template_name)
         return template.render(**kwargs)
+
+    @classmethod
+    def update_column_title(cls, title):
+        """Update the collection name with spaces and capitalize."""
+        new_title = (title.text.split("=")[-1]).capitalize()
+
+        if len(new_title.split("_")) > 1:
+            return new_title.split("_")[0] + " " + new_title.split("_")[-1].capitalize()
+
+        return new_title.split("_")[0]
