@@ -1,0 +1,34 @@
+{
+  "application_name": "Land Cover Classification System Service", 
+  "links": [
+    {
+      "href": "https://data.inpe.br/bdc/lccs/v1", 
+      "rel": "self", 
+      "title": "Link to this document", 
+      "type": "application/json"
+    }, 
+    {
+      "href": "https://data.inpe.br/bdc/lccs/v1/classification_systems", 
+      "rel": "classification_systems", 
+      "title": "Information about Classification Systems", 
+      "type": "application/json"
+    }, 
+    {
+      "href": "https://data.inpe.br/bdc/lccs/v1/style_formats", 
+      "rel": "style_formats", 
+      "title": "Information about Style Formats", 
+      "type": "application/json"
+    }
+  ], 
+  "supported_language": [
+    {
+      "description": "English", 
+      "language": "en"
+    }, 
+    {
+      "description": "Brazilian Portuguese", 
+      "language": "pt-br"
+    }
+  ], 
+  "version": "1.0.2"
+}

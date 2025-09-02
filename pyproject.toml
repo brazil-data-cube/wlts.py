@@ -69,7 +69,7 @@ exclude = ["tests*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"lccs" = [
+"wlts" = [
     "py.typed",
     "jsonschemas/*.json",
     "templates/*.html"
