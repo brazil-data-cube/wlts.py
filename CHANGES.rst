@@ -20,6 +20,12 @@
 Changes
 =======
 
+Version 1.3.1 (2025-09-03)
+--------------------------
+
+- Update project name - rename to wlts.py (`#101 <https://github.com/brazil-data-cube/wlts.py/issues/101>`_)
+- Fixing lccs url in default command line (`#100 <https://github.com/brazil-data-cube/wlts.py/issues/100>`_)
+
 Version 1.3.0 (2025-09-03)
 --------------------------
 
