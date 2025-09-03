@@ -1,7 +1,8 @@
 <style>
+  /* Botão colapsável */
   .collapsible {
    background-color: #eee;
-   color: #444;
+   color: #201f1f;
    cursor: pointer;
    padding: 18px;
    width: 100%;
@@ -9,45 +10,79 @@
    text-align: left;
    outline: none;
    font-size: 15px;
- }
- 
- .active, .collapsible:hover {
+   border-radius: 5px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .active, .collapsible:hover {
    background-color: #ccc;
- }
- 
- .content {
+  }
+
+  .content {
    padding: 0 18px;
    display: none;
    overflow: hidden;
    background-color: #ffffff;
- }
- 
- .collapsible:after {
+   border-radius: 5px;
+   margin-top: 10px;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .collapsible:after {
    content: '+'; /* Unicode character for "plus" sign (+) */
    font-size: 18px;
    color: black;
    float: right;
    margin-left: 5px;
- }
- 
- .active:after {
+  }
+
+  .active:after {
    content: "-"; /* Unicode character for "minus" sign (-) */
- }
- </style>
- 
- {% for tj in trajectories['trajectories'] %}
- <button type="button" class="collapsible"><b>Trajectory for Latitude {{tj['query']['latitude']}} Longitude {{tj['query']['longitude']}}</b></button>
- <div class="content">
-         {% include 'trajectory-item.html' %}
- </div>
- {% endfor %}
- 
- <script>
- document.querySelectorAll(".collapsible").forEach(button => {
-   button.addEventListener("click", function() {
-     this.classList.toggle("active");
-     let content = this.nextElementSibling;
-     content.style.display = content.style.display === "block" ? "none" : "block";
-   });
- });
- </script> 
+  }
+
+  /* Estilo das tabelas */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra na tabela */
+  }
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #007BFF !important; /* Cor do fundo */
+    color: white !important; /* Cor do texto */
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+</style>
+
+
+{% for tj in trajectories['trajectories'] %}
+  <button type="button" class="collapsible"><b>Trajectory for Latitude {{tj['query']['latitude']}} Longitude {{tj['query']['longitude']}}</b></button>
+  <div class="content">
+      {% include 'trajectory-item.html' %}
+  </div>
+{% endfor %}
+
+<script>
+  document.querySelectorAll(".collapsible").forEach(button => {
+    button.addEventListener("click", function() {
+      this.classList.toggle("active");
+      let content = this.nextElementSibling;
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    });
+  });
+</script>

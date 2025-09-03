@@ -1,80 +1,75 @@
 <b>Query</b>
-<div>
-    <b>Latitude:</b> {{tj.query['latitude']}}
+<div style="background-color: #e3e8ef; color: #201f1f; padding: 8px; border-radius: 4px; margin-bottom: 10px;">
+    <b>Latitude:</b> {{tj.query['latitude']}} <br>
+    <b>Longitude:</b> {{tj.query['longitude']}} <br>
+    {% if tj.query['start_date'] %}
+        <b>Start Date:</b> {{tj.query['start_date']}} <br>
+    {% endif %}
+    {% if tj.query['end_date'] %}
+        <b>End Date:</b> {{tj.query['end_date']}} <br>
+    {% endif %}
 </div>
-<div>
-    <b>Longitude:</b> {{tj.query['longitude']}}
-</div>
-{% if tj.query['start_date'] %}
-<div>
-    <b>Start Date:</b> {{tj.query['start_date']}}
-</div>
-{% endif %}
-{% if tj.query['end_date'] %}
-<div>
-    <b>End Date:</b> {{tj.query['end_date']}}
-</div>
-{% endif %}
+
 {% if tj.query['collections'] %}
-<div>
-    <li><b>Collections:</b></li>
+    <div style="background-color: #e3e8ef; color: #201f1f; padding: 8px; border-radius: 4px; margin-bottom: 10px;">
+        <b>Collections:</b>
         <ul>
-        {% for cl in tj.query['collections'] %}
-            <li>{{ cl }}</li>
-        {% endfor %}
+            {% for cl in tj.query['collections'] %}
+                <li>{{ cl }}</li>
+            {% endfor %}
         </ul>
-</div>
+    </div>
 {% endif %}
 
 {% if 'geometry' in tj.trajectory %}
-<div>
-    <b>Geometry:</b> {{tj.trajectory['geometry']}}
-</div>
-<b>Trajectory</b>
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>Class</th>
-                <th>Collection</th>
-                <th>Date</th>
-                <th>Geometry</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for traj in tj.trajectory['trajectory'] %}
-        <tr>
-            <td>{{ traj['class'] }}</td>
-            <td>{{ traj['collection'] }}</td>
-            <td>{{ traj['date'] }}</td>
-            <td>{{ traj['geometry'] }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-<br>
+    <div style="margin-bottom: 10px;">
+        <b>Geometry:</b> {{tj.trajectory['geometry']}}
+    </div>
+    <b>Trajectory</b>
+    <div>
+        <table style="width: 100%; border: 1px solid #b8b1b1; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Collection</th>
+                    <th>Date</th>
+                    <th>Geometry</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for traj in tj.trajectory['trajectory'] %}
+                    <tr>
+                        <td>{{ traj['class'] }}</td>
+                        <td>{{ traj['collection'] }}</td>
+                        <td>{{ traj['date'] }}</td>
+                        <td>{{ traj['geometry'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
 {% else %}
-<b>Trajectory</b>
-<div>
-   <table>
-        <thead>
-            <tr>
-                <th>Class</th>
-                <th>Collection</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for traj in tj.trajectory %}
-        <tr>
-            <td>{{ traj['class'] }}</td>
-            <td>{{ traj['collection'] }}</td>
-            <td>{{ traj['date'] }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-<br>
+    <b>Trajectory</b>
+    <div>
+        <table style="width: 100%; border: 1px solid #c9c2c2; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Collection</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for traj in tj.trajectory %}
+                    <tr>
+                        <td>{{ traj['class'] }}</td>
+                        <td>{{ traj['collection'] }}</td>
+                        <td>{{ traj['date'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
 {% endif %}

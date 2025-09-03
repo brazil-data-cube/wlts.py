@@ -20,7 +20,16 @@
 Changes
 =======
 
-Version 1.2.1 (2026-04-11)
+Version 1.3.0 (2025-09-03)
+--------------------------
+
+- Update lccs.py version (`#95 <https://github.com/brazil-data-cube/wlts.py/issues/95>`_)
+- Update plot to get color from LCCS  (`#97 <https://github.com/brazil-data-cube/wlts.py/issues/97>`_)
+- Add support for numpy in lat long  (`#93 <https://github.com/brazil-data-cube/wlts.py/issues/93>`_)
+- Collection parameter must accept a list of strings  (`#90 <https://github.com/brazil-data-cube/wlts.py/issues/90>`_)
+
+
+Version 1.2.1 (2025-04-11)
 --------------------------
 
 - Bug fix: Update plotly to use new version of numpy and fixed bar plot (`#91 <https://github.com/brazil-data-cube/wlts.py/issues/91>`_)
