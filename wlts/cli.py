@@ -55,7 +55,7 @@ console = Console()
 @click.option(
     "--lccs-url",
     type=click.STRING,
-    default="https://brazildatacube.dpi.inpe.br/lccs",
+    default="https://data.inpe.br/bdc/lccs/v1",
     help="The LCCS-WS address (an URL).",
 )
 @click.option(
@@ -155,8 +155,6 @@ def describe(config: Config, verbose, collection):
 )
 @click.option("--latitude", required=True, type=float, help="Latitude in EPSG:4326")
 @click.option("--longitude", required=True, type=float, help="Longitude in EPSG:4326")
-@click.option("--start-date", required=False, default=None, type=str, help="Start date")
-@click.option("--end-date", required=False, default=None, type=str, help="End date")
 @click.option("--start-date", required=False, default=None, type=str, help="Start date")
 @click.option("--end-date", required=False, default=None, type=str, help="End date")
 @click.option("--language", required=False, default=None, type=str, help="Language")
