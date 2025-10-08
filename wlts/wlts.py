@@ -21,13 +21,15 @@ This module introduces a class named ``WLTS`` that can be used to retrieve
 trajectories for a given location.
 """
 import json
-from typing import Dict
+from typing import Dict, List, Optional
 
 import httpx
 import lccs
 import numpy as np
+import pandas as pd
 import requests
 
+from .allen import ALLEN_RELATIONS
 from .collection import Collections
 from .trajectories import Trajectories
 from .trajectory import Trajectory
@@ -384,7 +386,7 @@ class WLTS:
                 collections=list(df["collection"].unique())
             )
 
-        # --- Scatter ---
+        # --- Scatter --- #
         if parameters["type"] == "scatter":
             if len(df.point_id.unique()) == 1:
                 df["label"] = (
@@ -424,7 +426,7 @@ class WLTS:
                     "The scatter plot is for one point only! Please try another type: bar plot."
                 )
 
-        # --- Bar (uma coleção) ---
+        # --- Bar --- #
         if parameters["type"] == "bar":
             if len(df.collection.unique()) == 1 and len(df.point_id.unique()) >= 1:
                 df_group = df.groupby(["date", "class"]).count()["point_id"].unstack()
@@ -456,7 +458,7 @@ class WLTS:
                 )
                 return fig
 
-            # --- Bar (várias coleções) ---
+            # --- Bar  --- #
             elif len(df.collection.unique()) >= 1 and len(df.point_id.unique()) >= 1:
                 df_group = (
                     df.groupby(["collection", "date", "class"], observed=False)
@@ -566,3 +568,93 @@ class WLTS:
             raise ValueError(f"HTTP Response is not JSON: Content-Type: {content_type}")
 
         return response.json()
+    
+    @staticmethod
+    def temporal_filter(
+        df: pd.DataFrame,
+        target_classes: List[str],
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        relation_op: str = "contains",
+    ) -> pd.DataFrame:
+        """
+        Filter a WLTS trajectory dataframe based on target classes and time range.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            WLTS trajectory with columns: ["class", "collection", "date", "point_id"].
+        target_classes : List[str]
+            Land use/cover classes of interest.
+        start_date : str, optional
+            Start date (YYYY or YYYY-MM-DD).
+        end_date : str, optional
+            End date (YYYY or YYYY-MM-DD).
+        relation_op : str, optional
+            Relationship operator: "contains" or "equals".
+
+        Returns
+        -------
+        pd.DataFrame
+            Filtered trajectory dataframe.
+        """
+        if not {"class", "collection", "date", "point_id"}.issubset(df.columns):
+            raise ValueError("Input dataframe must have columns: class, collection, date, point_id")
+
+        if start_date is None:
+            start_date = df["date"].min()
+        if end_date is None:
+            end_date = df["date"].max()
+
+        # Convert date column to datetime or int
+        if not pd.api.types.is_datetime64_any_dtype(df["date"]):
+            df["date"] = pd.to_datetime(df["date"], format="%Y", errors="coerce")
+
+        start_date = pd.to_datetime(start_date, errors="coerce")
+        end_date = pd.to_datetime(end_date, errors="coerce")
+
+        traj = df[(df["date"] >= start_date) & (df["date"] <= end_date)].copy()
+
+
+        traj.loc[~traj["class"].isin(target_classes), "class"] = pd.NA
+
+        def op_fn(x):
+            if relation_op == "equals":
+                return x.notna().all()
+            else:  # contains
+                return x.notna().any()
+
+        mask = (
+            traj.groupby("point_id")
+            .filter(lambda g: op_fn(g["class"]))
+            .dropna(subset=["class"])
+        )
+
+        return mask
+    
+    @staticmethod
+    def temporal_relation(
+        a: pd.DataFrame,
+        b: pd.DataFrame,
+        temp_fn: str = "before",
+    ) -> pd.DataFrame:
+        """Allen Relations."""
+        fn = ALLEN_RELATIONS.get(temp_fn)
+        if fn is None:
+            raise ValueError(f"Invalid relation '{temp_fn}'. Options: {list(ALLEN_RELATIONS)}")
+
+        all_ids = set(a["point_id"]) & set(b["point_id"])
+        a = a[a["point_id"].isin(all_ids)]
+        b = b[b["point_id"].isin(all_ids)]
+
+        results = []
+        for pid in all_ids:
+            a_id = a[a["point_id"] == pid]
+            b_id = b[b["point_id"] == pid]
+            res = fn(a_id, b_id)
+            if not res.empty:
+                results.append(res)
+
+        if results:
+            return pd.concat(results).sort_values(["point_id", "date"])
+        return pd.DataFrame(columns=a.columns)
