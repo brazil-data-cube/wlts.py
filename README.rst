@@ -28,8 +28,9 @@ Python Client Library for Web Land Trajectory Service
         :target: https://wlts.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. .. image:: https://img.shields.io/badge/pypi-v0.1.0-informational
-        :target: https://pypi.org/pypi/wlts.py
+.. image:: https://img.shields.io/pypi/v/wlts.py
+   :target: https://pypi.org/project/wlts.py/
+   :alt: PyPI version
 
 .. image:: https://img.shields.io/badge/lifecycle-maturing-blue.svg
         :target: https://www.tidyverse.org/lifecycle/#maturing
@@ -68,17 +69,24 @@ If you want to know more about WLTS service, please, take a look at its `specifi
 Installation
 ============
 
-See `INSTALL.rst <./INSTALL.rst>`_.
+.. code-block:: bash
+
+   pip install wlts.py
+
+Development Installation
+========================
+
+See `INSTALL.rst <https://github.com/brazil-data-cube/wlts.py/blob/master/INSTALL.rst>`_.
 
 
 Using WLTS in the Command Line
 ==============================
 
-See `CLI.rst <./CLI.rst>`_.
+See `CLI.rst <https://github.com/brazil-data-cube/wlts.py/blob/master/CLI.rst>`_.
 
 
-Developer Documentation
-=======================
+Full documentation
+==================
 
 See https://wlts.readthedocs.io/en/latest.
 
