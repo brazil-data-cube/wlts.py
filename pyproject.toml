@@ -1,10 +1,10 @@
 [project]
 name = "wlts.py"
-version="1.3.1"
+version="1.4.0"
 description = "."
 readme = "README.rst"
 requires-python = ">=3.8"
-license = {file = "LICENSE"}
+license = { text = "GNU General Public License v3.0" }
 authors = [
     {name = "Brazil Data Cube Team", email = "bdc.team@inpe.br"},
 ]
