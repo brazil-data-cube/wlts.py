@@ -20,6 +20,13 @@
 Changes
 =======
 
+Version 1.4.0 (2025-12-23)
+--------------------------
+
+- Include support to Allen's interval temporal logic relationships with point trajectories (`#104 <https://github.com/brazil-data-cube/wlts.py/issues/104>`_)
+- Add config for release and publish pypi using actions (`#106 <https://github.com/brazil-data-cube/wlts.py/issues/106>`_)
+
+
 Version 1.3.1 (2025-09-03)
 --------------------------
 
