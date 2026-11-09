@@ -40,7 +40,7 @@ project = 'wlts.py'
 copyright = 'GNU General Public License, v3.0.'
 author = "Brazil Data Cube (BDC)"
 autosummary_generate = False
-release = '1.0.0'
+release = '1.0.4'
 
 
 # -- General configuration ---------------------------------------------------
