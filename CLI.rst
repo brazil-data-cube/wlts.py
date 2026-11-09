@@ -46,7 +46,7 @@ Retrieve the trajectory given a longitude and latitude::
              --longitude -54.0  \
              --start-date 2001 \
              --end-date 2011 \
-             --collections mapbiomas-v10
+             --collections mapbiomas-v11
 
 
 The above command will return a document as:
@@ -54,17 +54,17 @@ The above command will return a document as:
 .. code-block:: shell
 
        trajectory: [
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2001'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2002'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2003'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2004'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2005'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2006'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2007'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2008'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2009'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2010'},
-        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v10', 'date': '2011'}
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2001'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2002'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2003'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2004'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2005'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2006'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2007'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2008'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2009'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2010'},
+        {'class': 'Formação Florestal', 'collection': 'mapbiomas-v11', 'date': '2011'}
        ]
 
 .. note::

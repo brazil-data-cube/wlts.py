@@ -19,7 +19,15 @@
 Installation
 ============
 
-``wlts.py`` depends essentially on `Requests <https://requests.readthedocs.io/en/master/>`_. Please, read the instructions below in order to install ``wlts.py``.
+Please, read the instructions below in order to install ``wlts.py``.
+
+
+Installation
+------------
+
+Install in production mode::
+
+  pip install wlts.py
 
 
 Development Installation

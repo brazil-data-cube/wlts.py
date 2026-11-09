@@ -65,10 +65,22 @@ def respx_mock_all(wlts_objects):
 
         mock.get(all_routes).mock(side_effect=handler)
 
-        # Mock LCCS endpoint
-        mock.get(re.compile(rf"{LCCS_URL}/.*")).mock(
-            return_value=Response(200, json=wlts_objects["jsons"]["lccs_root.json"])
-        )
+        # Mock LCCS endpoints
+        def lccs_handler(request):
+            if "/classification_systems" in str(request.url):
+                return Response(
+                    200,
+                    json=[
+                        {
+                            "identifier": "1",
+                            "title": "MapBiomas",
+                            "version": "1.0",
+                        }
+                    ],
+                )
+            return Response(200, json=wlts_objects["jsons"]["lccs_root.json"])
+
+        mock.get(re.compile(rf"{LCCS_URL}/.*")).mock(side_effect=lccs_handler)
 
         yield mock
 
@@ -80,7 +92,7 @@ def test_list_collection(respx_mock_all):
 
 def test_describe_collection(respx_mock_all):
    client = wlts.WLTS(BASE_URL, lccs_url=LCCS_URL)
-   desc = client["mapbiomas-v10"]
+   desc = client["mapbiomas-v11"]
    assert desc["collection_type"] == "Feature"
 
 
@@ -91,7 +103,7 @@ def test_trajectory(respx_mock_all):
        longitude=-54.0,
        start_date="2001",
        end_date="2011",
-       collections="mapbiomas-v10",
+       collections="mapbiomas-v11",
    )
    assert isinstance(traj, dict)
    assert "result" in traj
