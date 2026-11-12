@@ -20,7 +20,7 @@
 Changes
 =======
 
-Version 1.4.1 (2026-11-11)
+Version 1.4.1 (2026-11-12)
 --------------------------
 
 - Review documentation (#110)
