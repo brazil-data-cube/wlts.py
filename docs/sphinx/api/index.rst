@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2022 INPE.
+    Copyright (C) 2026 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,12 +16,53 @@
     along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 
 
-WLTS
-----
+WLTS API
+========
 
+WLTS Client
+------------
 
-.. autoclass:: wlts.wlts::WLTS
-    :members:
-    :private-members: _list_collections, _describe_collection, _trajectory
-    :special-members: __init__, __getitem__
-    :member-order: bysource
+.. automodule:: wlts.wlts
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Collection
+-----------
+
+.. automodule:: wlts.collection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Trajectory
+-----------
+
+.. automodule:: wlts.trajectory
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Trajectories
+-------------
+
+.. automodule:: wlts.trajectories
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+CLI
+---
+
+.. automodule:: wlts.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Utils
+-----
+
+.. automodule:: wlts.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

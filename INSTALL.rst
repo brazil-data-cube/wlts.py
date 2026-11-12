@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2023 INPE.
+    Copyright (C) 2026 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,15 @@
 Installation
 ============
 
-``wlts.py`` depends essentially on `Requests <https://requests.readthedocs.io/en/master/>`_. Please, read the instructions below in order to install ``wlts.py``.
+Please, read the instructions below in order to install ``wlts.py``.
+
+
+Installation
+------------
+
+Install in production mode::
+
+  pip install wlts.py
 
 
 Development Installation

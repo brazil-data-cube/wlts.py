@@ -21,7 +21,7 @@ This module introduces a class named ``WLTS`` that can be used to retrieve
 trajectories for a given location.
 """
 import json
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import httpx
 import lccs
@@ -44,16 +44,34 @@ class WLTS:
         `WLTS specification <https://github.com/brazil-data-cube/wlts-spec>`_.
     """
 
-    def __init__(self, url, lccs_url=None, access_token=None, language=None):
+    def __init__(
+        self,
+        url,
+        lccs_url=None,
+        access_token=None,
+        language=None,
+        timeout=100.0,
+        verify=False,
+    ):
         """Create a WLTS client attached to the given host address (an URL).
 
         Args:
             url (str): URL for the WLTS server.
             lccs_url (str, optional): URL for the LCCS server.
             access_token (str, optional): Authentication token to be used with the WLTS server.
+            timeout (float, optional): Timeout in seconds for HTTP requests. Slow
+                servers or connections through a proxy may need a larger value.
+            verify (bool, optional): Enable TLS certificate verification. Defaults
+                to ``False`` (equivalent to ``curl -k``).
         """
         #: str: URL for the WLTS server.
         self._url = url if url[-1] != "/" else url[0:-1]
+
+        #: float: Timeout in seconds for HTTP requests.
+        self._timeout = timeout
+
+        #: bool: Whether to verify TLS certificates.
+        self._verify = verify
 
         #: str: Authentication token to be used with the WLTS server.
         self._access_token: str = access_token or ""
@@ -92,7 +110,11 @@ class WLTS:
         """Returns the languages supported by the service."""
         import enum
 
-        response = requests.get(f"{self._url}/")
+        response = requests.get(
+            f"{self._url}/",
+            timeout=self._timeout,
+            verify=self._verify,
+        )
 
         response.raise_for_status()
 
@@ -549,7 +571,7 @@ class WLTS:
         :type url: str
 
         :param params: (optional) Dictionary, list of tuples or bytes to send
-        in the query string for the underlying `Requests`.
+            in the query string for the underlying Requests.
         :type params: dict
 
         :rtype: dict
@@ -559,7 +581,7 @@ class WLTS:
         url = f"{self._url}/{op}"
         params.setdefault("access_token", self._access_token)
 
-        with httpx.Client() as client:
+        with httpx.Client(timeout=self._timeout, verify=self._verify) as client:
             response = client.get(url, params=params, headers=self._headers)
             response.raise_for_status()
 
@@ -637,8 +659,18 @@ class WLTS:
         a: pd.DataFrame,
         b: pd.DataFrame,
         temp_fn: str = "before",
+        step: Optional[Union[pd.Timedelta, pd.DateOffset]] = None,
     ) -> pd.DataFrame:
-        """Allen Relations."""
+        """Apply an Allen relation to the intervals of matching points.
+
+        Args:
+            a: Trajectory dataframe with a ``point_id`` column.
+            b: Trajectory dataframe with a ``point_id`` column.
+            temp_fn: Name of the Allen relation.
+            step: Optional offset added to the latest observation to define the
+                half-open end of each interval (e.g. ``pd.DateOffset(years=1)``
+                for annual maps). When ``None``, closed intervals are used.
+        """
         fn = ALLEN_RELATIONS.get(temp_fn)
         if fn is None:
             raise ValueError(f"Invalid relation '{temp_fn}'. Options: {list(ALLEN_RELATIONS)}")
@@ -651,7 +683,7 @@ class WLTS:
         for pid in all_ids:
             a_id = a[a["point_id"] == pid]
             b_id = b[b["point_id"] == pid]
-            res = fn(a_id, b_id)
+            res = fn(a_id, b_id, step=step)
             if not res.empty:
                 results.append(res)
 

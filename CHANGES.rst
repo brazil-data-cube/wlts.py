@@ -20,6 +20,12 @@
 Changes
 =======
 
+Version 1.4.1 (2026-11-11)
+--------------------------
+
+- Review documentation (#110)
+- Fixing Allen's interval temporal logic bug.
+
 Version 1.4.0 (2025-12-22)
 --------------------------
 
