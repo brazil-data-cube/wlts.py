@@ -44,6 +44,9 @@ docs = [
     "sphinx_rtd_theme",
     "sphinx-copybutton",
     "sphinx-tabs",
+    "sphinx-design",
+    "sphinx-nefertiti",
+    "sphinx-colorschemed-images",
 ]
 tests = [
     "coverage>=6.4",
