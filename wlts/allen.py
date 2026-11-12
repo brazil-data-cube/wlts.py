@@ -15,107 +15,149 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 #
-"""Python Client Library for WLTS.
-
-This module introduces a class named ``WLTS`` that can be used to retrieve
-trajectories for a given location.
-"""
+"""Python Client Library for WLTS."""
+from typing import Callable, Optional, Tuple, Union
 
 import pandas as pd
 
+Interval = Tuple[pd.Timestamp, pd.Timestamp]
+Step = Optional[Union[pd.Timedelta, pd.DateOffset]]
 
-def before_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """The function represets a < b."""
-    if (a["date"].max() < b["date"].min()):
+
+def to_interval(
+    df: pd.DataFrame,
+    date_col: str = "date",
+    step: Step = None,
+) -> Optional[Interval]:
+    """Derive the closed interval ``[start, end]`` covered by ``df``.
+
+    Args:
+        df: A trajectory dataframe.
+        date_col: Name of the date column.
+        step: Optional offset added to ``end`` to represent the period covered
+            by the last observation (half-open interval). Must be positive.
+
+    Returns:
+        A ``(start, end)`` tuple of timestamps, or ``None`` when the input is
+        empty or has no valid dates.
+    """
+    if df is None or date_col not in getattr(df, "columns", []):
+        return None
+
+    dates = pd.to_datetime(df[date_col], errors="coerce").dropna()
+    if dates.empty:
+        return None
+
+    if step is not None and not isinstance(step, (pd.Timedelta, pd.DateOffset)):
+        raise TypeError("step must be a pandas Timedelta or DateOffset")
+
+    start = dates.min()
+    end = dates.max() + step if step is not None else dates.max()
+    return start, end
+
+
+def _empty_like(a: pd.DataFrame) -> pd.DataFrame:
+    """Return an empty frame preserving the columns of ``a``."""
+    return pd.DataFrame(columns=getattr(a, "columns", None))
+
+
+def _apply(
+    a: pd.DataFrame,
+    b: pd.DataFrame,
+    predicate: Callable[[Interval, Interval], bool],
+    step: Step = None,
+) -> pd.DataFrame:
+    """Return ``a`` when ``predicate`` holds for the intervals of ``a`` and ``b``."""
+    interval_a = to_interval(a, step=step)
+    interval_b = to_interval(b, step=step)
+    if interval_a is None or interval_b is None:
+        return _empty_like(a)
+    if predicate(interval_a, interval_b):
         return a
-    return pd.DataFrame(columns=a.columns)
+    return _empty_like(a)
 
 
-def after_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """The function represets a > b."""
-    if (a["date"].min() > b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def before_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a before b`` (``a_e < b_s``)."""
+    return _apply(a, b, lambda x, y: x[1] < y[0], step)
 
 
-def equals_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """The function represets a == b."""
-    if set(a["date"]) & set(b["date"]):
-        return a[a["date"].isin(b["date"])]
-    return pd.DataFrame(columns=a.columns)
-
-def meets_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a meets b  (a == b - 1)."""
-    if any(a["date"].isin(b["date"] - pd.Timedelta(days=1))):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def after_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a after b`` (``a_s > b_e``)."""
+    return _apply(a, b, lambda x, y: x[0] > y[1], step)
 
 
-def met_by_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a met_by b  (a == b + 1)."""
-    if any(a["date"].isin(b["date"] + pd.Timedelta(days=1))):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def equals_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a equals b`` (``a_s == b_s`` and ``a_e == b_e``)."""
+    return _apply(a, b, lambda x, y: x[0] == y[0] and x[1] == y[1], step)
 
 
-def overlaps_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a overlaps b  (a <= b & a + 1 >= b)."""
-    if any((a["date"].min() <= b["date"]) & ((a["date"].max() + pd.Timedelta(days=1)) >= b["date"])):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def meets_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a meets b`` (``a_e == b_s``)."""
+    return _apply(a, b, lambda x, y: x[1] == y[0], step)
 
 
-def overlapped_by_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a overlapped_by b  (a <= b & a + 1 <= b)."""
-    if any((a["date"].min() <= b["date"]) & ((a["date"].max() + pd.Timedelta(days=1)) <= b["date"])):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def met_by_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a met_by b`` (``a_s == b_e``)."""
+    return _apply(a, b, lambda x, y: x[0] == y[1], step)
 
 
-def during_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a during b  (a >= b & a + 1 <= b)."""
-    if (a["date"].min() >= b["date"].min()) and ((a["date"].max() + pd.Timedelta(days=1)) <= b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def overlaps_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a overlaps b`` (``a_s < b_s < a_e < b_e``)."""
+    return _apply(a, b, lambda x, y: x[0] < y[0] < x[1] < y[1], step)
 
 
-def contains_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a contains b  (a <= b & a + 1 >= b)."""
-    if (a["date"].min() <= b["date"].min()) and ((a["date"].max() + pd.Timedelta(days=1)) >= b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def overlapped_by_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a overlapped_by b`` (``b_s < a_s < b_e < a_e``)."""
+    return _apply(a, b, lambda x, y: y[0] < x[0] < y[1] < x[1], step)
 
 
-def starts_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a starts b  (a == b & a + 1 <= b)."""
-    if (a["date"].min() == b["date"].min()) and ((a["date"].max() + pd.Timedelta(days=1)) <= b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def during_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a during b`` (``b_s < a_s < a_e < b_e``)."""
+    return _apply(a, b, lambda x, y: y[0] < x[0] and x[1] < y[1], step)
 
 
-def started_by_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a started_by b  (a == b & a + 1 >= b)."""
-    if (a["date"].min() == b["date"].min()) and ((a["date"].max() + pd.Timedelta(days=1)) >= b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def contains_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a contains b`` (``a_s < b_s < b_e < a_e``)."""
+    return _apply(a, b, lambda x, y: x[0] < y[0] and y[1] < x[1], step)
 
 
-def finishes_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a finishes b  (a <= b & a + 1 == b)."""
-    if (a["date"].min() <= b["date"].min()) and ((a["date"].max() + pd.Timedelta(days=1)) == b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def starts_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a starts b`` (``a_s == b_s`` and ``a_e < b_e``)."""
+    return _apply(a, b, lambda x, y: x[0] == y[0] and x[1] < y[1], step)
 
 
-def finished_by_relation(a: pd.DataFrame, b: pd.DataFrame) -> pd.DataFrame:
-    """Represents a finished_by b  (a <= b & a + 1 == b)."""
-    if (a["date"].min() <= b["date"].min()) and ((a["date"].max() + pd.Timedelta(days=1)) == b["date"].max()):
-        return a
-    return pd.DataFrame(columns=a.columns)
+def started_by_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a started_by b`` (``a_s == b_s`` and ``a_e > b_e``)."""
+    return _apply(a, b, lambda x, y: x[0] == y[0] and x[1] > y[1], step)
 
+
+def finishes_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a finishes b`` (``b_s < a_s`` and ``a_e == b_e``)."""
+    return _apply(a, b, lambda x, y: y[0] < x[0] and x[1] == y[1], step)
+
+
+def finished_by_relation(a: pd.DataFrame, b: pd.DataFrame, step: Step = None) -> pd.DataFrame:
+    """Represent ``a finished_by b`` (``a_s < b_s`` and ``a_e == b_e``), inverse of ``finishes``."""
+    return _apply(a, b, lambda x, y: x[0] < y[0] and x[1] == y[1], step)
 
 
 # TODO: add other relations (RECUR, CONVERT and EVOLVE)
+"""
+    before       a_e <  b_s
+    after        a_s >  b_e
+    meets        a_e == b_s
+    met_by       a_s == b_e
+    overlaps     a_s <  b_s < a_e < b_e
+    overlapped_by b_s < a_s < b_e < a_e
+    during       b_s <  a_s < a_e < b_e
+    contains     a_s <  b_s < b_e < a_e
+    starts       a_s == b_s and a_e < b_e
+    started_by   a_s == b_s and a_e > b_e
+    finishes     b_s <  a_s and a_e == b_e
+    finished_by  a_s <  b_s and a_e == b_e
+    equals       a_s == b_s and a_e == b_e
+"""
 ALLEN_RELATIONS = {
     "before": before_relation,
     "after": after_relation,
@@ -131,5 +173,3 @@ ALLEN_RELATIONS = {
     "finishes": finishes_relation,
     "finished_by": finished_by_relation,
 }
-
-

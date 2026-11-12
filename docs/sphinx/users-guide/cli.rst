@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2022 INPE.
+    Copyright (C) 2026 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,11 +16,4 @@
     along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 
 
-Collection
-----------
-
-
-.. autoclass:: wlts.collection::Collections
-    :members:
-    :special-members: __init__
-    :member-order: bysource
+.. include:: ../../../CLI.rst

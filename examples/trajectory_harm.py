@@ -1,6 +1,6 @@
 #
 # This file is part of Python Client Library for WLTS.
-# Copyright (C) 2023 INPE.
+# Copyright (C) 2026 INPE.
 #
 # Python Client Library for WLTS is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -14,8 +14,8 @@ from wlts import WLTS
 
 # Define Services
 
-lccs_url = os.environ.get('LCCS_SERVER_URL', 'https://brazildatacube.dpi.inpe.br/lccs/')
-wlts_url = os.environ.get('LCCS_SERVER_URL', 'https://brazildatacube.dpi.inpe.br/wlts/')
+lccs_url = os.environ.get('LCCS_SERVER_URL', 'https://data.inpe.br/bdc/lccs/v1')
+wlts_url = os.environ.get('LCCS_SERVER_URL', 'https://data.inpe.br/bdc/wlts/v1')
 
 service_wlts = WLTS(url=wlts_url, lccs_url=lccs_url, access_token='change-me')
 service_lccs = LCCS(url=lccs_url)

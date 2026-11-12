@@ -1,0 +1,11 @@
+# Core Documentation Engine
+sphinx>=7.0.0
+
+# Themes
+sphinx-rtd-theme
+sphinx-nefertiti
+
+# Extensions & Utilities
+sphinx-copybutton
+sphinx-design
+sphinx-colorschemed-images

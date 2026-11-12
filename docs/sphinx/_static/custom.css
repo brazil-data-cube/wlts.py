@@ -1,0 +1,38 @@
+/* Custom enhancements for wlts.py documentation */
+
+/* Better code blocks */
+.highlight {
+    border-left: 4px solid #0066cc;
+    margin: 1.5rem 0;
+}
+
+/* Function signature styling */
+.function > dt {
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 1rem;
+    border-left: 3px solid #0066cc;
+}
+
+/* Parameter tables */
+.field-list {
+    border-collapse: collapse;
+}
+
+.field-list td, .field-list th {
+    padding: 0.5rem 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        font-size: 0.9rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar, .header-actions {
+        display: none;
+    }
+}

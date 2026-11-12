@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2022 INPE.
+    Copyright (C) 2026 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,43 +22,17 @@ Examples
 ========
 
 
-List Available Collections
---------------------------
-
-
-This example shows the list of collections in a service:
-
-.. literalinclude:: ../../examples/list_collection.py
-   :language: python
-   :lines: 10-
-
-Describe Collections
-------------------------
-
-
-This example shows the metadata of a collection:
-
-.. literalinclude:: ../../examples/describe_collection.py
-   :language: python
-   :lines: 10-
-
-Trajectory
+Basic Usage
 -----------
 
-
-This example shows how to retrieve a trajectory:
-
-.. literalinclude:: ../../examples/trajectory.py
+.. literalinclude:: ../../../examples/ex-01.py
    :language: python
-   :lines: 09-
+   :lines: 08-
 
 
-Text Representations
---------------------
+Trajectory Query
+----------------
 
-
-This example shows how the various text representation for services and coverages:
-
-.. literalinclude:: ../../examples/text-repr.py
+.. literalinclude:: ../../../examples/trajectory.py
    :language: python
-   :lines: 09-
+   :lines: 08-

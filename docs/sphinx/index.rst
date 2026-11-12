@@ -1,6 +1,6 @@
 ..
     This file is part of Python Client Library for WLTS.
-    Copyright (C) 2023 INPE.
+    Copyright (C) 2026 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,26 +19,38 @@
    :end-before: Installation
 
 
-Documentation
-=============
+WLTS Documentation
+===================
+
+User's guide
+============
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   installation
-   cli
-   examples
-   api
+   users-guide/index
+
+API
+===
+
+.. toctree::
+   :maxdepth: 2
+
+   api/index
+
+Project
+=======
+
+.. toctree::
+   :maxdepth: 1
+
    repository
    history
    license
 
 
-
-Indices and tables
+How to collaborate
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+If something is not working, or if there is wrong or missing information in the documentation, or
+if you would like to suggest an idea or improvement, please, create an entry in the `issues page <https://github.com/brazil-data-cube/wlts.py/issues>`_ of wlts.py repository and explain the details.
